@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="嵌入式," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM来使用。">
+<meta name="keywords" content="嵌入式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32使用内部存储器来掉电保存数据">
+<meta property="og:url" content="http://yoursite.com/2018/11/17/stm32使用内部存储器来掉电保存数据/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="前言stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM来使用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-17T07:57:27.031Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stm32使用内部存储器来掉电保存数据">
+<meta name="twitter:description" content="前言stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM来使用。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/17/stm32使用内部存储器来掉电保存数据/"/>
+
+
+
+
+
+  <title>stm32使用内部存储器来掉电保存数据 | 咸鱼站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">咸鱼站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个没有理想的咸鱼</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/17/stm32使用内部存储器来掉电保存数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">stm32使用内部存储器来掉电保存数据</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T10:32:01+08:00">
+                2018-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下<br>需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM<br>来使用。</p>
+<a id="more"></a>
+<p>存储器主要分为两种： <strong>随机存取器RAM</strong> 和 <strong>只读存储器ROM</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">存储器</span><br><span class="line">├── RAM （Random Access Memory）随机存储器：掉电数据丢失，多用于内存等</span><br><span class="line">│   ├── SRAM（静态RAM）存取速度快，价格昂贵。多用于CPU的一级缓存，二级缓存等</span><br><span class="line">│   └── DRAM（动态RAM）</span><br><span class="line">│        ├── EDORAM</span><br><span class="line">│        ├── FPRAM/FastPage</span><br><span class="line">│        ├── SDRAM</span><br><span class="line">│        ├── DDR RAM</span><br><span class="line">│        ├── RDRAM</span><br><span class="line">│        ├── WRAM</span><br><span class="line">│        └── SGRAM</span><br><span class="line">└── ROM(Read Only Memory)只读存储器：掉电数据不丢失，非易失性存储器件</span><br><span class="line">    ├── PROM</span><br><span class="line">    ├── EROM</span><br><span class="line">    ├── EEROM</span><br><span class="line">    └── FLASH</span><br><span class="line">         ├── NOR Flash</span><br><span class="line">         └── NADN Flash</span><br></pre></td></tr></table></figure>
+<h2 id="stm32-flash-的简介"><a href="#stm32-flash-的简介" class="headerlink" title="stm32 flash 的简介"></a>stm32 flash 的简介</h2><p>不同型号的stm32其stm32的容量也有所不同，根据容量大小，可以分为以下三种情况；</p>
+<ol>
+<li>小容量产品： Flash的大小为1-32KB（stm32f10x_LD）</li>
+<li>中容量产品： Flash的大小为64-128KB（stm32f10x_MD）</li>
+<li>大容量产品： Flash的大小为256KB以上（stm32f10x_HD）</li>
+</ol>
+<p>stm32的存储模块由：<em>主存储器，信息块和闪存存储器接口存储器</em> 三个部分组成。</p>
+<ul>
+<li><p>主存储器，该部分用来存放代码和数据常数（如const类型数据）。对于大容量产品，其被划分为256页，<br>每页2K字节。</p>
+</li>
+<li><p>信息块，该部分分为两个小部分，其中启动程序代码，是用来存储st自带的启动程序，用于串口下载代码。</p>
+</li>
+<li><p>内存存储器接口寄存器，该部分用于控制闪存读写。</p>
+</li>
+</ul>
+<p>stm32f4内部flash扇区的划分如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">name</th>
+<th style="text-align:center">block base addresses</th>
+<th style="text-align:center">size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">sector 0</td>
+<td style="text-align:center">0x0800 0000 - 0x0800 3FFF</td>
+<td style="text-align:center">16Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 1</td>
+<td style="text-align:center">0x0800 4000 - 0x0800 7FFF</td>
+<td style="text-align:center">16Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 2</td>
+<td style="text-align:center">0x0800 8000 - 0x0800 BFFF</td>
+<td style="text-align:center">16Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 3</td>
+<td style="text-align:center">0x0800 C000 - 0x0800 FFFF</td>
+<td style="text-align:center">16Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 4</td>
+<td style="text-align:center">0x0801 0000 - 0x0801 FFFF</td>
+<td style="text-align:center">64Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 5</td>
+<td style="text-align:center">0x0802 0000 - 0x0803 FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 6</td>
+<td style="text-align:center">0x0804 0000 - 0x0805 FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 7</td>
+<td style="text-align:center">0x0806 0000 - 0x0807 FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 8</td>
+<td style="text-align:center">0x0808 0000 - 0x0809 FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 9</td>
+<td style="text-align:center">0x080A 0000 - 0x080B FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 10</td>
+<td style="text-align:center">0x080C 0000 - 0x080D FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+<tr>
+<td style="text-align:center">sector 11</td>
+<td style="text-align:center">0x080E 0000 - 0x080F FFFF</td>
+<td style="text-align:center">128Kbytes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意最好不要使用sector0，因为bootloader和主程序在这个地方，操作后会导致程序跑飞，最好将数据<br>放在最后一个扇区。</p>
+</blockquote>
+<h2 id="stm32-flash操作流程"><a href="#stm32-flash操作流程" class="headerlink" title="stm32 flash操作流程"></a>stm32 flash操作流程</h2><p>stm32的flash操作已经属于嵌入式设备中很底层的操作了，直接对地址进行存取，简单来说，Flash操作大<br>致需要以下流程：</p>
+<ol>
+<li>确定要写入的Flash的首地址</li>
+<li>解锁Flash</li>
+<li>对Flash进行操作（写入数据）</li>
+<li>对Flash重新上锁</li>
+</ol>
+<h3 id="如何查找并选定要写入的Flash十六进制地址值的方法"><a href="#如何查找并选定要写入的Flash十六进制地址值的方法" class="headerlink" title="如何查找并选定要写入的Flash十六进制地址值的方法"></a>如何查找并选定要写入的Flash十六进制地址值的方法</h3><p>想要选定安全的Flash地址进行读写，可以根据自己的STM32 MCU型号，查找数据手册，确定FLASH地址的<br>区域段，因为起始段会存储代码，所以一定要避开起始段，以避免数据错误。下面是在网上找的一个例子。</p>
+<blockquote>
+<p>我此次操作Flash使用的MCU是STM32103C8T6，所以以该型号MCU为例进行描述：<br>在数据手册中，可以看到STM32103C8T6的flash起始地址是0x0800 0000，<br>而STM32103C8T6的Flash大小为64K，可以计算出STM32103C8T6的Flash地址范围是：<br>0x0800 0000~0x0800 FFFF（计算方法参考另一篇博客：STM32内存大小与地址的对应关系以及计算方法）。<br>这里选取0x0800 F000作为读写操作的起始地址，对于C8T6这款MCU，操作这个起始地址应该算是很安全的范围了。</p>
+</blockquote>
+<p>stm32flash擦除操作<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">HAL_FLASH_Unlock();</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> FLASH_EraseInitTypeDef EraseInitStruct;</span><br><span class="line"><span class="keyword">uint32_t</span> SectorError = <span class="number">0</span>;</span><br><span class="line">EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;</span><br><span class="line">EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3; <span class="comment">//芯片供电电压</span></span><br><span class="line">EraseInitStruct.Sector = FLASH_SECTOR_11;             <span class="comment">//从那个扇区开始擦除</span></span><br><span class="line">EraseInitStruct.NbSectors = <span class="number">1</span>;                        <span class="comment">//一共擦除几个扇区</span></span><br><span class="line"><span class="keyword">if</span>(HAL_FLASHEx_Erase(&amp;EraseInitStruct, &amp;SectorError) != HAL_OK)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">HAL_FLASH_Lock();</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意在对flash写入新数据的时候需要对其作擦除操作，flash只能写入0的值，无法将0写为1.</p>
+</blockquote>
+<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><ol>
+<li><a href="https://blog.csdn.net/xiaogu0322/article/details/78593423" target="_blank" rel="noopener">stm32F407 FLASH 操作笔记</a></li>
+<li><a href="https://blog.csdn.net/Ace_Shiyuan/article/details/78196648" target="_blank" rel="noopener">STM32操作访问flash</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/嵌入式/" rel="tag"># 嵌入式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/17/C语言typedef-struct和struct的区别/" rel="next" title="C语言typedef_struct和struct的区别">
+                <i class="fa fa-chevron-left"></i> C语言typedef_struct和struct的区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/17/stm32进入hardfault原因分析/" rel="prev" title="stm32进入hardfault原因分析">
+                stm32进入hardfault原因分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yun4411</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stm32-flash-的简介"><span class="nav-number">2.</span> <span class="nav-text">stm32 flash 的简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stm32-flash操作流程"><span class="nav-number">3.</span> <span class="nav-text">stm32 flash操作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查找并选定要写入的Flash十六进制地址值的方法"><span class="nav-number">3.1.</span> <span class="nav-text">如何查找并选定要写入的Flash十六进制地址值的方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客"><span class="nav-number">4.</span> <span class="nav-text">参考博客</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yun4411</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

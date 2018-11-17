@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="stm32,c语言,volatile,原子操作," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言在开发一个产品的时候，需要在中断中和主循环中操作同一个变量。测试发现会不定期出现数据异常的情况。排查发现这里是由于在对一个数据进行操作的时候受到了中断的影响。">
+<meta name="keywords" content="stm32,c语言,volatile,原子操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32多线程数据不一致处理记录">
+<meta property="og:url" content="http://yoursite.com/2018/11/06/stm32多线程数据不一致处理记录/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="前言在开发一个产品的时候，需要在中断中和主循环中操作同一个变量。测试发现会不定期出现数据异常的情况。排查发现这里是由于在对一个数据进行操作的时候受到了中断的影响。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-17T07:57:27.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="stm32多线程数据不一致处理记录">
+<meta name="twitter:description" content="前言在开发一个产品的时候，需要在中断中和主循环中操作同一个变量。测试发现会不定期出现数据异常的情况。排查发现这里是由于在对一个数据进行操作的时候受到了中断的影响。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/06/stm32多线程数据不一致处理记录/"/>
+
+
+
+
+
+  <title>stm32多线程数据不一致处理记录 | 咸鱼站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">咸鱼站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个没有理想的咸鱼</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/06/stm32多线程数据不一致处理记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">stm32多线程数据不一致处理记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-06T21:53:21+08:00">
+                2018-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发一个产品的时候，需要在中断中和主循环中操作同一个变量。测试发现会不定期出现数据异常的情况。<br>排查发现这里是由于在对一个数据进行操作的时候受到了中断的影响。</p>
+<a id="more"></a>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>当主程序与中断共用一个变量的时候，可能发生下面的情况：</p>
+<ol>
+<li>当主函数对变量的读-写，操作的时候，可能造成中断对变量的 读-写 操作无效：</li>
+</ol>
+<blockquote>
+<p>例如：当主函数刚刚将变量读入到内部寄存器时，还未回写到变量中时，发生中断，这里中断中修改了<br>变量中的数据。当主函数将数值再写回到变量中的时候，就会造成中断对数值变量的改写无效。</p>
+</blockquote>
+<ol>
+<li>多字节变量读取</li>
+</ol>
+<blockquote>
+<p>当变量的其中一个字节读入到寄存器中时，发生中断，中断改写了变量的值。当中断返回时，变量的其<br>他字节继续被读入到寄存器中，造成旧字节组合错误。</p>
+</blockquote>
+<p>主函数与中断函数共享变量的问题类似于在两个线程之间共享数据的问题，如何解决数据的冲突是系统设<br>计的关键。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ol>
+<li>volatile 声名的正确使用</li>
+<li>注意原子操作，（关中断 -&gt; 写变量 -&gt; 开中断）</li>
+</ol>
+<p>或者通过引入一个相同类型的临时变量，操作数据前先同步这两个数据</p>
+<p>操作系统中对这种问题有另一种解决办法，即引入一个与ms_counter相同类型的临时变量，读取与更新<br>变量分开操作。</p>
+<h3 id="volatile-变量的用法"><a href="#volatile-变量的用法" class="headerlink" title="volatile 变量的用法"></a>volatile 变量的用法</h3><p>volatile是 易变的、不稳定的意思。在c语言中几乎很少使用这个关键字。这个关键自可以处理部分的<br>数据不一致的问题。这里对这个关键字的用法作一个梳理。</p>
+<p>volatile关键字的本意是由于寄存器的访问速度要快于RAM，所以编译器一般都会减少去存取外部RAM的<br>优化，但是有可能会读取到脏数据。当要求使用 volatiale 声明变量的值的时候，系统总是重新从它所<br>在的内存中读取数据，即使它前面的指令刚刚从该处读取过数据，并且读取的数据会被立即保存。</p>
+<p>准确的说就是优化器在用到这个变量的时候每次都需要小心的重新从内存中读取这个变量的值，而不是使<br>用保存在寄存器中数据的备份。</p>
+<p>一般来说，volatile关键字用在如下几个地方；</p>
+<ol>
+<li>中断服务程序中修改的提供给其他程序检测的变量需要加volatile；</li>
+<li>多任务环境下各个任务之间共享的标志应该加上volatile；</li>
+<li>存储器映射的硬件寄存器也要加上volatile说明，因为每次对它读写都会存在会造成不同的意思；</li>
+</ol>
+<p>volatile 关键字和const 一样是一种类型修饰符，用它修饰的变量表示可以被某些编译器未知的因素<br>更改，比如操作系统、硬件或者其它线程等。遇到这个关键字声明的变量，编译器对访问该变量的代码就<br>不再进行优化，从而可以提供对特殊地址的稳定访问。</p>
+<p>如在下面的例子中：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> j = i; <span class="comment">//(1)语句</span></span><br><span class="line"><span class="keyword">int</span> k = i; <span class="comment">//(2)语句</span></span><br></pre></td></tr></table></figure></p>
+<p>这时候编译器对代码进行优化，因为在(1)、(2)两条语句中，i 没有被用作左值，这时编译器认为i的值<br>没有被改变。所以在(1)语句时从内存中取出i的值给j之后这个值并没有被丢弃，而是在(2)语句使用时<br>继续使用这个值给k赋值，编译器这时不会生成汇编代码重新从内存中取i的值，这样的编译优化有利于提高<br>程序的运行效率。但是要注意：(1)、(2)两条语句之间的i并没有被用作左值才行。</p>
+<p>这里再来看一下使用volatile声明变量的情况；<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> j = i; <span class="comment">//(3)语句</span></span><br><span class="line"><span class="keyword">int</span> k = i; <span class="comment">//(4)语句</span></span><br></pre></td></tr></table></figure></p>
+<p>这里volatile 关键字告诉编译器i是随时可能发生变化的，每次使用这个变量时都必须从内存中重新取出<br>i的值，因而编译器生成的汇编代码会重新从i的地址处读取数据放到k中。</p>
+<p>如果i是一个寄存器变量或者表示一个端口数据或者是多个线程共享数据，这样容易出错的情况，就可以<br>使用volatile关键字保证对特殊地址的稳定访问。</p>
+<h2 id="C语言原子操作-VS-非原子操作"><a href="#C语言原子操作-VS-非原子操作" class="headerlink" title="C语言原子操作 VS 非原子操作"></a>C语言原子操作 VS 非原子操作</h2><p>共享内存中的原子操作是指一个指令是否完成一个线程相关的单步操作。当一个原子存储作用于一个共享<br>变量时，其他线程不能检测到这个未完成修改的值。当一个原子加载作用于一个共享变量时，它读取到一<br>个完整的值，就像此时出现一个单独的时刻，而非原子加载和存储则不能做到这些保证。</p>
+<p>如果没有这些保证，无锁编程将无法实现，因为你不能使同一个线程同时操作一个共享变量。我们这里可<br>以制定如下规则：</p>
+<blockquote>
+<p>任何时刻两个线程同时操作一个共享变量，当其中一个线程为写操作时，这两个线程必须使用原子操作。<br>如果这里没有使用原子，就会发生数据竞争，出现未定义的行为。这种数据竞争会导致读写的撕裂。</p>
+</blockquote>
+<p><em>在c和c++中，所有的操作都被认定为非原子操作，甚至是普通的32位整数赋值，除非被别的编译器或者<br>硬件供应商指定。</em></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/stm32/" rel="tag"># stm32</a>
+          
+            <a href="/tags/c语言/" rel="tag"># c语言</a>
+          
+            <a href="/tags/volatile/" rel="tag"># volatile</a>
+          
+            <a href="/tags/原子操作/" rel="tag"># 原子操作</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/20/mac升级系统后无法通过控制台使用git等命令问题分析/" rel="next" title="mac升级系统后无法通过控制台使用git等命令问题分析">
+                <i class="fa fa-chevron-left"></i> mac升级系统后无法通过控制台使用git等命令问题分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/08/linux学习之安装deb格式文件/" rel="prev" title="linux学习之安装deb格式文件">
+                linux学习之安装deb格式文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yun4411</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">2.</span> <span class="nav-text">问题分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">2.1.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile-变量的用法"><span class="nav-number">2.2.</span> <span class="nav-text">volatile 变量的用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C语言原子操作-VS-非原子操作"><span class="nav-number">3.</span> <span class="nav-text">C语言原子操作 VS 非原子操作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yun4411</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

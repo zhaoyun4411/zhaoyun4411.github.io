@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="嵌入式,通讯协议," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言因为modbus是一个工业上面常用的通讯协议，一般在PLC上面用的比较多，主要i是定义了一种数据传输规范，数据是干吗的，数据有没有出错，接受到数据的从机告诉我数据有没有接受到等等。这里大部分是采用485形式进行传输，当然也可以使用can总线，232，甚至是以太网的形式来进行，当然这会和之前的形式有一定的区别。">
+<meta name="keywords" content="嵌入式,通讯协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="modbus学习笔记.md">
+<meta property="og:url" content="http://yoursite.com/2018/11/17/modbus学习笔记-1/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="前言因为modbus是一个工业上面常用的通讯协议，一般在PLC上面用的比较多，主要i是定义了一种数据传输规范，数据是干吗的，数据有没有出错，接受到数据的从机告诉我数据有没有接受到等等。这里大部分是采用485形式进行传输，当然也可以使用can总线，232，甚至是以太网的形式来进行，当然这会和之前的形式有一定的区别。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-17T07:57:27.039Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="modbus学习笔记.md">
+<meta name="twitter:description" content="前言因为modbus是一个工业上面常用的通讯协议，一般在PLC上面用的比较多，主要i是定义了一种数据传输规范，数据是干吗的，数据有没有出错，接受到数据的从机告诉我数据有没有接受到等等。这里大部分是采用485形式进行传输，当然也可以使用can总线，232，甚至是以太网的形式来进行，当然这会和之前的形式有一定的区别。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/17/modbus学习笔记-1/"/>
+
+
+
+
+
+  <title>modbus学习笔记.md | 咸鱼站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">咸鱼站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个没有理想的咸鱼</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/17/modbus学习笔记-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">modbus学习笔记.md</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-17T10:31:32+08:00">
+                2018-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为modbus是一个工业上面常用的通讯协议，一般在PLC上面用的比较多，主要i是定义了一种数据传输<br>规范，数据是干吗的，数据有没有出错，接受到数据的从机告诉我数据有没有接受到等等。这里大部分是<br>采用485形式进行传输，当然也可以使用can总线，232，甚至是以太网的形式来进行，当然这会和之前的<br>形式有一定的区别。</p>
+<a id="more"></a>
+<h2 id="modbus简介"><a href="#modbus简介" class="headerlink" title="modbus简介"></a>modbus简介</h2><p>在使用232或者485作为modbus底层通信协议的时候，整个系统只允许一个设备作为master设备，其他<br>设备作为salve，也就是说只有master端可以初始化整个通讯网络，并且发起会话，salve之间不允许<br>直接通讯。</p>
+<p>之所以这样是因为在232网络或者485网络中没有冲突检测，要是存在两个master设备，数据容易会发生<br>混乱。在使用TCP的时候由于协议的物理层已经做过了冲突检测工作，就不需要担心数据冲突。</p>
+<p>modbus数据传输的协议模型如下<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ADU</span><br><span class="line">├── 地址码</span><br><span class="line">├── PDU</span><br><span class="line">│   ├── 功能码</span><br><span class="line">│   └── 数据</span><br><span class="line">└── CRC</span><br></pre></td></tr></table></figure></p>
+<p>modbus的开头是地址帧，在modbus的网络中，每一个从机都存在一个地址，主机访问从机的时候依靠这<br>个唯一的地址来进行识别，多个从机接受到主机的数据的时候，匹配接收数据和自身地址，匹配上的那个<br>从机作出响应，其他的从机都忽略这个响应。</p>
+<p>第二个位是功能码，功能码决定这一帧数据是做什么的，比如说输入数据，输出数据，读取控制量等等，</p>
+<p>第三个是数据，可以有也可以没有。</p>
+<p>第四是差错校验，用来对之前发送的数据校验，防止发送过程中因为电磁干扰，数据出错。</p>
+<blockquote>
+<p>在使用RTU模式的时候，消息的发送至少要以3.5个字符的时间停顿间隔开始。在网络波特率下多样的<br>字符时间，这是最容易实现的。传输的第一个域是设备地址。可以使用的传输字符是16进制的0～F。网<br>络设备不断检测总线，包括停顿间隔时间。当第一个域（地址域）接受到的时候，每个设备都进行解码判<br>断，该消息是否发往自己的。当最后一个字符结束之后，一个至少3.5个字符时间的停顿标定了消息的结<br>束。一个新的消息可以在这个停顿之后开始。</p>
+</blockquote>
+<blockquote>
+<p>整个消息帧必须作为一个连续的流进行传输。如果在帧完成之前存在超过1.5个字节的停顿时间，接受<br>设备将刷新不完整的消息，并假定下一个字节是一个新的消息地址域。同样的，如果一个消息在小于3.5<br>个字符时间内接着前个消息开始，接受设备将认为它是前一个消息的延续。这将导致一个错误，这样会导<br>致最后的crc校验值不正缺。</p>
+</blockquote>
+<p> <em>在modbus协议中。主设备通过将要联络的从设备地址放入到消息中的地址来选通从设备。当从设备回应<br>消息时，从设备会将自己的地址放入到回应消息中，以便主设备知道是哪一个设备作出回应，地址0是用<br>作广播地址，以使所有的从设备都能够接收到这个消息。</em></p>
+<h2 id="modbus-功能码"><a href="#modbus-功能码" class="headerlink" title="modbus 功能码"></a>modbus 功能码</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">中文名称</th>
+<th style="text-align:center">寄存器</th>
+<th style="text-align:center">位操作/字操作</th>
+<th style="text-align:center">操作数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">01</td>
+<td style="text-align:center">读线圈状态</td>
+<td style="text-align:center">00001-09999</td>
+<td style="text-align:center">位操作</td>
+<td style="text-align:center">单个或多个</td>
+</tr>
+<tr>
+<td style="text-align:center">02</td>
+<td style="text-align:center">读离散输入状态</td>
+<td style="text-align:center">10001-19999</td>
+<td style="text-align:center">位操作</td>
+<td style="text-align:center">单个或多个</td>
+</tr>
+<tr>
+<td style="text-align:center">03</td>
+<td style="text-align:center">读保持寄存器</td>
+<td style="text-align:center">40001-49999</td>
+<td style="text-align:center">字操作</td>
+<td style="text-align:center">单个或多个</td>
+</tr>
+<tr>
+<td style="text-align:center">04</td>
+<td style="text-align:center">读输入寄存器</td>
+<td style="text-align:center">30001-39999</td>
+<td style="text-align:center">字操作</td>
+<td style="text-align:center">单个或多个</td>
+</tr>
+<tr>
+<td style="text-align:center">05</td>
+<td style="text-align:center">写单个线圈</td>
+<td style="text-align:center">00001-09999</td>
+<td style="text-align:center">位操作</td>
+<td style="text-align:center">单个</td>
+</tr>
+<tr>
+<td style="text-align:center">06</td>
+<td style="text-align:center">写单个保持寄存器</td>
+<td style="text-align:center">40001-49999</td>
+<td style="text-align:center">字操作</td>
+<td style="text-align:center">单个</td>
+</tr>
+<tr>
+<td style="text-align:center">15</td>
+<td style="text-align:center">写多个线圈</td>
+<td style="text-align:center">00001-09999</td>
+<td style="text-align:center">位操作</td>
+<td style="text-align:center">多个</td>
+</tr>
+<tr>
+<td style="text-align:center">16</td>
+<td style="text-align:center">写多个保持寄存器</td>
+<td style="text-align:center">40001-49999</td>
+<td style="text-align:center">字操作</td>
+<td style="text-align:center">多个</td>
+</tr>
+</tbody>
+</table>
+<h2 id="modbus的一些注意事项"><a href="#modbus的一些注意事项" class="headerlink" title="modbus的一些注意事项"></a>modbus的一些注意事项</h2><ol>
+<li>modbus的3.5T如何计算：</li>
+</ol>
+<p>T = 1000ms * (1起始位 + 数据位 + 奇偶校验 + 停止位) / 波特率</p>
+<p>如果你的通讯方式是：波特率9600(表示每秒传输9600个字符)，数据位8，无奇偶校验。那么你发送一个<br>字符的时间是：T = 1000*（1起始位 + 8数据位 + 0奇偶校验位 + 1停止位）/ 9600 = 1.04ms</p>
+<p>发送端：发送一帧后延时7*T （其中3.5T 是停止时间 3.5T是起始时间）再发送第二帧，保证一帧数据里<br>头各字节间间隔时间不能超过1.5T。</p>
+<p>接收端：接受一个字节，查询2T时间，是否有接受到下一个字节，有则这帧数据未完成，继续循环接收；没有<br>则默认这帧数据已经接收完成。</p>
+<h2 id="modbus信息中的数据地址"><a href="#modbus信息中的数据地址" class="headerlink" title="modbus信息中的数据地址"></a>modbus信息中的数据地址</h2><p>modbus中所有信息都是 <em>以数据0</em> 作为基准，各项数据的第一个地址数据的编号为0，如：</p>
+<ul>
+<li>线圈1在modbus信息中的数据位地址编号为0；</li>
+<li>线圈127（10进制）在modbus中的地址位为007EH(16进制)；</li>
+<li>保持寄存器 40001 ，在信息中数据地址为寄存器0000，功能代码区为保持寄存器规定的操作，因此，“4XXX”<br>是缺省的地址类型；</li>
+<li>保持寄存器 40108 寻址寄存器地址为 006BH（16进制）。</li>
+</ul>
+<h2 id="modbus异常码"><a href="#modbus异常码" class="headerlink" title="modbus异常码"></a>modbus异常码</h2><p>除广播外，主机向从机设备发送查询并希望有一个正常的响应，主机查询可能产生4种事件：</p>
+<ul>
+<li>从机接收查询，通讯错误正常处理信息，则返回一个正常的响应事件。</li>
+<li>由于通讯出错，从机不能接收查询数据，因而不返回响应。此时，主机依靠处理程序给出查询超时事件。</li>
+<li>若从机接收查询，发现有（LRC或CRC通讯错误），并且返回响应，此时，依靠主机处理程序给出查询超时<br>事件；</li>
+<li>从机接收查询，无通讯错误，但是无法处理，如读不存在的线圈和寄存器，向主机报告错误的性质。</li>
+</ul>
+<p>不正常的响应信息有两个与正常响应不相同的区域：</p>
+<p><strong>功能代码区：</strong> 正常响应时，从机的响应功能代码区。带原查询功能代码。所有的功能代码的MSB为0（其<br>值低于80H）。不正常响应时，从机把功能码MSB设为1，使功能代码值大于80H，高于正常响应值。这样，主机<br>应用程序能时别不正常响应事件，能检查不正常代码的数据区。</p>
+<p><strong>数据区：</strong> 正常响应中，数据区含有（按查询要求给出）数据或者统计值，在不正常响应中，数据区为一<br>个不正常的代码值，它说明从机产生不正常的响应条件和原因。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#master</span><br><span class="line">0a 01 04 a1 00 01 crc crc</span><br><span class="line">#salve</span><br><span class="line">0a 81 02 crc crc</span><br></pre></td></tr></table></figure>
+<p>异常码：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">代码</th>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">01</td>
+<td style="text-align:center">不合法的功能代码</td>
+<td style="text-align:center">从机接收的是一种不能执行功能代码。发出查询命令后，该代码指示无程序功能。</td>
+</tr>
+<tr>
+<td style="text-align:center">02</td>
+<td style="text-align:center">不合法数据地址</td>
+<td style="text-align:center">接收的数据地址，是从机不允许的地址。</td>
+</tr>
+<tr>
+<td style="text-align:center">03</td>
+<td style="text-align:center">不合法数据</td>
+<td style="text-align:center">查询数据区的值是从机不允许的值。</td>
+</tr>
+<tr>
+<td style="text-align:center">04</td>
+<td style="text-align:center">从机设备故障</td>
+<td style="text-align:center">从机执行主机请求的动作时出现不可恢复的错误。</td>
+</tr>
+<tr>
+<td style="text-align:center">05</td>
+<td style="text-align:center">确认</td>
+<td style="text-align:center">从机已接收请求处理数据，但需要较长 的处理时间，为避免主机出现超时错误而发送该确认响应。主机以此再发送一个“查询程序完成”未决定从机是否已完成处理。</td>
+</tr>
+<tr>
+<td style="text-align:center">06</td>
+<td style="text-align:center">从机设备忙碌</td>
+<td style="text-align:center">从机正忙于处理一个长时程序命令，请求主机在从机空闲时发送信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">07</td>
+<td style="text-align:center">否定</td>
+<td style="text-align:center">从机不能执行查询要求的程序功能时，该代码使用十进制 13 或 14 代码，向主机返回一个“不成功的编程请求”信息。主机应请求诊断从机的错误信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">08</td>
+<td style="text-align:center">内存奇偶校验错误</td>
+<td style="text-align:center">从机读扩展内存中的数据时，发现有奇偶校验错误，主机按从机的要求重新发送数据请求。</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/嵌入式/" rel="tag"># 嵌入式</a>
+          
+            <a href="/tags/通讯协议/" rel="tag"># 通讯协议</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/08/linux学习之安装deb格式文件/" rel="next" title="linux学习之安装deb格式文件">
+                <i class="fa fa-chevron-left"></i> linux学习之安装deb格式文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/17/C语言typedef-struct和struct的区别/" rel="prev" title="C语言typedef_struct和struct的区别">
+                C语言typedef_struct和struct的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yun4411</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modbus简介"><span class="nav-number">2.</span> <span class="nav-text">modbus简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modbus-功能码"><span class="nav-number">3.</span> <span class="nav-text">modbus 功能码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modbus的一些注意事项"><span class="nav-number">4.</span> <span class="nav-text">modbus的一些注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modbus信息中的数据地址"><span class="nav-number">5.</span> <span class="nav-text">modbus信息中的数据地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modbus异常码"><span class="nav-number">6.</span> <span class="nav-text">modbus异常码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yun4411</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
