@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="SICP,lisp," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -83,18 +83,14 @@
 
 
 
-<meta name="description" content="序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 闭包性质。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。">
-<meta name="keywords" content="SICP,lisp">
-<meta property="og:type" content="article">
-<meta property="og:title" content="SICP学习笔记-层次性数据和闭包性质">
-<meta property="og:url" content="http://yoursite.com/2018/05/23/SICP学习笔记-层次性数据和闭包性质/index.html">
+<meta name="keywords" content="游戏，Latex，一些好玩的技术">
+<meta property="og:type" content="website">
+<meta property="og:title" content="咸鱼站">
+<meta property="og:url" content="http://yoursite.com/page/5/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 闭包性质。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.040Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SICP学习笔记-层次性数据和闭包性质">
-<meta name="twitter:description" content="序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 闭包性质。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。">
+<meta name="twitter:title" content="咸鱼站">
 
 
 
@@ -124,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/23/SICP学习笔记-层次性数据和闭包性质/"/>
+  <link rel="canonical" href="http://yoursite.com/page/5/"/>
 
 
 
 
 
-  <title>SICP学习笔记-层次性数据和闭包性质 | 咸鱼站</title>
+  <title>咸鱼站</title>
   
 
 
@@ -149,7 +145,8 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -222,9 +219,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -237,7 +234,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/23/SICP学习笔记-层次性数据和闭包性质/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/25/使用Hexo搭建个人博客网站/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +251,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SICP学习笔记-层次性数据和闭包性质</h1>
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/25/使用Hexo搭建个人博客网站/" itemprop="url">使用Hexo搭建个人博客网站</a></h1>
         
 
         <div class="post-meta">
@@ -266,8 +265,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T19:48:47+08:00">
-                2018-05-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T13:35:20+08:00">
+                2018-03-25
               </time>
             
 
@@ -304,20 +303,16 @@
       
 
       
-        <p>序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 <em>闭包性质</em>。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。</p>
-<a id="more"></a>
-<h2 id="序列的表示-这里我理解为链表"><a href="#序列的表示-这里我理解为链表" class="headerlink" title="序列的表示(这里我理解为链表)"></a>序列的表示(这里我理解为链表)</h2><p>通过嵌套cons形成的这样的一个序对的序列称为一个表，Scheme为了方便表的构造，提供了一个基本操作list。</p>
-<p>这里可以将car看作选取表的第一项的操作，将cdr看作是选取表中除去第一项之后剩下的所有项形成的子表。car和cdr的嵌套应用可以取出第一个表里的第二、第三以及后面的各项，构造符cons可用于构造表，它在原有的表前面增加一个元素。</p>
-<p>利用序对将元素的序列表示为表之后，我们就可以使用常规的程序设计技术，通过顺序“向下cdr”表的方式完成对表的各种操作。下面的过程<code>list-ref</code>的实际参数是一个表和一个数n，它返回这个表中的第n个项，这里人们习惯将表的元素的编号从0开始，计算<code>list-ref</code>的方法如下:</p>
-<pre><code>* 对n=0，`list-ref`返回表的car
-* 否则，`list-ref`返回表的cdr的第（n-1）个项。
-</code></pre><p>在表的操作过程中，要学习强调从元素表到结果表的变换，而不是注意在逐个元素的处理上。</p>
-<h2 id="层次性结构"><a href="#层次性结构" class="headerlink" title="层次性结构"></a>层次性结构</h2><p>将表作为序列的表示方式，可以很自然的推广到表示那些元素本省也是序列的序列。认识这种元素本身也是序列的序列的一种方式，就是将它们看作树。序列中的元素就是树的分支，而那些本身也是序列的元素就形成了树中的子树。递归是处理树结构的一种很自然的工具，因为我们常常可以将对于树的操作归结为对它们分支的操作，再将这种操作归结为对分支的分支的操作，如此下去，直到达到树的叶子。</p>
-<p>map是处理序列的一种强有力的抽象，与此类似，map与递归的结合也是处理树的一种强有力的抽象。</p>
-<h2 id="序列作为一种约定的界面"><a href="#序列作为一种约定的界面" class="headerlink" title="序列作为一种约定的界面"></a>序列作为一种约定的界面</h2><p>计算过程可以很自然的用流过一些级联的处理步骤的信号方式描述，其中的每个步骤都是实现程序方案中的一个部分。对于一种情况<code>sum-odd-squares</code>。这里从一个 <em>枚举器</em> 开始，它产生出给定树的所有树叶组成的“信号”。这一信号流过一个过滤器，后将所有所有的不是奇数的数都删除，这样得到的信号又通过一个映射，这是一个“转换装置”，它将square过程应用于每个元素。这一映射的输出被馈入一个积累器，该装置用+将所有的元素组合起来，以初始0开始。</p>
-<p>要组织好这些程序使之能够更清晰的的反应上面信号流的结构，最关键的一点就是将注意力集中在处理过程从一个步骤流向下一个步骤的“信号”</p>
-<p>将程序表示为一些针对序列的操作，这样做的价值就在能帮助我呢吧得到模块化的程序设计，也就是说，得到由一些比较独立的片段组合构成设计。通过提供一个标准部件的库，并使这些部件都有着一些能以各种灵活方式互相链接的约定界面。</p>
-
+        
+          <p>最近准备安静的学习思考一段时间，并将这段时间学习与思考的内容通过博客记录下来。通过CSDN这些博客网站来搭建个人博客平台感觉存在许多不方便的地方，购买服务器又太贵，了解到可以通过github搭建，所以这里来试一试，并且将相关搭建过程记录如下。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/25/使用Hexo搭建个人博客网站/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
     
@@ -332,42 +327,14 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/SICP/" rel="tag"># SICP</a>
-          
-            <a href="/tags/lisp/" rel="tag"># lisp</a>
-          
-        </div>
+
+      
+
       
 
       
       
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/05/17/SICP学习笔记-数据抽象引导/" rel="next" title="SICP学习笔记-数据抽象引导">
-                <i class="fa fa-chevron-left"></i> SICP学习笔记-数据抽象引导
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/24/退出telnet的方法/" rel="prev" title="退出telnet的方法.md">
-                退出telnet的方法.md <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -377,11 +344,14 @@
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
+
 
 
           </div>
@@ -389,10 +359,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -413,17 +379,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -474,22 +431,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列的表示-这里我理解为链表"><span class="nav-number">1.</span> <span class="nav-text">序列的表示(这里我理解为链表)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层次性结构"><span class="nav-number">2.</span> <span class="nav-text">层次性结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列作为一种约定的界面"><span class="nav-number">3.</span> <span class="nav-text">序列作为一种约定的界面</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -630,10 +571,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
