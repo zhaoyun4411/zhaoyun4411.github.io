@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="C," />
+  <meta name="keywords" content="leetcode,C++," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
-<meta name="keywords" content="C">
+<meta name="description" content="You are given a data structure of employee information, which includes the employee’s unique id, his importance value and his direct subordinates’ id.">
+<meta name="keywords" content="leetcode,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言中#ifdef和#ifndef的比较">
-<meta property="og:url" content="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/index.html">
+<meta property="og:title" content="leetcode_690_Employee_Importance">
+<meta property="og:url" content="http://yoursite.com/2019/06/11/leetcode-690-Employee-Importance/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta property="og:description" content="You are given a data structure of employee information, which includes the employee’s unique id, his importance value and his direct subordinates’ id.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.028Z">
+<meta property="og:updated_time" content="2019-06-11T13:53:05.430Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C语言中#ifdef和#ifndef的比较">
-<meta name="twitter:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta name="twitter:title" content="leetcode_690_Employee_Importance">
+<meta name="twitter:description" content="You are given a data structure of employee information, which includes the employee’s unique id, his importance value and his direct subordinates’ id.">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/11/leetcode-690-Employee-Importance/"/>
 
 
 
 
 
-  <title>C语言中#ifdef和#ifndef的比较 | 咸鱼站</title>
+  <title>leetcode_690_Employee_Importance | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/11/leetcode-690-Employee-Importance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">C语言中#ifdef和#ifndef的比较</h1>
+          <h1 class="post-title" itemprop="name headline">leetcode_690_Employee_Importance</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T19:35:14+08:00">
-                2018-06-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-11T21:35:50+08:00">
+                2019-06-11
               </time>
             
 
@@ -304,10 +304,19 @@
       
 
       
-        <p>阅读C代码的时候会发现在有些地方会使用<code>#ifdef</code>有的地方会使用<code>#ifndef</code>，如何区分这两个。</p>
-<p><code>#ifdef</code>表示“if the following is defined”；<code>#ifndef</code>表示“if the following is not defined”。</p>
-<p>根据上面的描述可以推断下面代码会输出：”one is defined “</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> one 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is not defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+        <p>You are given a data structure of employee information, which includes the employee’s unique id, his importance value and his direct subordinates’ id.</p>
+<a id="more"></a>
+<p>For example, employee 1 is the leader of employee 2, and employee 2 is the leader of employee 3. They have importance value 15, 10 and 5, respectively. Then employee 1 has a data structure like [1, 15, [2]], and employee 2 has [2, 10, [3]], and employee 3 has [3, 5, []]. Note that although employee 3 is also a subordinate of employee 1, the relationship is not direct.</p>
+<p>Now given the employee information of a company, and an employee id, you need to return the total importance value of this employee and all his subordinates.</p>
+<p>Example 1:</p>
+<p>Input: [[1, 5, [2, 3]], [2, 3, []], [3, 3, []]], 1<br>Output: 11<br>Explanation:<br>Employee 1 has importance value 5, and he has two direct subordinates: employee 2 and employee 3. They both have importance value 3. So the total importance value of employee 1 is 5 + 3 + 3 = 11.</p>
+<p>Note:</p>
+<p>One employee has at most one direct leader and may have several subordinates.<br>The maximum number of employees won’t exceed 2000.</p>
+<p>链表问题</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">// Employee info</span></span><br><span class="line"><span class="comment">class Employee &#123;</span></span><br><span class="line"><span class="comment">public:</span></span><br><span class="line"><span class="comment">    // It's the unique ID of each node.</span></span><br><span class="line"><span class="comment">    // unique id of this employee</span></span><br><span class="line"><span class="comment">    int id;</span></span><br><span class="line"><span class="comment">    // the importance value of this employee</span></span><br><span class="line"><span class="comment">    int importance;</span></span><br><span class="line"><span class="comment">    // the id of direct subordinates</span></span><br><span class="line"><span class="comment">    vector&lt;int&gt; subordinates;</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getImportance</span><span class="params">(<span class="built_in">vector</span>&lt;Employee*&gt; employees, <span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(employees.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; subordinates;</span><br><span class="line">        <span class="keyword">int</span> val = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; employees.size(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(id == employees[i]-&gt;id)</span><br><span class="line">            &#123;</span><br><span class="line">                subordinates = employees[i]-&gt;subordinates;</span><br><span class="line">                val = employees[i]-&gt;importance;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; subordinates.size(); i++)</span><br><span class="line">        &#123;</span><br><span class="line">            val += getImportance(employees, subordinates[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意C++中检查vector是否为空的函数为vec.empty(), 若为空返回true</p>
+</blockquote>
 
       
     </div>
@@ -325,7 +334,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"># C</a>
+            <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -338,8 +349,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/18/git学习merge-rebase/" rel="next" title="git学习merge&rebase">
-                <i class="fa fa-chevron-left"></i> git学习merge&rebase
+              <a href="/2019/06/11/leetcode-43-Multiply-Strings/" rel="next" title="leetcode_43_Multiply_Strings">
+                <i class="fa fa-chevron-left"></i> leetcode_43_Multiply_Strings
               </a>
             
           </div>
@@ -348,8 +359,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/06/30/从撤销rebase分析git原理/" rel="prev" title="从撤销rebase分析git原理">
-                从撤销rebase分析git原理 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/13/leetcode-700-Search-in-a-Binary-Search-Tree/" rel="prev" title="leetcode-700-Search-in-a-Binary-Search-Tree">
+                leetcode-700-Search-in-a-Binary-Search-Tree <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>

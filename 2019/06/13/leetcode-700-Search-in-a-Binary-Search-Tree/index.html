@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="C," />
+  <meta name="keywords" content="leetcode,C++," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
-<meta name="keywords" content="C">
+<meta name="description" content="Given the root node of a binary search tree (BST) and a value. You need to find the node in the BST that the node’s value equals the given value. Return the subtree rooted with that node. If such node">
+<meta name="keywords" content="leetcode,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言中#ifdef和#ifndef的比较">
-<meta property="og:url" content="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/index.html">
+<meta property="og:title" content="leetcode-700-Search-in-a-Binary-Search-Tree">
+<meta property="og:url" content="http://yoursite.com/2019/06/13/leetcode-700-Search-in-a-Binary-Search-Tree/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta property="og:description" content="Given the root node of a binary search tree (BST) and a value. You need to find the node in the BST that the node’s value equals the given value. Return the subtree rooted with that node. If such node">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.028Z">
+<meta property="og:updated_time" content="2019-06-13T00:31:58.301Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C语言中#ifdef和#ifndef的比较">
-<meta name="twitter:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta name="twitter:title" content="leetcode-700-Search-in-a-Binary-Search-Tree">
+<meta name="twitter:description" content="Given the root node of a binary search tree (BST) and a value. You need to find the node in the BST that the node’s value equals the given value. Return the subtree rooted with that node. If such node">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/13/leetcode-700-Search-in-a-Binary-Search-Tree/"/>
 
 
 
 
 
-  <title>C语言中#ifdef和#ifndef的比较 | 咸鱼站</title>
+  <title>leetcode-700-Search-in-a-Binary-Search-Tree | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/13/leetcode-700-Search-in-a-Binary-Search-Tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">C语言中#ifdef和#ifndef的比较</h1>
+          <h1 class="post-title" itemprop="name headline">leetcode-700-Search-in-a-Binary-Search-Tree</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T19:35:14+08:00">
-                2018-06-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-13T07:45:41+08:00">
+                2019-06-13
               </time>
             
 
@@ -304,10 +304,14 @@
       
 
       
-        <p>阅读C代码的时候会发现在有些地方会使用<code>#ifdef</code>有的地方会使用<code>#ifndef</code>，如何区分这两个。</p>
-<p><code>#ifdef</code>表示“if the following is defined”；<code>#ifndef</code>表示“if the following is not defined”。</p>
-<p>根据上面的描述可以推断下面代码会输出：”one is defined “</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> one 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is not defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+        <p>Given the root node of a binary search tree (BST) and a value. You need to find the node in the BST that the node’s value equals the given value. Return the subtree rooted with that node. If such node doesn’t exist, you should return NULL.</p>
+<p>For example,</p>
+<a id="more"></a>
+<p>Given the tree:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    4</span><br><span class="line">   / \</span><br><span class="line">  2   7</span><br><span class="line"> / \</span><br><span class="line">1   3</span><br></pre></td></tr></table></figure></p>
+<p>And the value to search: 2<br>You should return this subtree:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  2     </span><br><span class="line"> / \   </span><br><span class="line">1   3</span><br></pre></td></tr></table></figure></p>
+<p>In the example above, if we want to search the value 5, since there is no node with value 5, we should return NULL.</p>
+<p>Note that an empty tree is represented by NULL, therefore you would see the expected output (serialized tree format) as [], not null.</p>
+<p>递归搜素即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Definition for a binary tree node.</span><br><span class="line"> * struct TreeNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     TreeNode *left;</span><br><span class="line"> *     TreeNode *right;</span><br><span class="line"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span><br><span class="line"> * &#125;;</span><br><span class="line"> */</span><br><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    TreeNode* searchBST(TreeNode* root, int val) &#123;</span><br><span class="line">        if(root == NULL) return root;</span><br><span class="line"></span><br><span class="line">        if(root-&gt;val == val) return root;</span><br><span class="line"></span><br><span class="line">        TreeNode* result_l = searchBST(root-&gt;left,val);</span><br><span class="line">        TreeNode* result_r = searchBST(root-&gt;right,val);</span><br><span class="line"></span><br><span class="line">        if(result_l == NULL &amp;&amp; result_r == NULL)</span><br><span class="line">        &#123;</span><br><span class="line">            return NULL;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(result_l != NULL &amp;&amp; result_r == NULL)</span><br><span class="line">        &#123;</span><br><span class="line">            return result_l;</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            return result_r;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -325,7 +329,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"># C</a>
+            <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -338,8 +344,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/18/git学习merge-rebase/" rel="next" title="git学习merge&rebase">
-                <i class="fa fa-chevron-left"></i> git学习merge&rebase
+              <a href="/2019/06/11/leetcode-690-Employee-Importance/" rel="next" title="leetcode_690_Employee_Importance">
+                <i class="fa fa-chevron-left"></i> leetcode_690_Employee_Importance
               </a>
             
           </div>
@@ -348,8 +354,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/06/30/从撤销rebase分析git原理/" rel="prev" title="从撤销rebase分析git原理">
-                从撤销rebase分析git原理 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/16/leetcode-283-Move-Zeroes/" rel="prev" title="leetcode-283-Move-Zeroes">
+                leetcode-283-Move-Zeroes <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
