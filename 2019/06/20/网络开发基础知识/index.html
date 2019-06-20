@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="mac," />
+  <meta name="keywords" content="http,网络开发," />
 
 
 
@@ -83,18 +83,21 @@
 
 
 
-<meta name="description" content="最近我的macbook 升级了macOS Mojave，升级完成之后发现控制台里面许多命令如make，git等都无法使用，在控制台中输入之后会弹报如下的error信息。 12xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Dev">
-<meta name="keywords" content="mac">
+<meta name="description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
+<meta name="keywords" content="http,网络开发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mac升级系统后无法通过控制台使用git等命令问题分析">
-<meta property="og:url" content="http://yoursite.com/2018/10/20/mac升级系统后无法通过控制台使用git等命令问题分析/index.html">
+<meta property="og:title" content="网络开发基础知识">
+<meta property="og:url" content="http://yoursite.com/2019/06/20/网络开发基础知识/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="最近我的macbook 升级了macOS Mojave，升级完成之后发现控制台里面许多命令如make，git等都无法使用，在控制台中输入之后会弹报如下的error信息。 12xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Dev">
+<meta property="og:description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.042Z">
+<meta property="og:image" content="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html">
+<meta property="og:image" content="https://blog.igevin.info/posts/restful-architecture-in-general/">
+<meta property="og:updated_time" content="2019-06-20T01:28:08.927Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mac升级系统后无法通过控制台使用git等命令问题分析">
-<meta name="twitter:description" content="最近我的macbook 升级了macOS Mojave，升级完成之后发现控制台里面许多命令如make，git等都无法使用，在控制台中输入之后会弹报如下的error信息。 12xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Dev">
+<meta name="twitter:title" content="网络开发基础知识">
+<meta name="twitter:description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
+<meta name="twitter:image" content="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html">
 
 
 
@@ -124,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/20/mac升级系统后无法通过控制台使用git等命令问题分析/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/20/网络开发基础知识/"/>
 
 
 
 
 
-  <title>mac升级系统后无法通过控制台使用git等命令问题分析 | 咸鱼站</title>
+  <title>网络开发基础知识 | 咸鱼站</title>
   
 
 
@@ -237,7 +240,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/20/mac升级系统后无法通过控制台使用git等命令问题分析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/20/网络开发基础知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +257,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mac升级系统后无法通过控制台使用git等命令问题分析</h1>
+          <h1 class="post-title" itemprop="name headline">网络开发基础知识</h1>
         
 
         <div class="post-meta">
@@ -266,8 +269,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-20T14:28:00+08:00">
-                2018-10-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-20T05:06:47+08:00">
+                2019-06-20
               </time>
             
 
@@ -304,9 +307,39 @@
       
 
       
-        <p>最近我的macbook 升级了macOS Mojave，升级完成之后发现控制台里面许多命令<br>如make，git等都无法使用，在控制台中输入之后会弹报如下的error信息。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), </span><br><span class="line">missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun</span><br></pre></td></tr></table></figure>
-<p>这个原因是因为重装了Xcode或者是应为升级了系统导致xcode某些工具缺失，可以通过下面命令修复：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure></p>
+        <h2 id="1-telnet的用法-测试端口号"><a href="#1-telnet的用法-测试端口号" class="headerlink" title="1. telnet的用法 测试端口号"></a>1. telnet的用法 测试端口号</h2><p>在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应<br>端口是否开启 <code>telnet {IP} {端口号}</code>。</p>
+<a id="more"></a>
+<blockquote>
+<p>输入netstat -ano可以查看所有端口号的情况。</p>
+</blockquote>
+<blockquote>
+<p>端口号21是FTP服务器，23 是Telnet服务器， TFTP（简单文本传输协议）的端口号是69。</p>
+</blockquote>
+<h2 id="2-TCP-IP模型的一个简单解释"><a href="#2-TCP-IP模型的一个简单解释" class="headerlink" title="2. TCP/IP模型的一个简单解释"></a>2. TCP/IP模型的一个简单解释</h2><p>TCP/IP模型是互联网的基础，是一系列网络协议的总称，这些协议的目的，就是为了使计算机之间可以进行信<br>息交互。TCP/IP的协议模型大致从下往上可以分为四层，分别为连接层（Link Layer）、网络层（Internet）、<br>传输层（Transport Layer）、应用层（Application Layer）。</p>
+<p>它们的作用可以按下面的方法理解：</p>
+<ol>
+<li>连接层负责建立电路连接，是整个网络的物理基础，典型的协议包括以太网，ADSL等等。</li>
+<li>网络层负责分配地址和传送二进制数据，主要协议是IP协议。</li>
+<li>传输层负责传送文本数据，主要协议为TCP协议。</li>
+<li>应用层负责传送各种形态的最终数据，是直接与用户打交道的层，典型的协议是HTTP、FTP等。</li>
+</ol>
+<blockquote>
+<p>互联网架构的核心是文本对话。</p>
+</blockquote>
+<h2 id="3-RestFul架构风格描述"><a href="#3-RestFul架构风格描述" class="headerlink" title="3. RestFul架构风格描述"></a>3. RestFul架构风格描述</h2><p>REST即Representational State Transfer的缩写，可译为”表现层状态转化”。REST最大的几个特点为：<br>资源、统一接口、URI和无状态。</p>
+<p>RESTful架构风格规定，数据的元操作，即CRUD(create, read, update和delete,即数据的增删查改)<br>操作，分别对应于HTTP方法：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新<br>资源，DELETE用来删除资源，这样就统一了数据操作的接口，仅通过HTTP方法，就可以完成对数据的所有增<br>删查改工作。</p>
+<ul>
+<li>GET（SELECT）：从服务器中取出资源（一项或者多项）。</li>
+<li>POST（CREATE）：在服务器中新建一个资源。</li>
+<li>PUT（UPDATE）：在服务器中跟新资源（客户端提供完整的资源数据）。</li>
+<li>PATCH（UPDATE）：在服务器中跟新资源（客户端提供需要求改的资源数据）。</li>
+<li>DELETE（DELETE）：从服务器删除资源。</li>
+</ul>
+<p>由于RESTFUL风格的服务是无状态的，认证机制尤为重要，认证信息（Basic Auth/Token Auth/OAuth）<br>被放在request的head中，而不是body中。权限逻辑在REST后台实现。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><img src="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html" alt="TCP/IP模型的一个简单解释"></li>
+<li><img src="https://blog.igevin.info/posts/restful-architecture-in-general/" alt="Rest架构风格概述"></li>
+</ol>
 
       
     </div>
@@ -324,7 +357,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/mac/" rel="tag"># mac</a>
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+            <a href="/tags/网络开发/" rel="tag"># 网络开发</a>
           
         </div>
       
@@ -337,8 +372,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/17/stm32can过滤器学习笔记/" rel="next" title="stm32can过滤器学习笔记">
-                <i class="fa fa-chevron-left"></i> stm32can过滤器学习笔记
+              <a href="/2019/06/18/前端开发基础准备/" rel="next" title="前端开发基础准备">
+                <i class="fa fa-chevron-left"></i> 前端开发基础准备
               </a>
             
           </div>
@@ -346,10 +381,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/06/stm32多线程数据不一致处理记录/" rel="prev" title="stm32多线程数据不一致处理记录">
-                stm32多线程数据不一致处理记录 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -401,8 +432,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -453,6 +493,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-telnet的用法-测试端口号"><span class="nav-number">1.</span> <span class="nav-text">1. telnet的用法 测试端口号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-TCP-IP模型的一个简单解释"><span class="nav-number">2.</span> <span class="nav-text">2. TCP/IP模型的一个简单解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-RestFul架构风格描述"><span class="nav-number">3.</span> <span class="nav-text">3. RestFul架构风格描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
