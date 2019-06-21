@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="git,merge,rebase," />
+  <meta name="keywords" content="Web,IIS,前端开发," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="git merge和git rebase 的作用都是从一个分支获取代码合并到当前分支，但是这两个命令采用不同的工作方式，在我前面介绍git基本命令的博客中( 链接 )提到，git merge代表合并指定分支到当前分支，git rebase 代表衍合指定分支到当前分支。一直不明白这两个的区别。查找资料写下这篇博客作为记录。">
-<meta name="keywords" content="git,merge,rebase">
+<meta name="description" content="Q1. 将源码直接部署道IIS上面会有什么问题发布最终程序有两种方式， 一种是编译原始程序，一种是直接在IIS中部署原始程序，这两种都可以在IIS中运行。其中编译打包后生成的为dll文件，不容易被窃取成果。源程序的话首次访问速度会很慢，因为会进行编译，第二次访问则正常速度。">
+<meta name="keywords" content="Web,IIS,前端开发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git学习merge&amp;rebase">
-<meta property="og:url" content="http://yoursite.com/2018/06/18/git学习merge-rebase/index.html">
+<meta property="og:title" content="微软IIS相关知识">
+<meta property="og:url" content="http://yoursite.com/2019/06/21/微软IIS相关知识/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="git merge和git rebase 的作用都是从一个分支获取代码合并到当前分支，但是这两个命令采用不同的工作方式，在我前面介绍git基本命令的博客中( 链接 )提到，git merge代表合并指定分支到当前分支，git rebase 代表衍合指定分支到当前分支。一直不明白这两个的区别。查找资料写下这篇博客作为记录。">
+<meta property="og:description" content="Q1. 将源码直接部署道IIS上面会有什么问题发布最终程序有两种方式， 一种是编译原始程序，一种是直接在IIS中部署原始程序，这两种都可以在IIS中运行。其中编译打包后生成的为dll文件，不容易被窃取成果。源程序的话首次访问速度会很慢，因为会进行编译，第二次访问则正常速度。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.035Z">
+<meta property="og:updated_time" content="2019-06-21T01:07:24.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git学习merge&amp;rebase">
-<meta name="twitter:description" content="git merge和git rebase 的作用都是从一个分支获取代码合并到当前分支，但是这两个命令采用不同的工作方式，在我前面介绍git基本命令的博客中( 链接 )提到，git merge代表合并指定分支到当前分支，git rebase 代表衍合指定分支到当前分支。一直不明白这两个的区别。查找资料写下这篇博客作为记录。">
+<meta name="twitter:title" content="微软IIS相关知识">
+<meta name="twitter:description" content="Q1. 将源码直接部署道IIS上面会有什么问题发布最终程序有两种方式， 一种是编译原始程序，一种是直接在IIS中部署原始程序，这两种都可以在IIS中运行。其中编译打包后生成的为dll文件，不容易被窃取成果。源程序的话首次访问速度会很慢，因为会进行编译，第二次访问则正常速度。">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/18/git学习merge-rebase/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/21/微软IIS相关知识/"/>
 
 
 
 
 
-  <title>git学习merge&rebase | 咸鱼站</title>
+  <title>微软IIS相关知识 | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/18/git学习merge-rebase/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/微软IIS相关知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git学习merge&rebase</h1>
+          <h1 class="post-title" itemprop="name headline">微软IIS相关知识</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-18T16:48:50+08:00">
-                2018-06-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-21T07:56:24+08:00">
+                2019-06-21
               </time>
             
 
@@ -304,15 +304,21 @@
       
 
       
-        <p>git merge和git rebase 的作用都是从一个分支获取代码合并到当前分支，但是这两个命令采用不同的工作方式，在我前面介绍git基本命令的博客中( <a href="https://zhaoyun4411.github.io/2018/04/19/git%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B/#more" target="_blank" rel="noopener">链接</a> )提到，git merge代表合并指定分支到当前分支，git rebase 代表衍合指定分支到当前分支。一直不明白这两个的区别。查找资料写下这篇博客作为记录。</p>
+        <h2 id="Q1-将源码直接部署道IIS上面会有什么问题"><a href="#Q1-将源码直接部署道IIS上面会有什么问题" class="headerlink" title="Q1. 将源码直接部署道IIS上面会有什么问题"></a>Q1. 将源码直接部署道IIS上面会有什么问题</h2><p>发布最终程序有两种方式， 一种是编译原始程序，一种是直接在IIS中部署原始程序，这两种都可以在IIS中<br>运行。其中编译打包后生成的为dll文件，不容易被窃取成果。源程序的话首次访问速度会很慢，因为会进行<br>编译，第二次访问则正常速度。</p>
 <a id="more"></a>
-<p>merge在官方手册中给出的定义是 <code>git-merge - Join two or more development histories together</code>，如下面的两个分支使用merge命令，在topic分支上面存在commit记录B和C，在master分支上面存在commit记录F和G运行<br>命令 <code>git checkout master</code> 后将topic分支的代码合并到master分支上面，<code>git merge topic</code>即将topic的代码合并到master分支上面。这时master分支上面会产生一个新的commit记录。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">merge前</span><br><span class="line">                     A---B---C topic</span><br><span class="line">                    /</span><br><span class="line">               D---E---F---G master</span><br><span class="line"></span><br><span class="line">merge后</span><br><span class="line"></span><br><span class="line">                     A---B---C topic</span><br><span class="line">                    /         \</span><br><span class="line">               D---E---F---G---H master</span><br></pre></td></tr></table></figure>
-<p>rebase在官方手册中的定义是 <code>git-merge - Join two or more development histories together</code>, 如下面两个分支上面使用rebase命令，在topic分支上面记录了commit记录B和C，在master分支上面存在commit记录F和G，运行命令<code>git checkout topic</code>后将master的代码合并到topic分支上面， <code>git rebase master</code>即将master代码合并到topic分支上面。这时提交记录的结构如下。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">rebase前</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                     A---B---C topic</span><br><span class="line">                    /</span><br><span class="line">               D---E---F---G master</span><br><span class="line"></span><br><span class="line">rebase后</span><br><span class="line"></span><br><span class="line">                            A&apos;--B&apos;--C&apos; topic</span><br><span class="line">                            /</span><br><span class="line">               D---E---F---G master</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>参考资料来自官方help文档 <code>git merge --help</code> <code>git rebase --help</code>.</p>
-</blockquote>
+<h2 id="Q2-安装IIS并将web程序发布道IIS上面"><a href="#Q2-安装IIS并将web程序发布道IIS上面" class="headerlink" title="Q2. 安装IIS并将web程序发布道IIS上面"></a>Q2. 安装IIS并将web程序发布道IIS上面</h2><p>直接可以通过windows功能安装IIS。</p>
+<p>发布网站将：</p>
+<ol>
+<li>打开IIS，将web程序添加到IIS，然后对其设置。</li>
+<li>添加网站时注意将应用池改为对应的ASP.net版本；物理路径即为准备发布的web程序路径；</li>
+<li>选择绑定类型和绑定端口号。</li>
+<li>将应用程序池标识改为LocalSystem，启用父路径。选中新建网站，在中间选项的IIS栏下点击ASP，<br>选择启用父路径为true</li>
+</ol>
+<h2 id="Q3-队列Queue的链表的实现"><a href="#Q3-队列Queue的链表的实现" class="headerlink" title="Q3. 队列Queue的链表的实现"></a>Q3. 队列Queue的链表的实现</h2><p>用两个变量来记录最早和最后添加的节点。若两个节点相等，Queue为空。每次添加数据更新最后添加的节点。<br>取数据更新最新添加的节点。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://blog.csdn.net/hanchaoqi/article/details/9146407" target="_blank" rel="noopener">安装IIS并将web程序发布到IIS上</a></li>
+<li><a href="https://blog.csdn.net/weixin_33896069/article/details/88161471" target="_blank" rel="noopener">队列Queue的链表实现（FIFO)</a></li>
+</ol>
 
       
     </div>
@@ -330,11 +336,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git/" rel="tag"># git</a>
+            <a href="/tags/Web/" rel="tag"># Web</a>
           
-            <a href="/tags/merge/" rel="tag"># merge</a>
+            <a href="/tags/IIS/" rel="tag"># IIS</a>
           
-            <a href="/tags/rebase/" rel="tag"># rebase</a>
+            <a href="/tags/前端开发/" rel="tag"># 前端开发</a>
           
         </div>
       
@@ -347,8 +353,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/17/和我一起写Makefile笔记/" rel="next" title="和我一起写Makefile笔记">
-                <i class="fa fa-chevron-left"></i> 和我一起写Makefile笔记
+              <a href="/2019/06/20/网络开发基础知识/" rel="next" title="网络开发基础知识">
+                <i class="fa fa-chevron-left"></i> 网络开发基础知识
               </a>
             
           </div>
@@ -356,10 +362,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/20/C语言中ifdef和ifndef的比较/" rel="prev" title="C语言中#ifdef和#ifndef的比较">
-                C语言中#ifdef和#ifndef的比较 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -411,8 +413,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -463,6 +474,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Q1-将源码直接部署道IIS上面会有什么问题"><span class="nav-number">1.</span> <span class="nav-text">Q1. 将源码直接部署道IIS上面会有什么问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Q2-安装IIS并将web程序发布道IIS上面"><span class="nav-number">2.</span> <span class="nav-text">Q2. 安装IIS并将web程序发布道IIS上面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Q3-队列Queue的链表的实现"><span class="nav-number">3.</span> <span class="nav-text">Q3. 队列Queue的链表的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
