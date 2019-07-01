@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面试,HTTP,网络," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="HTTP协议和TCP/IP协议相同，用于客户端和服务端之间的通信（请求文本或者图像资源的一端称为客户端，提供资源响应的一端称为服务器端）。  在两台计算机之间使用HTTP协议通信，在一条通讯线路上必定有一端是客户端，另一端为服务器端。  1. 通过一个具体的例子说明HTTP响应首先客户端发送如下请求12GET /index.htm HTTP/1.1   # 格式为 &amp;#123;方法&amp;#125; &amp;">
+<meta name="keywords" content="面试,HTTP,网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单HTTP协议">
+<meta property="og:url" content="http://yoursite.com/2019/06/30/简单HTTP协议/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="HTTP协议和TCP/IP协议相同，用于客户端和服务端之间的通信（请求文本或者图像资源的一端称为客户端，提供资源响应的一端称为服务器端）。  在两台计算机之间使用HTTP协议通信，在一条通讯线路上必定有一端是客户端，另一端为服务器端。  1. 通过一个具体的例子说明HTTP响应首先客户端发送如下请求12GET /index.htm HTTP/1.1   # 格式为 &amp;#123;方法&amp;#125; &amp;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-01T13:31:14.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单HTTP协议">
+<meta name="twitter:description" content="HTTP协议和TCP/IP协议相同，用于客户端和服务端之间的通信（请求文本或者图像资源的一端称为客户端，提供资源响应的一端称为服务器端）。  在两台计算机之间使用HTTP协议通信，在一条通讯线路上必定有一端是客户端，另一端为服务器端。  1. 通过一个具体的例子说明HTTP响应首先客户端发送如下请求12GET /index.htm HTTP/1.1   # 格式为 &amp;#123;方法&amp;#125; &amp;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/30/简单HTTP协议/"/>
+
+
+
+
+
+  <title>简单HTTP协议 | 咸鱼站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">咸鱼站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个没有理想的咸鱼</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/30/简单HTTP协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">简单HTTP协议</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-30T21:34:48+08:00">
+                2019-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HTTP协议和TCP/IP协议相同，用于客户端和服务端之间的通信（请求文本或者图像资源的一端称为客户端，提供资源响应的一端称为服务器端）。</p>
+<blockquote>
+<p>在两台计算机之间使用HTTP协议通信，在一条通讯线路上必定有一端是客户端，另一端为服务器端。</p>
+</blockquote>
+<h2 id="1-通过一个具体的例子说明HTTP响应"><a href="#1-通过一个具体的例子说明HTTP响应" class="headerlink" title="1. 通过一个具体的例子说明HTTP响应"></a>1. 通过一个具体的例子说明HTTP响应</h2><p>首先客户端发送如下请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /index.htm HTTP/1.1   # 格式为 &#123;方法&#125; &#123;URI&#125; &#123;协议版本&#125; （请求访问某台HTTP服务器上/index.htm页面资源）</span><br><span class="line">Host: hackr.jp</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>请求报文是由请求方法，请求URI、协议版本、可选的请求部首字段和内容实体构成。</p>
+</blockquote>
+<p>服务器端收到信号后作出如下响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK    # &#123;协议版本&#125; &#123;状态码&#125; &#123;状态码原因短语&#125;</span><br><span class="line">Data: Tue, 10 Jul 2019 06:50:15 GMT</span><br><span class="line">Content-Length: 362              </span><br><span class="line">         Content-Type text/html</span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>响应报文基本上有协议版本，状态码（表示请求成功或者失败的数字代码）、用以解释状态码的原因短语、可选的响应部首字段以及实体主体构成。</p>
+</blockquote>
+<blockquote>
+<p>使用HTTP协议不保存之前发送的请求或者响应功能。协议本身并不保存之前一切的请求或者响应的报文信息。但是有些场景（保持登陆状态）引入cookie等技术管理状态。</p>
+</blockquote>
+<h2 id="2-请求方法总结"><a href="#2-请求方法总结" class="headerlink" title="2. 请求方法总结"></a>2. 请求方法总结</h2><p>当客户端请求访问资源而发送请求时，URI需要作为请求报文中的请求URI包含在内。当不是访问特定资源而是对服务器本身发起请求，可以使用一个*来代替请求URI。</p>
+<h3 id="2-1-GET"><a href="#2-1-GET" class="headerlink" title="2.1 GET"></a>2.1 GET</h3><p>GET ： 获取资源，用来请求已经被URI识别的资源。指定资源经过服务器解析后返回响应的内容。例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">请求：  GET index.html HTTP1.1</span><br><span class="line">       Host: www.baidu.com</span><br><span class="line">响应   返回 index.html 的页面资源</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-POST"><a href="#2-2-POST" class="headerlink" title="2.2 POST"></a>2.2 POST</h3><p>POST ： 方法用来传输实体的主体。用来传输实体的主体，例子如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">请求： POST submit.cgi HTTP1.1</span><br><span class="line">      Host: www.baidu.com</span><br><span class="line">      Content-Length: 1560 (1560字节的处理结果)</span><br><span class="line">响应： 返回 submit.cgi 接收数据的处理结果</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-PUT"><a href="#2-3-PUT" class="headerlink" title="2.3 PUT"></a>2.3 PUT</h3><p>PUT ： 传输文件。类似FTP协议的文件上传一样，要求在请求报文的主体中包含文件内容，然后保存到请求URI指定位置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">请求： PUT temp.html HTTP1.1</span><br><span class="line">      Host: www.baidu.com</span><br><span class="line">      Content-Length: 1560 (1560字节的处理结果)</span><br><span class="line">响应： 响应返回状态码204 （表示该文件已经存在在该服务器上）</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因为HTTP1.1 的PUT方法不带验证机制，一般web网站不使用该方法。</p>
+</blockquote>
+<h3 id="2-4-HEAD"><a href="#2-4-HEAD" class="headerlink" title="2.4 HEAD"></a>2.4 HEAD</h3><p>HEAD ： 获得报文的首部。和GET方法类似，但是只能看到response的HEAD部分。用于确认URI的有效性及资源更新的日期和时间等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">请求：  GET index.html HTTP1.1</span><br><span class="line">       Host: www.baidu.com</span><br><span class="line">响应   返回 index.html 的响应首部</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-DELETE"><a href="#2-5-DELETE" class="headerlink" title="2.5 DELETE"></a>2.5 DELETE</h3><p>DELETE ： 删除文件，按请求URI删除服务器上面的指定资源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">请求： DELETE temp.html HTTP1.1</span><br><span class="line">      Host: www.baidu.com</span><br><span class="line">响应： 响应返回状态码204 （表示该文件已经被删除）</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因为HTTP1.1 的DELETE方法不带验证机制，一般web网站不使用该方法。如果要使用需要配合Web应用的验证机制。</p>
+</blockquote>
+<h3 id="2-6-OPTIONS"><a href="#2-6-OPTIONS" class="headerlink" title="2.6 OPTIONS"></a>2.6 OPTIONS</h3><p>OPTIONS ： 用来查询指定URI资源支持的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">请求： OPTIONS temp.html HTTP1.1</span><br><span class="line">      Host: www.baidu.com</span><br><span class="line">响应： HTTP1.1 200 OK</span><br><span class="line">      Allow: GET,POST</span><br><span class="line">      (返回服务器针对该URI支持的方法)</span><br></pre></td></tr></table></figure>
+<h3 id="2-9-总结"><a href="#2-9-总结" class="headerlink" title="2.9 总结"></a>2.9 总结</h3><p>这里总结HTTP1.0/1.1支持的方法：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">方法</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">支持的HTTP协议版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GET</td>
+<td style="text-align:left">获取资源</td>
+<td style="text-align:left">1.0、1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">POST</td>
+<td style="text-align:left">传输实体主体</td>
+<td style="text-align:left">1.0、1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">PUT</td>
+<td style="text-align:left">传输文件</td>
+<td style="text-align:left">1.0、1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">HEAD</td>
+<td style="text-align:left">获取报文首部</td>
+<td style="text-align:left">1.0、1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td style="text-align:left">删除文件</td>
+<td style="text-align:left">1.0、1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">OPTIONS</td>
+<td style="text-align:left">查询支持的方法</td>
+<td style="text-align:left">1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">TRACE</td>
+<td style="text-align:left">追踪路径</td>
+<td style="text-align:left">1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">CONNECT</td>
+<td style="text-align:left">要求用隧道协议连接代理</td>
+<td style="text-align:left">1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">LINK</td>
+<td style="text-align:left">建立和资源之间的联系</td>
+<td style="text-align:left">1.0</td>
+</tr>
+<tr>
+<td style="text-align:center">UNLINK</td>
+<td style="text-align:left">断开连接关系</td>
+<td style="text-align:left">1.0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-HTTP通信过程"><a href="#3-HTTP通信过程" class="headerlink" title="3. HTTP通信过程"></a>3. HTTP通信过程</h2><p>最开始的HTTP版本，每进行一次HTTP通信就要断开一次TCP连接。这样会导致当请求一个HTML页面的时候需要同时访问其他资源。导致每次都有建立连接和断开连接的资源消耗。增加通讯开销。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">客  建立  ---------SYN-----------&gt;  服</span><br><span class="line">    TCP  &lt;------SYN/ACK----------</span><br><span class="line">    连接  ---------ACK-----------&gt;</span><br><span class="line"></span><br><span class="line">    ------------HTTP请求---------&gt;  务</span><br><span class="line">户  &lt;-----------HTTP响应----------</span><br><span class="line"></span><br><span class="line">    断开  &lt;----------FIN----------</span><br><span class="line">端  TCP   -----------ACK---------&gt;  器</span><br><span class="line">    连接  -----------FIN---------&gt;</span><br><span class="line">         &lt;----------ACK----------</span><br></pre></td></tr></table></figure>
+<p>HTTP后续的版本开始支持持久连接（HTTP keep-alive）只要任何一端没有提出断开连接，则保持TCP的连接状态。在HTTP1.1中所有连接都是持久连接，使得多数请求以管线化方式发送成为可能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">客  建立  ---------SYN-----------&gt;  服</span><br><span class="line">    TCP  &lt;------SYN/ACK----------</span><br><span class="line">    连接  ---------ACK-----------&gt;</span><br><span class="line"></span><br><span class="line">    ------------HTTP请求---------&gt;  </span><br><span class="line">    &lt;-----------HTTP响应----------</span><br><span class="line">    ------------HTTP请求---------&gt;</span><br><span class="line">户  &lt;-----------HTTP响应----------  务</span><br><span class="line">                 ...</span><br><span class="line">    ------------HTTP请求---------&gt;  </span><br><span class="line">    &lt;-----------HTTP响应----------</span><br><span class="line"></span><br><span class="line">    断开  &lt;----------FIN----------</span><br><span class="line">端  TCP   -----------ACK---------&gt;  器</span><br><span class="line">    连接  -----------FIN---------&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-使用cookie进行状态管理"><a href="#4-使用cookie进行状态管理" class="headerlink" title="4. 使用cookie进行状态管理"></a>4. 使用cookie进行状态管理</h2><p>HTTP是无状态协议，不对之前发生过的请求和响应状态进行管理。这导致每次跳转页面都需要再次登陆。引入cookie技术后请求过程如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">       携带账号密码发送给服务器</span><br><span class="line">客  ----------------------------&gt;  服</span><br><span class="line">户  &lt;----------------------------  务</span><br><span class="line">端     在响应中添加Cookie后返回       器</span><br><span class="line"></span><br><span class="line">完成第一步后服务器记住生成的Cookie是向谁发送的</span><br><span class="line">客户端记住Cookie内容</span><br><span class="line"></span><br><span class="line">        请求中添加Cookie后发送</span><br><span class="line">客  ----------------------------&gt;  服</span><br><span class="line">户  &lt;----------------------------  务</span><br><span class="line">端  验证Cookie后响应（确认是那个客户端）器</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          
+            <a href="/tags/网络/" rel="tag"># 网络</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/30/了解web及网络基础/" rel="next" title="了解web及网络基础">
+                <i class="fa fa-chevron-left"></i> 了解web及网络基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yun4411</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-通过一个具体的例子说明HTTP响应"><span class="nav-number">1.</span> <span class="nav-text">1. 通过一个具体的例子说明HTTP响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-请求方法总结"><span class="nav-number">2.</span> <span class="nav-text">2. 请求方法总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-GET"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 GET</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-POST"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 POST</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-PUT"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 PUT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-HEAD"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 HEAD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-DELETE"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 DELETE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-OPTIONS"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 OPTIONS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-9-总结"><span class="nav-number">2.7.</span> <span class="nav-text">2.9 总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HTTP通信过程"><span class="nav-number">3.</span> <span class="nav-text">3. HTTP通信过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-使用cookie进行状态管理"><span class="nav-number">4.</span> <span class="nav-text">4. 使用cookie进行状态管理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yun4411</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
