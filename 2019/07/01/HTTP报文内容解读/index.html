@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="http,网络开发," />
+  <meta name="keywords" content="面试,HTTP,互联网," />
 
 
 
@@ -83,21 +83,18 @@
 
 
 
-<meta name="description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
-<meta name="keywords" content="http,网络开发">
+<meta name="description" content="HTTP 通信过程包括从客户端往服务端的请求以及从服务器端返回客户响应。用于HTTP协议交互的信息被称为HTTP报文。HTTP报文本身是由多行数据构成的字符串文本。主要有Head和body两块">
+<meta name="keywords" content="面试,HTTP,互联网">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络开发基础知识">
-<meta property="og:url" content="http://yoursite.com/2019/06/20/网络开发基础知识/index.html">
+<meta property="og:title" content="HTTP报文内容解读">
+<meta property="og:url" content="http://yoursite.com/2019/07/01/HTTP报文内容解读/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
+<meta property="og:description" content="HTTP 通信过程包括从客户端往服务端的请求以及从服务器端返回客户响应。用于HTTP协议交互的信息被称为HTTP报文。HTTP报文本身是由多行数据构成的字符串文本。主要有Head和body两块">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html">
-<meta property="og:image" content="https://blog.igevin.info/posts/restful-architecture-in-general/">
-<meta property="og:updated_time" content="2019-06-20T01:28:08.927Z">
+<meta property="og:updated_time" content="2019-07-06T09:48:28.570Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="网络开发基础知识">
-<meta name="twitter:description" content="1. telnet的用法 测试端口号在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应端口是否开启 telnet {IP} {端口号}。">
-<meta name="twitter:image" content="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html">
+<meta name="twitter:title" content="HTTP报文内容解读">
+<meta name="twitter:description" content="HTTP 通信过程包括从客户端往服务端的请求以及从服务器端返回客户响应。用于HTTP协议交互的信息被称为HTTP报文。HTTP报文本身是由多行数据构成的字符串文本。主要有Head和body两块">
 
 
 
@@ -127,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/06/20/网络开发基础知识/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/01/HTTP报文内容解读/"/>
 
 
 
 
 
-  <title>网络开发基础知识 | 咸鱼站</title>
+  <title>HTTP报文内容解读 | 咸鱼站</title>
   
 
 
@@ -240,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/20/网络开发基础知识/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/01/HTTP报文内容解读/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -257,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">网络开发基础知识</h1>
+          <h1 class="post-title" itemprop="name headline">HTTP报文内容解读</h1>
         
 
         <div class="post-meta">
@@ -269,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-20T05:06:47+08:00">
-                2019-06-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-01T21:33:07+08:00">
+                2019-07-01
               </time>
             
 
@@ -307,39 +304,58 @@
       
 
       
-        <h2 id="1-telnet的用法-测试端口号"><a href="#1-telnet的用法-测试端口号" class="headerlink" title="1. telnet的用法 测试端口号"></a>1. telnet的用法 测试端口号</h2><p>在控制台中输入telnet 回车若不报错误证明telnet可用。可以通过如下命令格式测试对应IP机器的对应<br>端口是否开启 <code>telnet {IP} {端口号}</code>。</p>
+        <p>HTTP 通信过程包括从客户端往服务端的请求以及从服务器端返回客户响应。用于HTTP协议交互的信息被称为HTTP报文。HTTP报文本身是由多行数据构成的字符串文本。主要有Head和body两块</p>
 <a id="more"></a>
+<h2 id="1-请求报文的响应结构"><a href="#1-请求报文的响应结构" class="headerlink" title="1. 请求报文的响应结构"></a>1. 请求报文的响应结构</h2><p>首先了解HTTP报文结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----------------+     [报文首部]</span><br><span class="line">|    报文首部     |      服务端或者客户端处理的请求响应的内容及属性。</span><br><span class="line">+----------------+     [CR+LF]</span><br><span class="line">|   空行(CR+LF)  |      回车符和换行符</span><br><span class="line">+----------------+     [报文主体]</span><br><span class="line">|    报文主体     |      应该被发送的数据</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+<p>请求报文和响应报文的结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">请求报文</span><br><span class="line">+----------------+     [报文首部]</span><br><span class="line">|    报文首部     |      +-------------------+</span><br><span class="line">+----------------+     |        请求行       |     </span><br><span class="line">|   空行(CR+LF)  |      +-------------------+</span><br><span class="line">+----------------+     |     各种部首字段     |</span><br><span class="line">|    报文主体     |      +-------------------+</span><br><span class="line">+----------------+     |        其他         |</span><br><span class="line">                        +-------------------+</span><br><span class="line"></span><br><span class="line">响应报文</span><br><span class="line">+----------------+     [报文首部]</span><br><span class="line">|    报文首部     |      +-------------------+</span><br><span class="line">+----------------+     |        状态行       |     </span><br><span class="line">|   空行(CR+LF)  |      +-------------------+</span><br><span class="line">+----------------+     |     各种部首字段     |</span><br><span class="line">|    报文主体     |      +-------------------+</span><br><span class="line">+----------------+     |        其他         |</span><br><span class="line">                        +-------------------+</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>输入netstat -ano可以查看所有端口号的情况。</p>
+<p>请求行包含用于请求的方法，请求URI和HTTP版本；状态行包含表明响应结果的状态码，原因短语和HTTP版本；部首字段包含响应的各种条件和属性的各类部首（包含通用部首、请求部首、响应部首和实体部首）；其他包括协议中未定义部首如cookie。</p>
 </blockquote>
-<blockquote>
-<p>端口号21是FTP服务器，23 是Telnet服务器， TFTP（简单文本传输协议）的端口号是69。</p>
-</blockquote>
-<h2 id="2-TCP-IP模型的一个简单解释"><a href="#2-TCP-IP模型的一个简单解释" class="headerlink" title="2. TCP/IP模型的一个简单解释"></a>2. TCP/IP模型的一个简单解释</h2><p>TCP/IP模型是互联网的基础，是一系列网络协议的总称，这些协议的目的，就是为了使计算机之间可以进行信<br>息交互。TCP/IP的协议模型大致从下往上可以分为四层，分别为连接层（Link Layer）、网络层（Internet）、<br>传输层（Transport Layer）、应用层（Application Layer）。</p>
-<p>它们的作用可以按下面的方法理解：</p>
-<ol>
-<li>连接层负责建立电路连接，是整个网络的物理基础，典型的协议包括以太网，ADSL等等。</li>
-<li>网络层负责分配地址和传送二进制数据，主要协议是IP协议。</li>
-<li>传输层负责传送文本数据，主要协议为TCP协议。</li>
-<li>应用层负责传送各种形态的最终数据，是直接与用户打交道的层，典型的协议是HTTP、FTP等。</li>
-</ol>
-<blockquote>
-<p>互联网架构的核心是文本对话。</p>
-</blockquote>
-<h2 id="3-RestFul架构风格描述"><a href="#3-RestFul架构风格描述" class="headerlink" title="3. RestFul架构风格描述"></a>3. RestFul架构风格描述</h2><p>REST即Representational State Transfer的缩写，可译为”表现层状态转化”。REST最大的几个特点为：<br>资源、统一接口、URI和无状态。</p>
-<p>RESTful架构风格规定，数据的元操作，即CRUD(create, read, update和delete,即数据的增删查改)<br>操作，分别对应于HTTP方法：GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新<br>资源，DELETE用来删除资源，这样就统一了数据操作的接口，仅通过HTTP方法，就可以完成对数据的所有增<br>删查改工作。</p>
+<h2 id="2-编码提升传输效率"><a href="#2-编码提升传输效率" class="headerlink" title="2. 编码提升传输效率"></a>2. 编码提升传输效率</h2><p>HTTP在传输数据时可以按照数据原貌进行传输，也可以在传输过程中通过编码提升传输效率。通过编码传输，能够有效的处理大量的访问资源。但是编码的操作需要计算机完成，因此会消耗更多的CPU计算资源。常用的内容格式编码有以下几种：</p>
 <ul>
-<li>GET（SELECT）：从服务器中取出资源（一项或者多项）。</li>
-<li>POST（CREATE）：在服务器中新建一个资源。</li>
-<li>PUT（UPDATE）：在服务器中跟新资源（客户端提供完整的资源数据）。</li>
-<li>PATCH（UPDATE）：在服务器中跟新资源（客户端提供需要求改的资源数据）。</li>
-<li>DELETE（DELETE）：从服务器删除资源。</li>
+<li>gzip (GUN zip)</li>
+<li>compress(UNIX 系统的解压缩标准)</li>
+<li>deflate(zlib)</li>
+<li>identity(不进行编码)</li>
 </ul>
-<p>由于RESTFUL风格的服务是无状态的，认证机制尤为重要，认证信息（Basic Auth/Token Auth/OAuth）<br>被放在request的head中，而不是body中。权限逻辑在REST后台实现。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
-<li><img src="http://www.ruanyifeng.com/blog/2009/03/tcp-ip_model.html" alt="TCP/IP模型的一个简单解释"></li>
-<li><img src="https://blog.igevin.info/posts/restful-architecture-in-general/" alt="Rest架构风格概述"></li>
-</ol>
+<p><strong>HTTP报文和实体主体的区别</strong></p>
+<ul>
+<li><strong>报文(message)</strong>:HTTP通讯中的基本单位。</li>
+<li><strong>实体(entity)</strong>:请求或响应的有效数据段。</li>
+</ul>
+<blockquote>
+<p>通常报文主体是等于实体主体的，只有当传输过程中进行了编码操作时，实体主体的内容发生变化，才导致他和报文主体之间产生差异。若报文需要压缩是对实体内容进行压缩，得到报文内容。</p>
+</blockquote>
+<p>同时HTTP通信过程中请求的资源可能需要很久全部完成传输，协议可以支持将数据块分割成多块，能够让浏览器逐步显示请求页面。这个能力叫做分块传输编码(Chunked Transfer Coding)。</p>
+<h2 id="3-获取部分内容的范围请求"><a href="#3-获取部分内容的范围请求" class="headerlink" title="3. 获取部分内容的范围请求"></a>3. 获取部分内容的范围请求</h2><p>对于一份10000字节大小的资源，如果使用范围请求，可以只请求5001～10000字节内的资源（Range Request）。具体方法是在Head中使用部首字段Range来指定资源的byte范围。</p>
+<ul>
+<li><p>5001到10000字节</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Range: bytes=5001-10000</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从5001到最后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Range: bytes=5001-</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从开始到3000字节和从5001到6000字节的多重范围</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Range: bytes=-3000, 5001-6000</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>若请求可以正确响应返回206的响应报文，若无法响应返回完整的报文和200OK的状态码。</p>
+<h2 id="4-内容协商返回最适合的内容"><a href="#4-内容协商返回最适合的内容" class="headerlink" title="4. 内容协商返回最适合的内容"></a>4. 内容协商返回最适合的内容</h2><p>当浏览器的语言选项为中文时显示的语言为中文，当浏览器的语言设置为中文是访问会返回中文的web页面，是英文时则会返回英文的web页面。这样的机制称为内容协商。主要包含的部首字段如下：</p>
+<ul>
+<li>Accept</li>
+<li>Accept-Charset</li>
+<li>Accept-Encoding</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+</ul>
+<p>内容协商技术有以下三种类型：</p>
+<ul>
+<li><strong>服务器驱动协商(Server-driven Negotiation)</strong>：服务器端根据请求部首字段自动处理。</li>
+<li><strong>客户端驱动协商(Agent-driven Negotiation)</strong>：服务器端将所有的请求可能全部发送出来，客户端在页面选择，或者自动选择。</li>
+<li><strong>透明协商(Transparent Negotiation)</strong>：服务器端和客户端各自进行内容协商</li>
+</ul>
 
       
     </div>
@@ -357,9 +373,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/http/" rel="tag"># http</a>
+            <a href="/tags/面试/" rel="tag"># 面试</a>
           
-            <a href="/tags/网络开发/" rel="tag"># 网络开发</a>
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          
+            <a href="/tags/互联网/" rel="tag"># 互联网</a>
           
         </div>
       
@@ -372,8 +390,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/18/前端开发基础准备/" rel="next" title="前端开发基础准备">
-                <i class="fa fa-chevron-left"></i> 前端开发基础准备
+              <a href="/2019/06/30/简单HTTP协议/" rel="next" title="简单HTTP协议">
+                <i class="fa fa-chevron-left"></i> 简单HTTP协议
               </a>
             
           </div>
@@ -381,10 +399,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/21/微软IIS相关知识/" rel="prev" title="微软IIS相关知识">
-                微软IIS相关知识 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -507,7 +521,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-telnet的用法-测试端口号"><span class="nav-number">1.</span> <span class="nav-text">1. telnet的用法 测试端口号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-TCP-IP模型的一个简单解释"><span class="nav-number">2.</span> <span class="nav-text">2. TCP/IP模型的一个简单解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-RestFul架构风格描述"><span class="nav-number">3.</span> <span class="nav-text">3. RestFul架构风格描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-请求报文的响应结构"><span class="nav-number">1.</span> <span class="nav-text">1. 请求报文的响应结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编码提升传输效率"><span class="nav-number">2.</span> <span class="nav-text">2. 编码提升传输效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-获取部分内容的范围请求"><span class="nav-number">3.</span> <span class="nav-text">3. 获取部分内容的范围请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-内容协商返回最适合的内容"><span class="nav-number">4.</span> <span class="nav-text">4. 内容协商返回最适合的内容</span></a></li></ol></div>
             
 
           </div>
