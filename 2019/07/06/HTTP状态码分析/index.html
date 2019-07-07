@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="面试,互联网,http," />
+  <meta name="keywords" content="面试,HTTP,互联网," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="在我们上网的时候可以看到url前面会有http或者https的字样，这篇博客将解释这两个的区别。">
-<meta name="keywords" content="面试,互联网,http">
+<meta name="description" content="1. 状态码的作用HTTP状态码负责表示客户端HTTP请求的返回结果，标记服务器端的处理是否正常。借助状态码客户端就可以快速知道服务器端的处理结果状态。其中数字的第一位指定了响应类别具体响应类别如下。">
+<meta name="keywords" content="面试,HTTP,互联网">
 <meta property="og:type" content="article">
-<meta property="og:title" content="http和https的区别">
-<meta property="og:url" content="http://yoursite.com/2019/06/29/http和https的区别/index.html">
+<meta property="og:title" content="HTTP状态码分析">
+<meta property="og:url" content="http://yoursite.com/2019/07/06/HTTP状态码分析/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="在我们上网的时候可以看到url前面会有http或者https的字样，这篇博客将解释这两个的区别。">
+<meta property="og:description" content="1. 状态码的作用HTTP状态码负责表示客户端HTTP请求的返回结果，标记服务器端的处理是否正常。借助状态码客户端就可以快速知道服务器端的处理结果状态。其中数字的第一位指定了响应类别具体响应类别如下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-29T15:17:16.385Z">
+<meta property="og:updated_time" content="2019-07-07T07:24:41.524Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="http和https的区别">
-<meta name="twitter:description" content="在我们上网的时候可以看到url前面会有http或者https的字样，这篇博客将解释这两个的区别。">
+<meta name="twitter:title" content="HTTP状态码分析">
+<meta name="twitter:description" content="1. 状态码的作用HTTP状态码负责表示客户端HTTP请求的返回结果，标记服务器端的处理是否正常。借助状态码客户端就可以快速知道服务器端的处理结果状态。其中数字的第一位指定了响应类别具体响应类别如下。">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/06/29/http和https的区别/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/06/HTTP状态码分析/"/>
 
 
 
 
 
-  <title>http和https的区别 | 咸鱼站</title>
+  <title>HTTP状态码分析 | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/29/http和https的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/06/HTTP状态码分析/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">http和https的区别</h1>
+          <h1 class="post-title" itemprop="name headline">HTTP状态码分析</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-29T22:35:56+08:00">
-                2019-06-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-06T17:49:57+08:00">
+                2019-07-06
               </time>
             
 
@@ -304,18 +304,84 @@
       
 
       
-        <p>在我们上网的时候可以看到url前面会有http或者https的字样，这篇博客将解释这两个的区别。</p>
+        <h2 id="1-状态码的作用"><a href="#1-状态码的作用" class="headerlink" title="1. 状态码的作用"></a>1. 状态码的作用</h2><p>HTTP状态码负责表示客户端HTTP请求的返回结果，标记服务器端的处理是否正常。借助状态码客户端就可以快速知道服务器端的处理结果状态。其中数字的第一位指定了响应类别具体响应类别如下。</p>
 <a id="more"></a>
-<p>http就是我们说的超文本传输协议，这个协议是用明文的方式发送内容，比如说我们访问一个网站，可能需要<br>在一个网站输入密码登陆账号之类的操作，这时候使用如果有人在服务端向客户端请求数据的中途拦截了数据<br>是可以直接获取到账号密码信息的。</p>
-<p>这里为了解决http在传输过程中不加密的问题，后面添加了一个ssl协议，这个协议提供了一个数据安全和完整<br>性的协议内容（主要负责网络连接的加密）。</p>
-<p>访问一个https的网站请求步骤如下：</p>
-<ol>
-<li>客户端首先和服务端建立一个安全的连接通道。</li>
-<li>服务端发送一份网站的证书信息到客户端（告诉客户端访问到了正确的服务器）。</li>
-<li>这时候服务端将共钥，和请求发送给客户端（私钥自己保留）。</li>
-<li>客户端将数据打包加密后发送给服务端。</li>
-<li>服务器通过私钥解密数据包。</li>
-</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:left">类别</th>
+<th style="text-align:left">原因短语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1XX</td>
+<td style="text-align:left">Informational(信息性状态码)</td>
+<td style="text-align:left">接收的请求正在处理</td>
+</tr>
+<tr>
+<td style="text-align:center">2XX</td>
+<td style="text-align:left">Success(成功状态码)</td>
+<td style="text-align:left">请求正常处理完毕</td>
+</tr>
+<tr>
+<td style="text-align:center">3XX</td>
+<td style="text-align:left">Redirection(重定向状态码)</td>
+<td style="text-align:left">需要进行附加操作以完成请求</td>
+</tr>
+<tr>
+<td style="text-align:center">4XX</td>
+<td style="text-align:left">Client Error()</td>
+<td style="text-align:left">服务器无法处理的请求</td>
+</tr>
+<tr>
+<td style="text-align:center">5XX</td>
+<td style="text-align:left">Server Error()</td>
+<td style="text-align:left">服务器处理请求出错</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-2XX状态码"><a href="#2-2XX状态码" class="headerlink" title="2. 2XX状态码"></a>2. 2XX状态码</h2><ul>
+<li><p><strong>200 OK</strong> 表示从客户端发来的请求被正常处理。</p>
+</li>
+<li><p><strong>204 NO Content</strong> 该状态码代表服务器接收的请求已经成功处理，但在返回的响应报文中不包含body体的部分。（请求处理成功，但没有资源返回）</p>
+</li>
+<li><p><strong>206 Partial Content</strong> 该状态码表示客户端进行了范围请求，响应指定范围内的资源文件。</p>
+</li>
+</ul>
+<h2 id="3-3XX状态码"><a href="#3-3XX状态码" class="headerlink" title="3. 3XX状态码"></a>3. 3XX状态码</h2><ul>
+<li><p><strong>301 Moved Permanently</strong> 如请求下面的URI <code>http://example/sample</code> 因为忘记添加最后的斜杠 <code>/</code> ,这时候服务器端会产生301的状态码。</p>
+</li>
+<li><p><strong>302 Found</strong> 表示资源的URI已经临时定位到其他位置，该资源已经被分配了新的URI，希望客户端本次能够使用新的URI来访问。</p>
+</li>
+<li><p><strong>303 See Other</strong> 该资源码表示请求对应的资源存在另一个URI，应使用 GET 方法定向获取请求资源。</p>
+</li>
+<li><p><strong>304 NO Content</strong> 该状态码表示客户端发送附带条件的请求时，服务器允许请求访问资源，但未满足条件的情况下， 304状态码返回。</p>
+</li>
+</ul>
+<blockquote>
+<p>附加条件是指使用 GET方法的情况下请求报文中包含 If-Match, If-Modified-Since, If-None-Match, If-Range, If-Unmodified-Since中任一部分。</p>
+</blockquote>
+<ul>
+<li><strong>307 Temporary Redirect</strong> 临时重定向，与302的状态码有着类似的作用。</li>
+</ul>
+<h2 id="3-4XX状态码"><a href="#3-4XX状态码" class="headerlink" title="3. 4XX状态码"></a>3. 4XX状态码</h2><ul>
+<li><p><strong>400 Bad Request</strong> 请求报文中存在语法错误，导致服务器端无法理解。</p>
+</li>
+<li><p><strong>401 Unauthorized</strong> 请求的URI需要通过HTTP认证。若之前进行过一次请求，则这次返回认证失败。</p>
+</li>
+<li><p><strong>403 Forbidden</strong> 请求访问的资源被服务器拒绝，用户没有访问该资源块的权限。</p>
+</li>
+<li><p><strong>404 Not Found</strong> 服务器上没有对应的资源</p>
+</li>
+</ul>
+<h2 id="3-5XX状态码"><a href="#3-5XX状态码" class="headerlink" title="3. 5XX状态码"></a>3. 5XX状态码</h2><ul>
+<li><p><strong>500 Unauthorized</strong> 服务器内部错误。可能是Web应用存在Bug或某些零时故障。</p>
+</li>
+<li><p><strong>503 Service Unavailable</strong> 表示服务器暂时处于超负荷或者停机维护状态，现在无法处理请求。</p>
+</li>
+</ul>
 
       
     </div>
@@ -335,9 +401,9 @@
           
             <a href="/tags/面试/" rel="tag"># 面试</a>
           
-            <a href="/tags/互联网/" rel="tag"># 互联网</a>
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
           
-            <a href="/tags/http/" rel="tag"># http</a>
+            <a href="/tags/互联网/" rel="tag"># 互联网</a>
           
         </div>
       
@@ -350,8 +416,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/21/微软IIS相关知识/" rel="next" title="微软IIS相关知识">
-                <i class="fa fa-chevron-left"></i> 微软IIS相关知识
+              <a href="/2019/07/01/HTTP报文内容解读/" rel="next" title="HTTP报文内容解读">
+                <i class="fa fa-chevron-left"></i> HTTP报文内容解读
               </a>
             
           </div>
@@ -359,10 +425,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/30/了解web及网络基础/" rel="prev" title="了解web及网络基础">
-                了解web及网络基础 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -414,8 +476,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -466,6 +537,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-状态码的作用"><span class="nav-number">1.</span> <span class="nav-text">1. 状态码的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2XX状态码"><span class="nav-number">2.</span> <span class="nav-text">2. 2XX状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3XX状态码"><span class="nav-number">3.</span> <span class="nav-text">3. 3XX状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4XX状态码"><span class="nav-number">4.</span> <span class="nav-text">3. 4XX状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5XX状态码"><span class="nav-number">5.</span> <span class="nav-text">3. 5XX状态码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
