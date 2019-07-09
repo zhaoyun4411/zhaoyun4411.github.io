@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="Hexo,github,gitpage,博客," />
+  <meta name="keywords" content="HTTP,互联网,面试,Web服务器," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="最近准备安静的学习思考一段时间，并将这段时间学习与思考的内容通过博客记录下来。通过CSDN这些博客网站来搭建个人博客平台感觉存在许多不方便的地方，购买服务器又太贵，了解到可以通过github搭建，所以这里来试一试，并且将相关搭建过程记录如下。">
-<meta name="keywords" content="Hexo,github,gitpage,博客">
+<meta name="description" content="一台Web服务器可以搭建多个独立域名的Web网站，也可以作为数据转发服务器提升传输效率。">
+<meta name="keywords" content="HTTP,互联网,面试,Web服务器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Hexo搭建个人博客网站">
-<meta property="og:url" content="http://yoursite.com/2018/03/25/使用Hexo搭建个人博客网站/index.html">
+<meta property="og:title" content="与HTTP协作的Web服务器">
+<meta property="og:url" content="http://yoursite.com/2019/07/07/与HTTP协作的Web服务器/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="最近准备安静的学习思考一段时间，并将这段时间学习与思考的内容通过博客记录下来。通过CSDN这些博客网站来搭建个人博客平台感觉存在许多不方便的地方，购买服务器又太贵，了解到可以通过github搭建，所以这里来试一试，并且将相关搭建过程记录如下。">
+<meta property="og:description" content="一台Web服务器可以搭建多个独立域名的Web网站，也可以作为数据转发服务器提升传输效率。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.037Z">
+<meta property="og:updated_time" content="2019-07-09T12:24:12.616Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Hexo搭建个人博客网站">
-<meta name="twitter:description" content="最近准备安静的学习思考一段时间，并将这段时间学习与思考的内容通过博客记录下来。通过CSDN这些博客网站来搭建个人博客平台感觉存在许多不方便的地方，购买服务器又太贵，了解到可以通过github搭建，所以这里来试一试，并且将相关搭建过程记录如下。">
+<meta name="twitter:title" content="与HTTP协作的Web服务器">
+<meta name="twitter:description" content="一台Web服务器可以搭建多个独立域名的Web网站，也可以作为数据转发服务器提升传输效率。">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/25/使用Hexo搭建个人博客网站/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/07/与HTTP协作的Web服务器/"/>
 
 
 
 
 
-  <title>使用Hexo搭建个人博客网站 | 咸鱼站</title>
+  <title>与HTTP协作的Web服务器 | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/25/使用Hexo搭建个人博客网站/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/07/与HTTP协作的Web服务器/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用Hexo搭建个人博客网站</h1>
+          <h1 class="post-title" itemprop="name headline">与HTTP协作的Web服务器</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-25T13:35:20+08:00">
-                2018-03-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-07T12:35:50+08:00">
+                2019-07-07
               </time>
             
 
@@ -304,27 +304,35 @@
       
 
       
-        <p>最近准备安静的学习思考一段时间，并将这段时间学习与思考的内容通过博客记录下来。通过CSDN这些博客网站来搭建个人博客平台感觉存在许多不方便的地方，购买服务器又太贵，了解到可以通过github搭建，所以这里来试一试，并且将相关搭建过程记录如下。</p>
+        <p>一台Web服务器可以搭建多个独立域名的Web网站，也可以作为数据转发服务器提升传输效率。</p>
 <a id="more"></a>
-<p>首先申明本文针对mac用户。文章内容参考<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo官方网站</a>。</p>
-<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><ul>
-<li>Node.js：进入<a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs官方网站</a>选择最新的版本直接安装即可。</li>
-<li>git：mac系统已经自带，如果没有安装可以参考<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">hexo官方网站</a>中的方法安装。</li>
+<h2 id="1-用单台虚拟主机实现多个域名"><a href="#1-用单台虚拟主机实现多个域名" class="headerlink" title="1. 用单台虚拟主机实现多个域名"></a>1. 用单台虚拟主机实现多个域名</h2><p>HTTP协议规范允许一台HTTP服务器搭建多个Web站点，也可以说在相同的IP地址下Web服务器可以寄存多个不同主机名和域名的Web网站，因此在发送HTTP请求是，必须在Host部首内部完整的指定主机名或域名的URI。即一个 <strong>一个域名只能对应一个ip，但一个ip可以对应多个域名</strong> 。</p>
+<blockquote>
+<p>域名在DNS服务器里面做解析的时候，一条记录只能指向一个IP地址。如果一个子域名指向两个IP地址，当打开这个域名时，浏览器就不知道显示那个IP地址。当IP绑定到一台服务器时可以在服务器上设置多个主机头，每个主机头绑定一个域名。这样当访问者打开服务器上站点时，服务器会根据访问正访问的时那个域名，来展示对应域名的网站内容。</p>
+</blockquote>
+<h2 id="2-用作数据转发"><a href="#2-用作数据转发" class="headerlink" title="2. 用作数据转发"></a>2. 用作数据转发</h2><p>HTTP通信除了客户端与服务器之间的信息交互外还有一些用户通信数据转发的应用程序，例如网络代理，网关和隧道。这些应用程序和服务器可以将请求转发给通信线路上的下一站服务器，并接收从那台服务器上发送的响应再转发给客户端。</p>
+<h3 id="2-1-代理"><a href="#2-1-代理" class="headerlink" title="2.1 代理"></a>2.1 代理</h3><p>代理是一种具有转发功能的应用程序，它扮演了位于服务器和客户端“中间人”的角色，接收由客户端发送的请求并转发给服务器，同时也接收服务器的响应并转发给客户端。每次通过代理服务器转发请求或者响应会追加写入Via部首信息。</p>
+<blockquote>
+<p>代理服务器内部可以设施做到针对特定URI访问的控制</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">                         GET / HTTP/1.1             GET / HTTP/1.1</span><br><span class="line">客  GET / HTTP/1.1  代理    Via: proxy1    代理   Via: proxy2, proxy1    资源</span><br><span class="line">户 ---------------&gt; 服务 ----------------&gt; 服务 -----------------------&gt; 服务</span><br><span class="line">端 &lt;--------------- 器1 &lt;----------------- 器2 &lt;----------------------- 器</span><br><span class="line">   HTTP/1.1 200 OK       HTTP/1.1 200 OK           HTTP/1.1 200 OK</span><br><span class="line"> Via: proxy2, proxy1       Via: proxy2</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-网关"><a href="#2-2-网关" class="headerlink" title="2.2 网关"></a>2.2 网关</h3><p>网关是转发其他服务器通信数据的服务器，接收从客户端发送来的请求，它就像自己拥有通信资源的服务器一样对请求进行处理。有时客户端都可能不会察觉，自己的通讯目标是一个网关。（可以理解为南北向服务）</p>
+<h3 id="2-3-隧道"><a href="#2-3-隧道" class="headerlink" title="2.3 隧道"></a>2.3 隧道</h3><p>隧道是在两个相隔很远的客户端和服务器两者之间进行中转，并保持双方通信连接的应用程序。隧道本身不会去解析HTTP请求。也就是说请求保持原样中转给之后的服务器。</p>
+<h2 id="3-保存资源的缓存"><a href="#3-保存资源的缓存" class="headerlink" title="3. 保存资源的缓存"></a>3. 保存资源的缓存</h2><p>缓存是指代理服务器或客户端本地磁盘内保存的资源副本。利用缓存可以减少对源服务器的访问，因此也就节省了通信流量和通信时间。</p>
+<blockquote>
+<p>请求的资源如果已经被缓存则直接由缓存服务器返回给客户端。</p>
+</blockquote>
+<p>同时缓存存在有效期的概念，缓存服务器或客户端判断资源不再有效会先向资源服务器确认资源有效性。若判断浏览器缓存失效，浏览器会再次请求新的资源。</p>
+<blockquote>
+<p>IE浏览器起将缓存称为临时网络文件。</p>
+</blockquote>
+<h2 id="4-HTTP之前的协议介绍"><a href="#4-HTTP之前的协议介绍" class="headerlink" title="4. HTTP之前的协议介绍"></a>4. HTTP之前的协议介绍</h2><ul>
+<li>FTP 传输文件时使用该协议</li>
+<li>NNTP</li>
+<li>Archie</li>
+<li>WAIS</li>
+<li>Gopher</li>
 </ul>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>当Node.js和git安装好了之后即可以开始安装Hexo。在终端中输入下面命令安装Hexo。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo</span><br></pre></td></tr></table></figure>
-<h3 id="Hexo初始化"><a href="#Hexo初始化" class="headerlink" title="Hexo初始化"></a>Hexo初始化</h3><p>通过控制台切换到您想要存放博客的目录位置，执行下面命令，初始化Hexo的配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br><span class="line">npm install</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
-<p>完成上面操作之后，即完成Hexo的初始化，这时打开浏览器输入下面的网址 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 既可以看到生成的博客网址。最后需要通过control + c终止程序。</p>
-<p>新建完成后指定文件夹下的目录结构如下：(具体含义参考<a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">hexo官方网站</a>，这里不重复说明)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|-- _config.yml</span><br><span class="line">|-- package.json</span><br><span class="line">|-- scaffolds</span><br><span class="line">|-- source</span><br><span class="line">|   |-- _drafts</span><br><span class="line">|   └-- _posts</span><br><span class="line">└-- themes</span><br></pre></td></tr></table></figure>
-<h2 id="关联github账号"><a href="#关联github账号" class="headerlink" title="关联github账号"></a>关联github账号</h2><p>这里默认阅读这篇文章的人都熟悉github，并能够独立完成github的相关操作。</p>
-<h3 id="创建代码仓库"><a href="#创建代码仓库" class="headerlink" title="创建代码仓库"></a>创建代码仓库</h3><p>这里注意项目名必须为 <strong>github用户名.github.io</strong> 。如您的用户名为temp，则这个仓库需要命名为 <strong>temp.github.io</strong> 。</p>
-<h3 id="关联并托管个人博客到github"><a href="#关联并托管个人博客到github" class="headerlink" title="关联并托管个人博客到github"></a>关联并托管个人博客到github</h3><p>然后进入您的博客目录，找到目录中的 <code>_config.yml</code>文件，切换到文件最后的地方，添加如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:zhaoyun4411/zhaoyun4411.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-<p>这里需要注意每一个<code>:</code> 后面均需要加上空格否则最后的解析会报错。</p>
-<p>修改完成后执行<code>npm install hexo-deployer-git --save</code>安装hexo-deployer-git，然后执行下面命令生成代码并推送。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure></p>
-<p>当以上命令执行完成之后，在浏览器打开 http://你的用户名.github.io ，能看到和打开 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 一样的页面。</p>
 
       
     </div>
@@ -342,13 +350,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
           
-            <a href="/tags/github/" rel="tag"># github</a>
+            <a href="/tags/互联网/" rel="tag"># 互联网</a>
           
-            <a href="/tags/gitpage/" rel="tag"># gitpage</a>
+            <a href="/tags/面试/" rel="tag"># 面试</a>
           
-            <a href="/tags/博客/" rel="tag"># 博客</a>
+            <a href="/tags/Web服务器/" rel="tag"># Web服务器</a>
           
         </div>
       
@@ -361,15 +369,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/07/06/HTTP状态码分析/" rel="next" title="HTTP状态码分析">
+                <i class="fa fa-chevron-left"></i> HTTP状态码分析
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/25/Hexo配置文件解析/" rel="prev" title="Hexo配置文件解析">
-                Hexo配置文件解析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -492,7 +500,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境配置"><span class="nav-number">1.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo"><span class="nav-number">1.1.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo初始化"><span class="nav-number">1.2.</span> <span class="nav-text">Hexo初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联github账号"><span class="nav-number">2.</span> <span class="nav-text">关联github账号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建代码仓库"><span class="nav-number">2.1.</span> <span class="nav-text">创建代码仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联并托管个人博客到github"><span class="nav-number">2.2.</span> <span class="nav-text">关联并托管个人博客到github</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-用单台虚拟主机实现多个域名"><span class="nav-number">1.</span> <span class="nav-text">1. 用单台虚拟主机实现多个域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-用作数据转发"><span class="nav-number">2.</span> <span class="nav-text">2. 用作数据转发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-代理"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-网关"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 网关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-隧道"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 隧道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-保存资源的缓存"><span class="nav-number">3.</span> <span class="nav-text">3. 保存资源的缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-HTTP之前的协议介绍"><span class="nav-number">4.</span> <span class="nav-text">4. HTTP之前的协议介绍</span></a></li></ol></div>
             
 
           </div>

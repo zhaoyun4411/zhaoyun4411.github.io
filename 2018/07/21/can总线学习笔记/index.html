@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="咸鱼站">
 <meta property="og:description" content="近期因为项目需要需要使用can设备这里对can设备的学习，进行一个总结，主要包括can的介绍，linux下调试can设备，socketcan介绍，stm32 的can模块的使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.034Z">
+<meta property="og:updated_time" content="2019-07-09T12:25:52.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="can总线学习笔记">
 <meta name="twitter:description" content="近期因为项目需要需要使用can设备这里对can设备的学习，进行一个总结，主要包括can的介绍，linux下调试can设备，socketcan介绍，stm32 的can模块的使用。">
@@ -310,29 +310,47 @@
 <p>can总线的网络结构</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">___   ___   ___                   _______   ___</span><br><span class="line"> | _ | | _ | | _ |                 | _   _ | | _ |</span><br><span class="line"> ||A|| ||B|| ||C||                 ||A| |B|| ||C||</span><br><span class="line"> |___| |___| |___|                 |_______| |___|</span><br><span class="line">   |     |     |                       |       |</span><br><span class="line"> -----------------(1)- CAN bus -(2)---------------</span><br></pre></td></tr></table></figure>
 <h3 id="can总线的特点"><a href="#can总线的特点" class="headerlink" title="can总线的特点"></a>can总线的特点</h3><p>can协议具有以下特点。</p>
-<pre><code>1. 多主控制。
-    * 在总线空闲的时候，所有的单元都可以开始发送消息。
-    * 最先访问总线的单元可以获得总线的发送权限。
-    * 多个单元同时开始发送消息，发送高优先级ID消息单元可以获得发送权限。
-2. 消息的发送。
-    * 在can协议中。所有消息都以固定协议发送。
-    * 空闲时所有与总线相连的单元都可以开始发送新的数据。
-    * 两个以上的单元同时发送数据，仲裁获胜者可以继续发送。
-3. 系统的柔软性
-    * 与总线相连的单元没有类似与地址的信息。因此在总线上面增加单元。连接在总线上的其他软硬件及应用层都不需要改变。
-4. 通信速度
-    * 同一网络下所有单元必须设定成统一的通信速度
-5. 远程数据请求
-    * 可以通过遥控帧，请求其他单元发送数据
-6. 错误检测功能·错误通知功能·错误恢复功能
-    * 所有的单元都可以检测错误。
-    * 检测出错误的单元会立即同时通知其他所有单元。
-    * 正在发送消息的单元一旦检测出错误，会强制结束当前的发送。强制结束发送的单元会不断反复的重新发送此消息直到成功发送。
-7. 故障封闭
-    * 当总线上面发生持续性数据错误时，将故障单元从总线上隔离出去。
-8. 连接
-    * 降低通讯速度，可连接的单元数增加；提高通讯速度，可连接的单元数减少。
-</code></pre><h3 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h3><p> 总线上的单元始终处于三种状态：</p>
+<ol>
+<li>多主控制。<ul>
+<li>在总线空闲的时候，所有的单元都可以开始发送消息。</li>
+<li>最先访问总线的单元可以获得总线的发送权限。</li>
+<li>多个单元同时开始发送消息，发送高优先级ID消息单元可以获得发送权限。</li>
+</ul>
+</li>
+<li>消息的发送。<ul>
+<li>在can协议中。所有消息都以固定协议发送。</li>
+<li>空闲时所有与总线相连的单元都可以开始发送新的数据。</li>
+<li>两个以上的单元同时发送数据，仲裁获胜者可以继续发送。</li>
+</ul>
+</li>
+<li>系统的柔软性<ul>
+<li>与总线相连的单元没有类似与地址的信息。因此在总线上面增加单元。连接在总线上的其他软硬件及应用层都不需要改变。</li>
+</ul>
+</li>
+<li>通信速度<ul>
+<li>同一网络下所有单元必须设定成统一的通信速度</li>
+</ul>
+</li>
+<li>远程数据请求<ul>
+<li>可以通过遥控帧，请求其他单元发送数据</li>
+</ul>
+</li>
+<li>错误检测功能·错误通知功能·错误恢复功能<ul>
+<li>所有的单元都可以检测错误。</li>
+<li>检测出错误的单元会立即同时通知其他所有单元。</li>
+<li>正在发送消息的单元一旦检测出错误，会强制结束当前的发送。强制结束发送的单元会不断反复的重新发送此消息直到成功发送。</li>
+</ul>
+</li>
+<li>故障封闭<ul>
+<li>当总线上面发生持续性数据错误时，将故障单元从总线上隔离出去。</li>
+</ul>
+</li>
+<li>连接<ul>
+<li>降低通讯速度，可连接的单元数增加；提高通讯速度，可连接的单元数减少。</li>
+</ul>
+</li>
+</ol>
+<h3 id="错误状态"><a href="#错误状态" class="headerlink" title="错误状态"></a>错误状态</h3><p> 总线上的单元始终处于三种状态：</p>
 <ol>
 <li>主动错误状态：单元可以正常参加总线上的通讯。处于主动错误状态的单元检测出错误时，输出主动错误标志。</li>
 <li>被动错误状态：被动错误状态是容易引起错误的状态。处于被动错误状态的单元能够参加总线通讯。处于被动错误状态的单元在发送结束后不能马上开始再次发送。在开始下次发送前，在间隔帧间必须插上延迟传送。</li>
@@ -346,7 +364,7 @@
 <li>帧间隔：用于将数据帧及遥控帧与前面的帧分离出来的帧。</li>
 </ol>
 <h2 id="linux下面调试can设备"><a href="#linux下面调试can设备" class="headerlink" title="linux下面调试can设备"></a>linux下面调试can设备</h2><p>linux下面调试can设备需要记住下面命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ip link set can0 down	//关闭can设备</span><br><span class="line">ip link set can0 up	//开启can设备</span><br><span class="line">ip -details link show can0	//显示can设备的详细信息</span><br><span class="line">candump can0	//接受can总线发来的数据</span><br><span class="line">ifconfig can0 down	//关闭can设备，以便配置</span><br><span class="line">ip link set can0 up type can bitrate 1000000	//设置can波特率</span><br><span class="line">canconfig can0 bitrate + 波特率	</span><br><span class="line">canconfig	can0 start //启动can设备</span><br><span class="line">canconfig can0 ctrlmode loopback on	//回环测试</span><br><span class="line">canconfig can0 restart	//重启can设备</span><br><span class="line">canconfig can0 stop	//停止can设备</span><br><span class="line">canecho can0	//查看can设备总线状态</span><br><span class="line">cansend can0 --identifer=ID+数据	//发送数据;</span><br><span class="line">candump can0 --filter=ID:mask	//使用滤波器接受ID匹配的数据</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ip link set can0 down	//关闭can设备</span><br><span class="line">ip link set can0 up	//开启can设备</span><br><span class="line">ip -details link show can0	//显示can设备的详细信息</span><br><span class="line">candump can0	//接受can总线发来的数据</span><br><span class="line">ifconfig can0 down	//关闭can设备，以便配置</span><br><span class="line">ip link set can0 up type can bitrate 1000000	//设置can波特率</span><br><span class="line">canconfig can0 bitrate + 波特率</span><br><span class="line">canconfig	can0 start //启动can设备</span><br><span class="line">canconfig can0 ctrlmode loopback on	//回环测试</span><br><span class="line">canconfig can0 restart	//重启can设备</span><br><span class="line">canconfig can0 stop	//停止can设备</span><br><span class="line">canecho can0	//查看can设备总线状态</span><br><span class="line">cansend can0 --identifer=ID+数据	//发送数据;</span><br><span class="line">candump can0 --filter=ID:mask	//使用滤波器接受ID匹配的数据</span><br></pre></td></tr></table></figure>
 <h2 id="stm32-can模块的使用"><a href="#stm32-can模块的使用" class="headerlink" title="stm32 can模块的使用"></a>stm32 can模块的使用</h2><blockquote>
 <p>在cubeMX的设置中可以看到需要设置can是master还是slave模式。但是实际的can总线中是没有主从设备之分的。cubeMX中的这个名字具有一定的误导性，实际上这个主从只是用于stm32内部关于can设备的一些公共资源如内存的一个区分，并不是实际上的主从关系。</p>
 </blockquote>
@@ -476,7 +494,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -489,7 +507,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
