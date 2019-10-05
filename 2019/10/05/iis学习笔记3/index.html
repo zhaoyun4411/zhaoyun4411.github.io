@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="面试,iis,微软," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。">
+<meta name="keywords" content="面试,iis,微软">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iis学习笔记3">
+<meta property="og:url" content="http://yoursite.com/2019/10/05/iis学习笔记3/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-05T14:36:29.013Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iis学习笔记3">
+<meta name="twitter:description" content="这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/05/iis学习笔记3/"/>
+
+
+
+
+
+  <title>iis学习笔记3 | 咸鱼站</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">咸鱼站</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一个没有理想的咸鱼</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/05/iis学习笔记3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iis学习笔记3</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-05T22:36:28+08:00">
+                2019-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。</p>
+<a id="more"></a>
+<h2 id="1-IIS的安装步骤"><a href="#1-IIS的安装步骤" class="headerlink" title="1. IIS的安装步骤"></a>1. IIS的安装步骤</h2><p>IIS服务主要有下面几种安装方式，其中包括：</p>
+<ol>
+<li>使用服务管理器安装IIS服务。</li>
+<li>使用命令行的方式进行IIS安装。这种安装方式安装没有用户交互界面，也无法获取安装进度，但是可以内嵌在自动化脚本或者程序中在程序部署时静默安装IIS服务，需要管理员权限。</li>
+</ol>
+<h2 id="2-IIS组件列表及对应的功能"><a href="#2-IIS组件列表及对应的功能" class="headerlink" title="2. IIS组件列表及对应的功能"></a>2. IIS组件列表及对应的功能</h2><p>当使用图形化的方式安装IIS服务的时候可以看到可选的IIS服务组件列表主要有如下内容：</p>
+<ol>
+<li>FTP服务器、FTP服务和FTP扩展性：默认情况下占用20，21两个端口。其中20端口用于传输数据，21端口用于客户端与服务器之间传递控制数据。安装这个组件就可以在IIS上使用FTP协议在客户端与服务器端之间传输文件。IIS提供用户认证，上传/下载，获取操作日志和权限管理接口给开发人员。</li>
+<li>Web管理工具中的IIS6.0管理兼容性：向管理员提供一个向前管理兼容性。</li>
+<li>Web管理工具中的管理服务、管理脚本和工具及管理控制台：只WMSVC这个windows服务。让开发维护人员可以在同一网段内通过PC上的管理控制台管理远端的Web服务器。</li>
+<li>安全性组件：主要是指配置IIS需要支持的用户验证方式，主要包括：证书验证、windows集成安全验证、基本身份验证、摘要式验证和匿名访问。</li>
+<li>常见HTTP功能组件：HTTP错误功能组件（生成维护错误码对应的页面，当出现错误时将对应的页面返回给客户端。主要错误有401、403、404、405、406、412、500、501、502等），默认文档（没有明确指定资源时默认返回的资源），目录浏览，静态内容，HTTP重定向。</li>
+<li>性能组件：主要是指压缩功能组件。</li>
+<li>应用程序开发组件：.net extensibility 及 ASP.net等支持组件。</li>
+<li>健康和诊断组件：HTTP日志记录，日志记录工具，请求监视，跟踪，自定义日志记录，ODBC日志记录。</li>
+<li>管理工具：IIS管理控制台，IIS管理脚本和工具、IIS管理服务（用于集群管理）。</li>
+<li>IIS 6.0 管理兼容性：保证向前兼容，当有IIS6.0 之前版本的应用需要安装这个服务。</li>
+<li>IIS可承载Web核心：将Web Server基础功能API暴露给第三方开发者。</li>
+</ol>
+<h2 id="3-推荐安装的IIS组件列表"><a href="#3-推荐安装的IIS组件列表" class="headerlink" title="3. 推荐安装的IIS组件列表"></a>3. 推荐安装的IIS组件列表</h2><p>这里给出典型场景下部署运行IIS需要安装的组件，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">种类</th>
+<th style="text-align:left">组件名称</th>
+<th style="text-align:left">是否需要安装</th>
+<th style="text-align:left">注释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">常见HTTP功能</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">静态内容</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">默认文档</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">没有明确指定资源时默认返回的资源</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">目录浏览</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">HTTP错误</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">HTTP重定向</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">WebDAV发布</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">应用程序开发</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">ASP.NET</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">.NET扩展性</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">ASP</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅在网站中含有.asp页面时需要安装</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">CGI</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">ISAPI扩展</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">ISAPI筛选器</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">在服务器端的包含文件</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅在网站含有.shtml页面时安装</td>
+</tr>
+<tr>
+<td style="text-align:left">健康和诊断</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">HTTP日志记录</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">日志记录工具</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">请求监视</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">跟踪</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">自定义日志记录</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">ODBC日志记录</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">安全性</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">基本身份验证</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">Windows身份验证</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅当使用Windows账号体系验证时安装</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">摘要式身份验证</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">客户端证书映射身份验证</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅在用户使用用户证书验证时安装</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS客户端证书映射身份验证</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅在用户使用用户证书验证时安装</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">URL授权</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">请求筛选</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IP和域限制</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">此功能应该在三层网络设备上实现</td>
+</tr>
+<tr>
+<td style="text-align:left">性能</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">静态内容压缩</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">动态内容压缩</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">仅在带宽有限且CPU资源充裕时启用</td>
+</tr>
+<tr>
+<td style="text-align:left">管理工具</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS管理控制台</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS管理脚本和工具</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">管理服务</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">IIS6.0 管理兼容性</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS6.0 元数据库兼容性</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS6.0 WMI兼容性</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS6.0 脚本工具</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS6.0 管理控制台</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">FTP 服务器</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">FTP Service</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">不推荐Web服务器上同时部署FTP</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">FTP扩展</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">IIS可承载Web核心</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">开放基础功能组件</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+            <a href="/tags/iis/" rel="tag"># iis</a>
+          
+            <a href="/tags/微软/" rel="tag"># 微软</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/07/iis学习笔记2/" rel="next" title="iis学习笔记2">
+                <i class="fa fa-chevron-left"></i> iis学习笔记2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yun4411</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">71</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IIS的安装步骤"><span class="nav-number">1.</span> <span class="nav-text">1. IIS的安装步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-IIS组件列表及对应的功能"><span class="nav-number">2.</span> <span class="nav-text">2. IIS组件列表及对应的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-推荐安装的IIS组件列表"><span class="nav-number">3.</span> <span class="nav-text">3. 推荐安装的IIS组件列表</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yun4411</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
