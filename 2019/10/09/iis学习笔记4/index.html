@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="C," />
+  <meta name="keywords" content="iis,微软," />
 
 
 
@@ -83,18 +83,18 @@
 
 
 
-<meta name="description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
-<meta name="keywords" content="C">
+<meta name="description" content="这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。">
+<meta name="keywords" content="iis,微软">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C语言中#ifdef和#ifndef的比较">
-<meta property="og:url" content="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/index.html">
+<meta property="og:title" content="iis学习笔记4">
+<meta property="og:url" content="http://yoursite.com/2019/10/09/iis学习笔记4/index.html">
 <meta property="og:site_name" content="咸鱼站">
-<meta property="og:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta property="og:description" content="这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-17T07:57:27.028Z">
+<meta property="og:updated_time" content="2019-10-09T14:26:07.542Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C语言中#ifdef和#ifndef的比较">
-<meta name="twitter:description" content="阅读C代码的时候会发现在有些地方会使用#ifdef有的地方会使用#ifndef，如何区分这两个。 #ifdef表示“if the following is defined”；#ifndef表示“if the following is not defined”。 根据上面的描述可以推断下面代码会输出：”one is defined “ 1234567#define one 0#ifdef one">
+<meta name="twitter:title" content="iis学习笔记4">
+<meta name="twitter:description" content="这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/10/09/iis学习笔记4/"/>
 
 
 
 
 
-  <title>C语言中#ifdef和#ifndef的比较 | 咸鱼站</title>
+  <title>iis学习笔记4 | 咸鱼站</title>
   
 
 
@@ -237,7 +237,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/C语言中ifdef和ifndef的比较/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/iis学习笔记4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yun4411">
@@ -254,7 +254,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">C语言中#ifdef和#ifndef的比较</h1>
+          <h1 class="post-title" itemprop="name headline">iis学习笔记4</h1>
         
 
         <div class="post-meta">
@@ -266,8 +266,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T19:35:14+08:00">
-                2018-06-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-09T22:26:07+08:00">
+                2019-10-09
               </time>
             
 
@@ -304,10 +304,24 @@
       
 
       
-        <p>阅读C代码的时候会发现在有些地方会使用<code>#ifdef</code>有的地方会使用<code>#ifndef</code>，如何区分这两个。</p>
-<p><code>#ifdef</code>表示“if the following is defined”；<code>#ifndef</code>表示“if the following is not defined”。</p>
-<p>根据上面的描述可以推断下面代码会输出：”one is defined “</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> one 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> one</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"one is not defined "</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+        <p>这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。</p>
+<a id="more"></a>
+<h2 id="1-Web-Deploy"><a href="#1-Web-Deploy" class="headerlink" title="1. Web Deploy"></a>1. Web Deploy</h2><p>这个工具主要用于帮助管理员打包一个Web网站，并提供Web网站在另外一台计算机上面部署的能力。部署一个Web网站主要涉及下面动作：</p>
+<ol>
+<li>复制Web网站文件和文件夹；</li>
+<li>安装部署数据库或执行数据库结构更新脚本；</li>
+<li>在文件和文件夹上设置相应的读写权限；</li>
+<li>安装和配置SSL认证；</li>
+<li>部署其他依赖（如事件日志，全局程序及缓冲区和注册COM对象等）；</li>
+</ol>
+<p>使用Web Deploy工具生成的部署包中会存在一个.cmd的脚本文件。在目标计算机上安装Web Deploy工具后执行该脚本文件即可完成安装。</p>
+<h2 id="2-使用Visual-Studio-Online为Azure-Web应用部署Web网站"><a href="#2-使用Visual-Studio-Online为Azure-Web应用部署Web网站" class="headerlink" title="2. 使用Visual Studio Online为Azure Web应用部署Web网站"></a>2. 使用Visual Studio Online为Azure Web应用部署Web网站</h2><p>VSO可用于源码管理、敏捷开发流程、测试流程和发布管理等完成自己的产品软件。Web应用也可以和VSO进行集成，实现可持续化部署。这个工具可以感知每一次推送代码，并根据配置，推送完代码后进行编译部署，实现持续集成。开发者仅需要配置该工具，提交代码后自动部署到开发环境。</p>
+<h2 id="3-使用Git为Azure应用部署Web网站"><a href="#3-使用Git为Azure应用部署Web网站" class="headerlink" title="3. 使用Git为Azure应用部署Web网站"></a>3. 使用Git为Azure应用部署Web网站</h2><p>关联Azure与git仓库，当检测到git仓库上有提交即将提交自动部署到各个节点。</p>
+<h2 id="4-在云服务上部署Web网站"><a href="#4-在云服务上部署Web网站" class="headerlink" title="4. 在云服务上部署Web网站"></a>4. 在云服务上部署Web网站</h2><p>在云服务的部署模式中有两个不同的部署角色：</p>
+<ol>
+<li>Web Role是指Cloud Service中IIS里面前端Web应用程序和内容。</li>
+<li>Work Role是指不涉及用户界面交互的后台服务。<br>这里可以通过Visual Studio打出对用的部署包。</li>
+</ol>
 
       
     </div>
@@ -325,7 +339,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"># C</a>
+            <a href="/tags/iis/" rel="tag"># iis</a>
+          
+            <a href="/tags/微软/" rel="tag"># 微软</a>
           
         </div>
       
@@ -338,8 +354,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/18/git学习merge-rebase/" rel="next" title="git学习merge&rebase">
-                <i class="fa fa-chevron-left"></i> git学习merge&rebase
+              <a href="/2019/10/07/leetcode-406-Queue-Reconstruction-by-Height/" rel="next" title="leetcode-406-Queue-Reconstruction-by-Height">
+                <i class="fa fa-chevron-left"></i> leetcode-406-Queue-Reconstruction-by-Height
               </a>
             
           </div>
@@ -347,10 +363,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/30/从撤销rebase分析git原理/" rel="prev" title="从撤销rebase分析git原理">
-                从撤销rebase分析git原理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -402,8 +414,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -454,6 +475,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Web-Deploy"><span class="nav-number">1.</span> <span class="nav-text">1. Web Deploy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用Visual-Studio-Online为Azure-Web应用部署Web网站"><span class="nav-number">2.</span> <span class="nav-text">2. 使用Visual Studio Online为Azure Web应用部署Web网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-使用Git为Azure应用部署Web网站"><span class="nav-number">3.</span> <span class="nav-text">3. 使用Git为Azure应用部署Web网站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-在云服务上部署Web网站"><span class="nav-number">4.</span> <span class="nav-text">4. 在云服务上部署Web网站</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
