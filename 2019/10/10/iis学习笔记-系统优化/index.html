@@ -72,7 +72,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="面试,iis,微软," />
 
 
 
@@ -83,14 +83,18 @@
 
 
 
-<meta name="keywords" content="游戏，Latex，一些好玩的技术">
-<meta property="og:type" content="website">
-<meta property="og:title" content="咸鱼站">
-<meta property="og:url" content="http://yoursite.com/tags/minicom/index.html">
+<meta name="description" content="Windows Server操作系统安装完成之后，并没有针对特定使用场景进行优化。这里讲解如何优化系统，使系统适合作为IIS服务器。">
+<meta name="keywords" content="面试,iis,微软">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iis学习笔记-系统优化">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/iis学习笔记-系统优化/index.html">
 <meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="Windows Server操作系统安装完成之后，并没有针对特定使用场景进行优化。这里讲解如何优化系统，使系统适合作为IIS服务器。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-10T14:29:30.575Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="咸鱼站">
+<meta name="twitter:title" content="iis学习笔记-系统优化">
+<meta name="twitter:description" content="Windows Server操作系统安装完成之后，并没有针对特定使用场景进行优化。这里讲解如何优化系统，使系统适合作为IIS服务器。">
 
 
 
@@ -120,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/minicom/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/10/10/iis学习笔记-系统优化/"/>
 
 
 
 
 
-  <title>标签: minicom | 咸鱼站</title>
+  <title>iis学习笔记-系统优化 | 咸鱼站</title>
   
 
 
@@ -145,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -219,54 +223,164 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>minicom<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/iis学习笔记-系统优化/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yun4411">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="咸鱼站">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/05/28/linux平台下串口调试/" itemprop="url">
-              
-                <span itemprop="name">linux平台下串口调试</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">iis学习笔记-系统优化</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-28T23:47:30+08:00"
-              content="2018-05-28" >
-          05-28
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-10T22:29:30+08:00">
+                2019-10-10
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Windows Server操作系统安装完成之后，并没有针对特定使用场景进行优化。这里讲解如何优化系统，使系统适合作为IIS服务器。<br><a id="more"></a></p>
+<ol>
+<li>设置虚拟内存文件（理解为linux开启swap分区）。对于32位操作系统建议将虚拟内存设置为物理内存的1.5倍大小，对于64位操作系统，建议将虚拟内存文件的大小设置为比服务器正常运行时物理内存大小多1GB。</li>
+</ol>
+<blockquote>
+<p>虚拟内存可以设置到系统以外的分区但是这样会导致系统蓝屏的使用无法正确的写入pagefile.sys文件。</p>
+</blockquote>
+<ol>
+<li>设置致命故障恢复配置。</li>
+<li>关闭不必要的服务。关闭使用不到的服务提升系统性能。</li>
+<li>设置适当的Windows事件日志大小。建议300M大小，太大英文系统对大文件读写很慢，太小无法保存足够信息。</li>
+<li>设置定期整理磁盘。</li>
+<li>关闭Windows自动更新。多台服务器同时从互联网下载Windows补丁包会带来网络压力，API/ABI break等问题，所以系统更新建议在维护时间段进行。</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/面试/" rel="tag"># 面试</a>
+          
+            <a href="/tags/iis/" rel="tag"># iis</a>
+          
+            <a href="/tags/微软/" rel="tag"># 微软</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/09/iis学习笔记4/" rel="next" title="iis学习笔记4">
+                <i class="fa fa-chevron-left"></i> iis学习笔记4
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -274,6 +388,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -486,6 +604,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
