@@ -91,7 +91,7 @@
 <meta property="og:site_name" content="咸鱼站">
 <meta property="og:description" content="这本书的目的是解释计算机系统的本质，并向你展示这些概念是如何影响应用程序的正确性、性能和实用性的。学习这本书的建议：">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-08-15T09:30:10.687Z">
+<meta property="og:updated_time" content="2020-08-15T09:35:17.977Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSAPP overview">
 <meta name="twitter:description" content="这本书的目的是解释计算机系统的本质，并向你展示这些概念是如何影响应用程序的正确性、性能和实用性的。学习这本书的建议：">
@@ -317,11 +317,6 @@
 <ol>
 <li><strong>计算机系统漫游</strong> 这一章通过研究 <code>Hello, world</code> 这个简单程序的生命周期，介绍计算机系统的主要概念和主题。</li>
 <li><strong>信息的表示和处理</strong> 这里讲述计算机的算数运算，重点描述了会对程序员有影响的无符号数和数的补码表示的特性，以由此给出一个给定的字长，推导出器可能的编码范围。<em>重点将数在计算机中的表示</em></li>
-</ol>
-<blockquote>
-<p>对于计算机的算数运算有深刻的理解是写出可靠程序的关键。比如，程序员不能使用 <code>(x-y) &lt; 0</code> 来代替 <code>x &lt; y</code>（前者可能会产生溢出）。也不能使用 <code>-y &lt; -x</code> 来代替。应为补码在表示中负数和正数的范围是不对称的。</p>
-</blockquote>
-<ol>
 <li><strong>程序的机器级表示</strong> 这一章讲解如何阅读C编译器生成的 x86-64 机器代码。我们说明为不同的控制结构（条件、循环）生成基本指令模式。还讲述了过程的实现，包括栈分配，寄存器使用惯例和参数传递。这里还讨论不同的数据结构（结构、联合和数组）的访问方式。还说明实现整数和浮点数运算的指令。还以分析程序在计算机级的样子作为途径，来理解常见的代码安全漏洞（缓冲区溢出等），以帮助理解程序员，编译器和操作系统可以采取的减轻这些威胁的措施。</li>
 <li><strong>处理器体系结构</strong> 这一章主要讲述了我们编写的C语言的代码是如何被处理器执行起来的。</li>
 <li><strong>优化程序性能</strong> 这一章介绍了许多提高代码性能的技术，主要思想就是让程序员通过是编译器能够产生更加有效的机器代码来</li>
@@ -333,6 +328,9 @@
 <li><strong>网络编程</strong> </li>
 <li><strong>并发编程</strong> </li>
 </ol>
+<blockquote>
+<p>对于计算机的算数运算有深刻的理解是写出可靠程序的关键。比如，程序员不能使用 <code>(x-y) &lt; 0</code> 来代替 <code>x &lt; y</code>（前者可能会产生溢出）。也不能使用 <code>-y &lt; -x</code> 来代替。应为补码在表示中负数和正数的范围是不对称的。</p>
+</blockquote>
 
       
     </div>
