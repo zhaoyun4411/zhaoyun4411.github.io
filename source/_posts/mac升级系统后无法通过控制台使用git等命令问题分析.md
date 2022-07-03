@@ -9,6 +9,8 @@ date: 2018-10-20 14:28:00
 最近我的macbook 升级了macOS Mojave，升级完成之后发现控制台里面许多命令
 如make，git等都无法使用，在控制台中输入之后会弹报如下的error信息。
 
+<!--more-->
+
 ```shell
 xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), 
 missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun

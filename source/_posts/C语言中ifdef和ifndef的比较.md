@@ -12,6 +12,8 @@ date: 2018-06-20 19:35:14
 
 根据上面的描述可以推断下面代码会输出："one is defined "
 
+<!--more-->
+
 ```C
 #define one 0
 #ifdef one

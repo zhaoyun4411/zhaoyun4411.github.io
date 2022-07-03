@@ -8,6 +8,8 @@ TinyURL is a URL shortening service where you enter a URL such as `https://leetc
 
 Design the `encode` and `decode` methods for the TinyURL service. There is no restriction on how your encode/decode algorithm should work. You just need to ensure that a URL can be encoded to a tiny URL and the tiny URL can be decoded to the original URL.
 
+<!--more-->
+
 解题思路：新建一个数据队列将数据的索引作为短url
 
 

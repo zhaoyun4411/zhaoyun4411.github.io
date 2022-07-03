@@ -12,6 +12,8 @@ Find whether the largest element in the array is at least twice as much as every
 
 If it is, return the index of the largest element, otherwise return -1.
 
+<!--more-->
+
 Example 1:
 
 ```
