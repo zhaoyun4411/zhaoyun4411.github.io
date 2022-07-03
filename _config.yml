@@ -105,6 +105,6 @@ plantuml:
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy: 
-  type: 'git'
+  type: git
   repository: git@github.com:zhaoyun4411/zhaoyun4411.github.io.git
   branch: main
