@@ -56,8 +56,8 @@ jobs:
       run: | 
         ls
         cd ./public && git init && git add .
-        git config -- user.name "yun.zhao"
-        git config user.email "2294583704@qq.com"
+        git config --global user.name "yun.zhao"
+        git config --global user.email "2294583704@qq.com"
         git add .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
         git push --force --quiet "https://${{ secrets.ACCESS_TOKEN }}@$GITHUB_REPO" main:main
