@@ -1,4 +1,4 @@
 #ignore hexo project file
-node_modules/
-scaffolds/
-themes/
+# node_modules/
+# scaffolds/
+# themes/
