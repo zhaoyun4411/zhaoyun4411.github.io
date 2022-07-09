@@ -1,7 +1,9 @@
 ---
 title: leetcode-1021-remove-outermost-parentheses
+date: 2019-10-07 21:36:50
 tags:
   - leetcode
+  - C++
 ---
 
 A valid parentheses string is either empty `("")`, ``"(" + A + ")"``, or `A + B`, where `A` and `B` are valid parentheses strings, and `+` represents string concatenation.  For example, `""`, `"()"`, `"(())()"`, and `"(()(()))"` are all valid parentheses strings.

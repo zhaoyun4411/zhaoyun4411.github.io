@@ -1,7 +1,7 @@
 ---
 title: linux学习之安装deb格式文件
 tags:
-  - linux
+  - Linux
 date: 2018-11-08 19:24:21
 ---
 

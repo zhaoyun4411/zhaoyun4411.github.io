@@ -1,8 +1,9 @@
 ---
 title: modbus学习笔记.md
 tags:
-  - 嵌入式
-  - 通讯协议
+  - Embedded System
+  - Modbus
+  - 网络
 date: 2018-11-17 10:31:32
 ---
 

@@ -1,9 +1,7 @@
 ---
 title: serialplot安装记录
 tags:
-  - linux
-  - serialplot
-  - debug
+  - Linux
 date: 2018-08-04 23:13:36
 ---
 

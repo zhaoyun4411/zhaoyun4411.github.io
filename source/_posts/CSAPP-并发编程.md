@@ -2,8 +2,8 @@
 title: CSAPP-并发编程
 tags:
   - CSAPP
-  - 并发编程
   - 读书笔记
+  - CS
 date: 2022-07-02 15:10:20
 ---
 

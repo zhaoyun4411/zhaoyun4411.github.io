@@ -1,7 +1,9 @@
 ---
 title: leetcode-1038-Binary-Search-Tree-to-Greater-Sum-Tree
+date: 2019-10-07 21:36:50
 tags:
   - leetcode
+  - C++
 ---
 Given the root of a binary search tree with distinct values, modify it so that every node has a new value equal to the sum of the values of the original tree that are greater than or equal to `node.val`.
 

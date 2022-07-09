@@ -3,7 +3,7 @@ title: CSAPP-虚拟内存
 tags:
   - CSAPP
   - 读书笔记
-  - 虚拟内存
+  - CS
 date: 2022-06-05 17:12:17
 ---
 

@@ -1,8 +1,10 @@
 ---
 title: SICP学习笔记-用高阶函数做抽象
 tags:
+  - 读书笔记
   - SICP
-  - lisp
+  - Lisp
+  - CS
 date: 2018-05-11 11:07:44
 ---
 

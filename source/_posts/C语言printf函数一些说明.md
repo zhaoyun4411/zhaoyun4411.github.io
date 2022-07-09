@@ -1,8 +1,7 @@
 ---
 title: C语言printf函数一些说明
 tags:
-  - c
-  - printf
+  - C
 date: 2018-07-21 15:58:07
 ---
 

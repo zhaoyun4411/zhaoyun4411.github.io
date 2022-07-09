@@ -2,7 +2,7 @@
 title: Markdown语法整理
 date: 2018-04-07 09:59:38
 tags:
-  - blog
+  - Blog
   - Markdown
 ---
 

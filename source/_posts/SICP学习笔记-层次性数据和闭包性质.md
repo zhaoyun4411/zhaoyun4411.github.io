@@ -1,8 +1,10 @@
 ---
 title: SICP学习笔记-层次性数据和闭包性质
 tags:
+  - 读书笔记
   - SICP
-  - lisp
+  - Lisp
+  - CS
 date: 2018-05-23 19:48:47
 ---
 

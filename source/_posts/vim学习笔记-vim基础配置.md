@@ -2,8 +2,6 @@
 title: vim学习笔记-vim基础配置
 tags:
   - vim
-  - vundle
-  - vimrc
 date: 2018-05-12 23:59:41
 ---
 

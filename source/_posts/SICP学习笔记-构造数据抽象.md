@@ -1,8 +1,10 @@
 ---
 title: SICP学习笔记-构造数据抽象
 tags:
+  - 读书笔记
   - SICP
-  - Scheme
+  - Lisp
+  - CS
 date: 2018-05-14 08:55:51
 ---
 

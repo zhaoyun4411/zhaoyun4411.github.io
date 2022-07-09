@@ -1,5 +1,6 @@
 ---
 title: leetcode-1114-Print-in-Order
+date: 2019-10-07 21:36:50
 tags:
   - leetcode
   - C++

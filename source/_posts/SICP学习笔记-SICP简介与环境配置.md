@@ -1,11 +1,10 @@
 ---
 title: SICP学习笔记-SICP简介与环境配置
 tags:
+  - 读书笔记
   - SICP
-  - code
-  - 环境配置
-  - lisp
-  - Scheme
+  - Lisp
+  - CS
 date: 2018-05-03 20:27:08
 ---
 

@@ -2,6 +2,8 @@
 title: CSAPP-计算机系统漫游
 tags:
   - CS
+  - 读书笔记
+  - CSAPP
 date: 2020-08-15 16:59:29
 ---
 

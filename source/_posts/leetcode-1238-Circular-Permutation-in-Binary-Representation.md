@@ -2,8 +2,7 @@
 title: leetcode-1238-Circular-Permutation-in-Binary-Representation
 tags:
   - leetcode
-  - dfs
-  - 格雷姆数
+  - C++
 date: 2019-11-09 23:15:12
 ---
 

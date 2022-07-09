@@ -1,7 +1,8 @@
 ---
 title: stm32进入hardfault原因分析
 tags:
-  - 嵌入式
+  - Embedded System
+  - Stm32
 date: 2018-11-17 10:32:11
 ---
 

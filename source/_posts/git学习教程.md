@@ -1,8 +1,7 @@
 ---
 title: git学习教程
 tags:
-  - github
-  - code
+  - git
 date: 2018-04-19 22:58:21
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: stm32使用内部存储器来掉电保存数据
 tags:
-  - 嵌入式
+  - Embedded System
+  - Stm32
 date: 2018-11-17 10:32:01
 ---
 

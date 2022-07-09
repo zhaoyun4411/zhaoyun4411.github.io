@@ -2,8 +2,6 @@
 title: git学习merge&rebase
 tags:
   - git
-  - merge
-  - rebase
 date: 2018-06-18 16:48:50
 ---
 

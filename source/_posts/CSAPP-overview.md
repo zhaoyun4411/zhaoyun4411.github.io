@@ -1,6 +1,8 @@
 ---
 title: CSAPP overview
 tags:
+  - CSAPP
+  - 读书笔记
   - CS
 date: 2020-07-13 21:50:00
 ---

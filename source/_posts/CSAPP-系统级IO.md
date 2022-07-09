@@ -2,7 +2,8 @@
 title: CSAPP-系统级IO
 tags:
   - CSAPP
-  - IO
+  - 读书笔记
+  - CS
 date: 2022-06-18 20:48:14
 ---
 

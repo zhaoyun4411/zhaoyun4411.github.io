@@ -2,6 +2,8 @@
 title: leetcode-283-Move-Zeroes
 date: 2019-06-16 16:46:49
 tags:
+  - leetcode
+  - C++
 ---
 
 Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.

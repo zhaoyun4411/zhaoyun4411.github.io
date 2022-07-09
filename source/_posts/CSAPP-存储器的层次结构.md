@@ -2,6 +2,8 @@
 title: CSAPP-存储器的层次结构
 tags:
   - CSAPP
+  - 读书笔记
+  - CS
 date: 2022-02-01 21:54:14
 ---
 

@@ -3,7 +3,7 @@ title: 通过github-action搭建博客自动部署
 tags:
   - 博客
   - git
-  - devops
+  - Devops
 date: 2022-07-09 14:15:47
 ---
 

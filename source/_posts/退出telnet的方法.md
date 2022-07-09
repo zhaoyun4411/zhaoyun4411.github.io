@@ -2,9 +2,7 @@
 layout: linux
 title: 退出telnet的方法.md
 tags:
-  - telnet
-  - stm32
-  - linux
+  - Linux
 date: 2018-05-24 21:05:39
 ---
 

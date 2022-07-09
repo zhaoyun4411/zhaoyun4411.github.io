@@ -1,10 +1,7 @@
 ---
 title: linux平台下串口调试
 tags:
-  - linux
-  - uart
-  - minicom
-  - cutecom
+  - Linux
 date: 2018-05-28 23:47:30
 ---
 

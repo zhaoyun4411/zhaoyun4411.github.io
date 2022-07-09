@@ -1,8 +1,7 @@
 ---
 title: uart和usart的区别
 tags:
-  - 嵌入式
-  - 串口
+  - Embedded System
 date: 2018-07-21 15:36:53
 ---
 

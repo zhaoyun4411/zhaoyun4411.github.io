@@ -1,8 +1,9 @@
 ---
 title: CSAPP-信息的表示和处理
 tags:
-  - CS
+  - CSAPP
   - 读书笔记
+  - CS
 date: 2020-12-26 21:46:50
 ---
 

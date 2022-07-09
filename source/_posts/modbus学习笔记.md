@@ -1,8 +1,9 @@
 ---
 title: modbus学习笔记
 tags:
-  - modbus
-  - stm32
+  - Embedded System
+  - Modbus
+  - 网络
 date: 2018-08-04 23:11:22
 ---
 

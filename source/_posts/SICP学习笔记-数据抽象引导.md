@@ -1,8 +1,10 @@
 ---
 title: SICP学习笔记-数据抽象引导
 tags:
+  - 读书笔记
   - SICP
-  - Scheme
+  - Lisp
+  - CS
 date: 2018-05-17 10:30:26
 ---
 

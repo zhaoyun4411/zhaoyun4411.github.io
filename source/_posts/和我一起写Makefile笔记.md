@@ -1,9 +1,8 @@
 ---
 title: 和我一起写Makefile笔记
 tags:
-  - linux
+  - Linux
   - Makefile
-  - github
 date: 2018-06-17 20:39:55
 ---
 

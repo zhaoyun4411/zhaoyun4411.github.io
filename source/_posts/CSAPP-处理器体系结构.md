@@ -2,6 +2,8 @@
 title: CSAPP-处理器体系结构
 tags:
   - CSAPP
+  - 读书笔记
+  - CS
 date: 2021-11-06 10:03:25
 ---
 

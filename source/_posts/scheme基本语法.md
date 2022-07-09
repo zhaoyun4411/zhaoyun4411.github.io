@@ -1,9 +1,10 @@
 ---
 title: scheme基本语法
 tags:
-  - scheme
-  - guile
-  - lisp
+  - 读书笔记
+  - SICP
+  - Lisp
+  - CS
 date: 2018-06-03 15:14:08
 ---
 

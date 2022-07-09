@@ -3,8 +3,6 @@ title: 使用Hexo搭建个人博客网站
 date: 2018-03-25 13:35:20
 tags:
   - Hexo
-  - github
-  - gitpage
   - 博客
 ---
 

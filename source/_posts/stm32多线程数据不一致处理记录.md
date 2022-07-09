@@ -1,10 +1,9 @@
 ---
 title: stm32多线程数据不一致处理记录
 tags:
-  - stm32
-  - c语言
-  - volatile
-  - 原子操作
+  - Embedded System
+  - Stm32
+  - C
 date: 2018-11-06 21:53:21
 ---
 

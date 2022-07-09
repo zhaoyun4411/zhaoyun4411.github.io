@@ -1,6 +1,8 @@
 ---
 title: freertos时序笔记
-tags: '-- freertos -- embedded system -- timing'
+tags: 
+  - freertos 
+  - timing
 date: 2020-11-01 11:49:09
 ---
 

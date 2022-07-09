@@ -1,10 +1,8 @@
 ---
 title: linux环境下STM32开发环境搭建
 tags:
-  - linux
-  - STM32
-  - cubeMX
-  - openOCD
+  - Linux
+  - Embedded System
 date: 2018-05-27 18:04:35
 ---
 
