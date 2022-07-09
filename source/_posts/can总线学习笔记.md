@@ -1,7 +1,7 @@
 ---
 title: can总线学习笔记
 tags:
-  - can总线
+  - CAN
   - Linux
   - 网络
 date: 2018-07-21 14:49:05

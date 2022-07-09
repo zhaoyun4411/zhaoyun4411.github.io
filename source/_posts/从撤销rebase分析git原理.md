@@ -1,7 +1,6 @@
 ---
 title: 从撤销rebase分析git原理
 tags:
-  - rebase
   - git
 date: 2018-06-30 21:04:52
 ---
