@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>iis学习笔记3 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iis学习笔记3">
+<meta property="og:url" content="http://example.com/2019/06/23/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-06-23T13:03:32.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="IIS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-iis学习笔记3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/23/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/" class="article-date">
+  <time datetime="2019-06-23T13:03:32.000Z" itemprop="datePublished">2019-06-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iis学习笔记3
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这里讨论安装iis服务。在IIS7.0之前，IIS是一个高度集成化的整体，要么整体提供安装，要么整体卸载，没有太多的选项提供给开发人员在安装时进行配置。在7.0之后，IIS采用了组件化设计，可以让管理员有选择的配置需要的IIS服务环境，以便Web网站的安全和其他性能。</p>
+<span id="more"></span>
+
+<h2 id="1-IIS的安装步骤"><a href="#1-IIS的安装步骤" class="headerlink" title="1. IIS的安装步骤"></a>1. IIS的安装步骤</h2><p>IIS服务主要有下面几种安装方式，其中包括：</p>
+<ol>
+<li>使用服务管理器安装IIS服务。</li>
+<li>使用命令行的方式进行IIS安装。这种安装方式安装没有用户交互界面，也无法获取安装进度，但是可以内嵌在自动化脚本或者程序中在程序部署时静默安装IIS服务，需要管理员权限。</li>
+</ol>
+<h2 id="2-IIS组件列表及对应的功能"><a href="#2-IIS组件列表及对应的功能" class="headerlink" title="2. IIS组件列表及对应的功能"></a>2. IIS组件列表及对应的功能</h2><p>当使用图形化的方式安装IIS服务的时候可以看到可选的IIS服务组件列表主要有如下内容：</p>
+<ol>
+<li>FTP服务器、FTP服务和FTP扩展性：默认情况下占用20，21两个端口。其中20端口用于传输数据，21端口用于客户端与服务器之间传递控制数据。安装这个组件就可以在IIS上使用FTP协议在客户端与服务器端之间传输文件。IIS提供用户认证，上传&#x2F;下载，获取操作日志和权限管理接口给开发人员。</li>
+<li>Web管理工具中的IIS6.0管理兼容性：向管理员提供一个向前管理兼容性。</li>
+<li>Web管理工具中的管理服务、管理脚本和工具及管理控制台：只WMSVC这个windows服务。让开发维护人员可以在同一网段内通过PC上的管理控制台管理远端的Web服务器。</li>
+<li>安全性组件：主要是指配置IIS需要支持的用户验证方式，主要包括：证书验证、windows集成安全验证、基本身份验证、摘要式验证和匿名访问。</li>
+<li>常见HTTP功能组件：HTTP错误功能组件（生成维护错误码对应的页面，当出现错误时将对应的页面返回给客户端。主要错误有401、403、404、405、406、412、500、501、502等），默认文档（没有明确指定资源时默认返回的资源），目录浏览，静态内容，HTTP重定向。</li>
+<li>性能组件：主要是指压缩功能组件。</li>
+<li>应用程序开发组件：.net extensibility 及 ASP.net等支持组件。</li>
+<li>健康和诊断组件：HTTP日志记录，日志记录工具，请求监视，跟踪，自定义日志记录，ODBC日志记录。</li>
+<li>管理工具：IIS管理控制台，IIS管理脚本和工具、IIS管理服务（用于集群管理）。</li>
+<li>IIS 6.0 管理兼容性：保证向前兼容，当有IIS6.0 之前版本的应用需要安装这个服务。</li>
+<li>IIS可承载Web核心：将Web Server基础功能API暴露给第三方开发者。</li>
+</ol>
+<h2 id="3-推荐安装的IIS组件列表"><a href="#3-推荐安装的IIS组件列表" class="headerlink" title="3. 推荐安装的IIS组件列表"></a>3. 推荐安装的IIS组件列表</h2><p>这里给出典型场景下部署运行IIS需要安装的组件，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">种类</th>
+<th align="left">组件名称</th>
+<th align="left">是否需要安装</th>
+<th align="left">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">常见HTTP功能</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">静态内容</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">默认文档</td>
+<td align="left">是</td>
+<td align="left">没有明确指定资源时默认返回的资源</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">目录浏览</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">HTTP错误</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">HTTP重定向</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">WebDAV发布</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">应用程序开发</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ASP.NET</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">.NET扩展性</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ASP</td>
+<td align="left">否</td>
+<td align="left">仅在网站中含有.asp页面时需要安装</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">CGI</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ISAPI扩展</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ISAPI筛选器</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">在服务器端的包含文件</td>
+<td align="left">否</td>
+<td align="left">仅在网站含有.shtml页面时安装</td>
+</tr>
+<tr>
+<td align="left">健康和诊断</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">HTTP日志记录</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">日志记录工具</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">请求监视</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">跟踪</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">自定义日志记录</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">ODBC日志记录</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">安全性</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">基本身份验证</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">Windows身份验证</td>
+<td align="left">否</td>
+<td align="left">仅当使用Windows账号体系验证时安装</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">摘要式身份验证</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">客户端证书映射身份验证</td>
+<td align="left">否</td>
+<td align="left">仅在用户使用用户证书验证时安装</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS客户端证书映射身份验证</td>
+<td align="left">否</td>
+<td align="left">仅在用户使用用户证书验证时安装</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">URL授权</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">请求筛选</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IP和域限制</td>
+<td align="left">否</td>
+<td align="left">此功能应该在三层网络设备上实现</td>
+</tr>
+<tr>
+<td align="left">性能</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">静态内容压缩</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">动态内容压缩</td>
+<td align="left">否</td>
+<td align="left">仅在带宽有限且CPU资源充裕时启用</td>
+</tr>
+<tr>
+<td align="left">管理工具</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS管理控制台</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS管理脚本和工具</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">管理服务</td>
+<td align="left">是</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">IIS6.0 管理兼容性</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS6.0 元数据库兼容性</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS6.0 WMI兼容性</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS6.0 脚本工具</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS6.0 管理控制台</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">FTP 服务器</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">FTP Service</td>
+<td align="left">否</td>
+<td align="left">不推荐Web服务器上同时部署FTP</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">FTP扩展</td>
+<td align="left">否</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">IIS可承载Web核心</td>
+<td align="left">否</td>
+<td align="left">开放基础功能组件</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/06/23/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/" data-id="cl7d3spyr002jacow7ixr2anb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/23/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iis学习笔记2
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/21/%E5%BE%AE%E8%BD%AFIIS%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">微软IIS相关知识</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

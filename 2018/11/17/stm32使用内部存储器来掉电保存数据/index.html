@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>stm32使用内部存储器来掉电保存数据 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM来使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="stm32使用内部存储器来掉电保存数据">
+<meta property="og:url" content="http://example.com/2018/11/17/stm32%E4%BD%BF%E7%94%A8%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%9D%A5%E6%8E%89%E7%94%B5%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="前言stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM来使用。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-11-17T02:32:01.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.680Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="Embedded System">
+<meta property="article:tag" content="Stm32">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-stm32使用内部存储器来掉电保存数据" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/17/stm32%E4%BD%BF%E7%94%A8%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%9D%A5%E6%8E%89%E7%94%B5%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" class="article-date">
+  <time datetime="2018-11-17T02:32:01.000Z" itemprop="datePublished">2018-11-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      stm32使用内部存储器来掉电保存数据
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>stm32的flash是用来存储主程序的，st公司为了节约成本，并没有在片上加上eeprom，但是在许多场合下<br>需要掉电保存一部分数据的，这里st公司提供的IAP（在应用编程）的功能可以将stm32的flash当成EEPROM<br>来使用。</p>
+<span id="more"></span>
+
+<p>存储器主要分为两种： <strong>随机存取器RAM</strong> 和 <strong>只读存储器ROM</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">存储器</span><br><span class="line">├── RAM （Random Access Memory）随机存储器：掉电数据丢失，多用于内存等</span><br><span class="line">│   ├── SRAM（静态RAM）存取速度快，价格昂贵。多用于CPU的一级缓存，二级缓存等</span><br><span class="line">│   └── DRAM（动态RAM）</span><br><span class="line">│        ├── EDORAM</span><br><span class="line">│        ├── FPRAM/FastPage</span><br><span class="line">│        ├── SDRAM</span><br><span class="line">│        ├── DDR RAM</span><br><span class="line">│        ├── RDRAM</span><br><span class="line">│        ├── WRAM</span><br><span class="line">│        └── SGRAM</span><br><span class="line">└── ROM(Read Only Memory)只读存储器：掉电数据不丢失，非易失性存储器件</span><br><span class="line">    ├── PROM</span><br><span class="line">    ├── EROM</span><br><span class="line">    ├── EEROM</span><br><span class="line">    └── FLASH</span><br><span class="line">         ├── NOR Flash</span><br><span class="line">         └── NADN Flash</span><br></pre></td></tr></table></figure>
+
+<h2 id="stm32-flash-的简介"><a href="#stm32-flash-的简介" class="headerlink" title="stm32 flash 的简介"></a>stm32 flash 的简介</h2><p>不同型号的stm32其stm32的容量也有所不同，根据容量大小，可以分为以下三种情况；</p>
+<ol>
+<li>小容量产品： Flash的大小为1-32KB（stm32f10x_LD）</li>
+<li>中容量产品： Flash的大小为64-128KB（stm32f10x_MD）</li>
+<li>大容量产品： Flash的大小为256KB以上（stm32f10x_HD）</li>
+</ol>
+<p>stm32的存储模块由：<em>主存储器，信息块和闪存存储器接口存储器</em> 三个部分组成。</p>
+<ul>
+<li><p>主存储器，该部分用来存放代码和数据常数（如const类型数据）。对于大容量产品，其被划分为256页，<br>每页2K字节。</p>
+</li>
+<li><p>信息块，该部分分为两个小部分，其中启动程序代码，是用来存储st自带的启动程序，用于串口下载代码。</p>
+</li>
+<li><p>内存存储器接口寄存器，该部分用于控制闪存读写。</p>
+</li>
+</ul>
+<p>stm32f4内部flash扇区的划分如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">name</th>
+<th align="center">block base addresses</th>
+<th align="center">size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">sector 0</td>
+<td align="center">0x0800 0000 - 0x0800 3FFF</td>
+<td align="center">16Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 1</td>
+<td align="center">0x0800 4000 - 0x0800 7FFF</td>
+<td align="center">16Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 2</td>
+<td align="center">0x0800 8000 - 0x0800 BFFF</td>
+<td align="center">16Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 3</td>
+<td align="center">0x0800 C000 - 0x0800 FFFF</td>
+<td align="center">16Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 4</td>
+<td align="center">0x0801 0000 - 0x0801 FFFF</td>
+<td align="center">64Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 5</td>
+<td align="center">0x0802 0000 - 0x0803 FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 6</td>
+<td align="center">0x0804 0000 - 0x0805 FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 7</td>
+<td align="center">0x0806 0000 - 0x0807 FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 8</td>
+<td align="center">0x0808 0000 - 0x0809 FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 9</td>
+<td align="center">0x080A 0000 - 0x080B FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 10</td>
+<td align="center">0x080C 0000 - 0x080D FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+<tr>
+<td align="center">sector 11</td>
+<td align="center">0x080E 0000 - 0x080F FFFF</td>
+<td align="center">128Kbytes</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意最好不要使用sector0，因为bootloader和主程序在这个地方，操作后会导致程序跑飞，最好将数据<br>放在最后一个扇区。</p>
+</blockquote>
+<h2 id="stm32-flash操作流程"><a href="#stm32-flash操作流程" class="headerlink" title="stm32 flash操作流程"></a>stm32 flash操作流程</h2><p>stm32的flash操作已经属于嵌入式设备中很底层的操作了，直接对地址进行存取，简单来说，Flash操作大<br>致需要以下流程：</p>
+<ol>
+<li>确定要写入的Flash的首地址</li>
+<li>解锁Flash</li>
+<li>对Flash进行操作（写入数据）</li>
+<li>对Flash重新上锁</li>
+</ol>
+<h3 id="如何查找并选定要写入的Flash十六进制地址值的方法"><a href="#如何查找并选定要写入的Flash十六进制地址值的方法" class="headerlink" title="如何查找并选定要写入的Flash十六进制地址值的方法"></a>如何查找并选定要写入的Flash十六进制地址值的方法</h3><p>想要选定安全的Flash地址进行读写，可以根据自己的STM32 MCU型号，查找数据手册，确定FLASH地址的<br>区域段，因为起始段会存储代码，所以一定要避开起始段，以避免数据错误。下面是在网上找的一个例子。</p>
+<blockquote>
+<p>我此次操作Flash使用的MCU是STM32103C8T6，所以以该型号MCU为例进行描述：<br>在数据手册中，可以看到STM32103C8T6的flash起始地址是0x0800 0000，<br>而STM32103C8T6的Flash大小为64K，可以计算出STM32103C8T6的Flash地址范围是：<br>0x0800 0000~0x0800 FFFF（计算方法参考另一篇博客：STM32内存大小与地址的对应关系以及计算方法）。<br>这里选取0x0800 F000作为读写操作的起始地址，对于C8T6这款MCU，操作这个起始地址应该算是很安全的范围了。</p>
+</blockquote>
+<p>stm32flash擦除操作</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">HAL_FLASH_Unlock();</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> FLASH_EraseInitTypeDef EraseInitStruct;</span><br><span class="line"><span class="type">uint32_t</span> SectorError = <span class="number">0</span>;</span><br><span class="line">EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;</span><br><span class="line">EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3; <span class="comment">//芯片供电电压</span></span><br><span class="line">EraseInitStruct.Sector = FLASH_SECTOR_11;             <span class="comment">//从那个扇区开始擦除</span></span><br><span class="line">EraseInitStruct.NbSectors = <span class="number">1</span>;                        <span class="comment">//一共擦除几个扇区</span></span><br><span class="line"><span class="keyword">if</span>(HAL_FLASHEx_Erase(&amp;EraseInitStruct, &amp;SectorError) != HAL_OK)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">HAL_FLASH_Lock();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意在对flash写入新数据的时候需要对其作擦除操作，flash只能写入0的值，无法将0写为1.</p>
+</blockquote>
+<h2 id="参考博客"><a href="#参考博客" class="headerlink" title="参考博客"></a>参考博客</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaogu0322/article/details/78593423">stm32F407 FLASH 操作笔记</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Ace_Shiyuan/article/details/78196648">STM32操作访问flash</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2018/11/17/stm32%E4%BD%BF%E7%94%A8%E5%86%85%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%9D%A5%E6%8E%89%E7%94%B5%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE/" data-id="cl7d3spzm0045acowevam748x" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/17/stm32%E8%BF%9B%E5%85%A5hardfault%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          stm32进入hardfault原因分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/17/C%E8%AF%AD%E8%A8%80typedef-struct%E5%92%8Cstruct%E7%9A%84%E5%8C%BA%E5%88%AB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">C语言typedef_struct和struct的区别</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

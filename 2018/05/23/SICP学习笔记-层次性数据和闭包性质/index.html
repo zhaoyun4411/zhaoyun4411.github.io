@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>SICP学习笔记-层次性数据和闭包性质 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 闭包性质。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SICP学习笔记-层次性数据和闭包性质">
+<meta property="og:url" content="http://example.com/2018/05/23/SICP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%B1%82%E6%AC%A1%E6%80%A7%E6%95%B0%E6%8D%AE%E5%92%8C%E9%97%AD%E5%8C%85%E6%80%A7%E8%B4%A8/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 闭包性质。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-05-23T11:48:47.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="CS">
+<meta property="article:tag" content="SICP">
+<meta property="article:tag" content="Lisp">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-SICP学习笔记-层次性数据和闭包性质" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/23/SICP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%B1%82%E6%AC%A1%E6%80%A7%E6%95%B0%E6%8D%AE%E5%92%8C%E9%97%AD%E5%8C%85%E6%80%A7%E8%B4%A8/" class="article-date">
+  <time datetime="2018-05-23T11:48:47.000Z" itemprop="datePublished">2018-05-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SICP学习笔记-层次性数据和闭包性质
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>序对就是一种通用的建筑砌块，通过它可以构造起所有不同种类的数据结构。这里建立的元素本省也是序对的序对，这就是表结构得以作为一种表示工具的根本基础。我们将这种能力称为cons的 <em>闭包性质</em>。一般来说如果某种组合数据对象满足闭包性质，那就是说，通过它组合起来的数据对象的得到的结果本生还可以通过同样的操作再进行组合。</p>
+<span id="more"></span>
+
+<h2 id="序列的表示-这里我理解为链表"><a href="#序列的表示-这里我理解为链表" class="headerlink" title="序列的表示(这里我理解为链表)"></a>序列的表示(这里我理解为链表)</h2><p>通过嵌套cons形成的这样的一个序对的序列称为一个表，Scheme为了方便表的构造，提供了一个基本操作list。</p>
+<p>这里可以将car看作选取表的第一项的操作，将cdr看作是选取表中除去第一项之后剩下的所有项形成的子表。car和cdr的嵌套应用可以取出第一个表里的第二、第三以及后面的各项，构造符cons可用于构造表，它在原有的表前面增加一个元素。</p>
+<p>利用序对将元素的序列表示为表之后，我们就可以使用常规的程序设计技术，通过顺序“向下cdr”表的方式完成对表的各种操作。下面的过程<code>list-ref</code>的实际参数是一个表和一个数n，它返回这个表中的第n个项，这里人们习惯将表的元素的编号从0开始，计算<code>list-ref</code>的方法如下:<br>    * 对n&#x3D;0，<code>list-ref</code>返回表的car<br>    * 否则，<code>list-ref</code>返回表的cdr的第（n-1）个项。</p>
+<p>在表的操作过程中，要学习强调从元素表到结果表的变换，而不是注意在逐个元素的处理上。</p>
+<h2 id="层次性结构"><a href="#层次性结构" class="headerlink" title="层次性结构"></a>层次性结构</h2><p>将表作为序列的表示方式，可以很自然的推广到表示那些元素本省也是序列的序列。认识这种元素本身也是序列的序列的一种方式，就是将它们看作树。序列中的元素就是树的分支，而那些本身也是序列的元素就形成了树中的子树。递归是处理树结构的一种很自然的工具，因为我们常常可以将对于树的操作归结为对它们分支的操作，再将这种操作归结为对分支的分支的操作，如此下去，直到达到树的叶子。</p>
+<p>map是处理序列的一种强有力的抽象，与此类似，map与递归的结合也是处理树的一种强有力的抽象。</p>
+<h2 id="序列作为一种约定的界面"><a href="#序列作为一种约定的界面" class="headerlink" title="序列作为一种约定的界面"></a>序列作为一种约定的界面</h2><p>计算过程可以很自然的用流过一些级联的处理步骤的信号方式描述，其中的每个步骤都是实现程序方案中的一个部分。对于一种情况<code>sum-odd-squares</code>。这里从一个 <em>枚举器</em> 开始，它产生出给定树的所有树叶组成的“信号”。这一信号流过一个过滤器，后将所有所有的不是奇数的数都删除，这样得到的信号又通过一个映射，这是一个“转换装置”，它将square过程应用于每个元素。这一映射的输出被馈入一个积累器，该装置用+将所有的元素组合起来，以初始0开始。</p>
+<p>要组织好这些程序使之能够更清晰的的反应上面信号流的结构，最关键的一点就是将注意力集中在处理过程从一个步骤流向下一个步骤的“信号”</p>
+<p>将程序表示为一些针对序列的操作，这样做的价值就在能帮助我呢吧得到模块化的程序设计，也就是说，得到由一些比较独立的片段组合构成设计。通过提供一个标准部件的库，并使这些部件都有着一些能以各种灵活方式互相链接的约定界面。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2018/05/23/SICP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%B1%82%E6%AC%A1%E6%80%A7%E6%95%B0%E6%8D%AE%E5%92%8C%E9%97%AD%E5%8C%85%E6%80%A7%E8%B4%A8/" data-id="cl7d3spy8001kacow56wtezv1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/24/%E9%80%80%E5%87%BAtelnet%E7%9A%84%E6%96%B9%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          退出telnet的方法.md
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/17/SICP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1%E5%BC%95%E5%AF%BC/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">SICP学习笔记-数据抽象引导</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

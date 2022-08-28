@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>iis学习笔记4 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iis学习笔记4">
+<meta property="og:url" content="http://example.com/2019/10/09/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2019-10-09T14:26:07.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="IIS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-iis学习笔记4" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/09/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/" class="article-date">
+  <time datetime="2019-10-09T14:26:07.000Z" itemprop="datePublished">2019-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iis学习笔记4
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这里主要讲解部署Web站点。部署动作是IIS管理员最常做的一种操作，在网络负载平衡的集群环境中，使用手工部署的方式十分容易出错，这里介绍自动化管理工具，以便让管理员能够在网络负载集群环境中快速维护和部署应用程序，减少出错几率，加快部署流程。主要有Web Deploy工具、Visual Studio Online 等工具。</p>
+<span id="more"></span>
+
+<h2 id="1-Web-Deploy"><a href="#1-Web-Deploy" class="headerlink" title="1. Web Deploy"></a>1. Web Deploy</h2><p>这个工具主要用于帮助管理员打包一个Web网站，并提供Web网站在另外一台计算机上面部署的能力。部署一个Web网站主要涉及下面动作：</p>
+<ol>
+<li>复制Web网站文件和文件夹；</li>
+<li>安装部署数据库或执行数据库结构更新脚本；</li>
+<li>在文件和文件夹上设置相应的读写权限；</li>
+<li>安装和配置SSL认证；</li>
+<li>部署其他依赖（如事件日志，全局程序及缓冲区和注册COM对象等）；</li>
+</ol>
+<p>使用Web Deploy工具生成的部署包中会存在一个.cmd的脚本文件。在目标计算机上安装Web Deploy工具后执行该脚本文件即可完成安装。</p>
+<h2 id="2-使用Visual-Studio-Online为Azure-Web应用部署Web网站"><a href="#2-使用Visual-Studio-Online为Azure-Web应用部署Web网站" class="headerlink" title="2. 使用Visual Studio Online为Azure Web应用部署Web网站"></a>2. 使用Visual Studio Online为Azure Web应用部署Web网站</h2><p>VSO可用于源码管理、敏捷开发流程、测试流程和发布管理等完成自己的产品软件。Web应用也可以和VSO进行集成，实现可持续化部署。这个工具可以感知每一次推送代码，并根据配置，推送完代码后进行编译部署，实现持续集成。开发者仅需要配置该工具，提交代码后自动部署到开发环境。</p>
+<h2 id="3-使用Git为Azure应用部署Web网站"><a href="#3-使用Git为Azure应用部署Web网站" class="headerlink" title="3. 使用Git为Azure应用部署Web网站"></a>3. 使用Git为Azure应用部署Web网站</h2><p>关联Azure与git仓库，当检测到git仓库上有提交即将提交自动部署到各个节点。</p>
+<h2 id="4-在云服务上部署Web网站"><a href="#4-在云服务上部署Web网站" class="headerlink" title="4. 在云服务上部署Web网站"></a>4. 在云服务上部署Web网站</h2><p>在云服务的部署模式中有两个不同的部署角色：</p>
+<ol>
+<li>Web Role是指Cloud Service中IIS里面前端Web应用程序和内容。</li>
+<li>Work Role是指不涉及用户界面交互的后台服务。<br>这里可以通过Visual Studio打出对用的部署包。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/10/09/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/" data-id="cl7d3spyr002lacowcub5efij" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/10/iis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E7%B3%BB%E7%BB%9F%E4%BC%98%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iis学习笔记-系统优化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/07/leetcode-1021-remove-outermost-parentheses/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-1021-remove-outermost-parentheses</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

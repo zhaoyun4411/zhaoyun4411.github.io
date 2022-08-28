@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>git学习教程 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="github是一个只要是写代码就绕不开的问题，这里将在这篇博客对其的一些基本操作作一些描述。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git学习教程">
+<meta property="og:url" content="http://example.com/2018/04/19/git%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="github是一个只要是写代码就绕不开的问题，这里将在这篇博客对其的一些基本操作作一些描述。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-04-19T14:58:21.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-git学习教程" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/04/19/git%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B/" class="article-date">
+  <time datetime="2018-04-19T14:58:21.000Z" itemprop="datePublished">2018-04-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      git学习教程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>github是一个只要是写代码就绕不开的问题，这里将在这篇博客对其的一些基本操作作一些描述。</p>
+<span id="more"></span>
+
+<h2 id="github简介"><a href="#github简介" class="headerlink" title="github简介"></a>github简介</h2><p>git是一种免费、开源的版本控制系统，而github是一个主要提供基于git的代码托管的平台。</p>
+<h2 id="加入github"><a href="#加入github" class="headerlink" title="加入github"></a>加入github</h2><h3 id="注册github"><a href="#注册github" class="headerlink" title="注册github"></a>注册github</h3><p>进入<a target="_blank" rel="noopener" href="https://github.com/">github官方网站</a>，注册「Sign Up」一个账号，后面可以选择两种个人方案，其中一种是全部为公共仓库的方案，另外一种为可选择私有仓库的方案（每月7刀），一般对于个人选择免费的共有仓库方案即可。</p>
+<h3 id="认识github"><a href="#认识github" class="headerlink" title="认识github"></a>认识github</h3><p>注册成功后就会跳转到github的主页上面。点击<code>Your profile</code>菜单既可以进入你的个人github主页。</p>
+<h3 id="设置你的github"><a href="#设置你的github" class="headerlink" title="设置你的github"></a>设置你的github</h3><p>点击<code>setting</code>菜单，进入设置页面来设置一些基本信息，如头像、Name、公开的邮箱等等。</p>
+<h3 id="github的基本概念"><a href="#github的基本概念" class="headerlink" title="github的基本概念"></a>github的基本概念</h3><ul>
+<li>Repository 仓库。即你的项目，如果你想通过github托管一个项目，那就必须新建一个Repository。</li>
+<li>Issue 问题。当你的项目被别人使用，但是别人在使用过程中对代码的设计流程有疑问，或者认为代码有做的不好的地方，就可以通过此处体出问题，你可以对问题作出解答然后 Close掉。</li>
+<li>Star 星星。即给你的项目点赞。</li>
+<li>Fork 分叉。当有人想基于你的项目作出一定的修改的情况下，他可以Fork你的项目，这个时候他的github主页上面就多了一个同样的项目，这时他可以自行修改不会影响到原来的代码结构。</li>
+<li>Pull Request 发起请求。当别人Fork你的项目之后，作出了一些改进，同时觉得这个改进不错，想要让这个改进让更多人受益，这时候就可以发起一个Pull Request，愿项目的创建人收到这个请求之后review代码，觉得Ok后就会接受你的请求，这时你的代码将添加到原项目。</li>
+<li>Watch 观察。当你watch某个项目之后，项目的相关更新你都会收到通知。</li>
+<li>Gist 当你没有项目，只是想分享一些代码片段，这时Gist就派上用场了。</li>
+</ul>
+<h3 id="创建自己的项目"><a href="#创建自己的项目" class="headerlink" title="创建自己的项目"></a>创建自己的项目</h3><p>点击顶部导航窗口中+号图标既可以快速创建一个新的项目，这时候根据页面指导填写相关的项目名称、项目描述、和简介即可以创建你的第一个Github项目。</p>
+<h2 id="git介绍"><a href="#git介绍" class="headerlink" title="git介绍"></a>git介绍</h2><p>git是linux之父linus开发的一种版本控制工具，是一种记录一个或者多个文件内容变化，以便将来查询特定版本修订情况的系统。</p>
+<h3 id="git安装"><a href="#git安装" class="headerlink" title="git安装"></a>git安装</h3><p>Mac平台下自带了git无需安装。</p>
+<h3 id="如何学习git"><a href="#如何学习git" class="headerlink" title="如何学习git"></a>如何学习git</h3><p>这里建议不要通过图形化的软件的方式，通过命令行的方式学习git。</p>
+<h3 id="git命令列表"><a href="#git命令列表" class="headerlink" title="git命令列表"></a>git命令列表</h3><p>在安装完成git之后可以通过在控制台中输入git的方式来验证是否安装成功。如果提示git用法则表明安装成功。这里可以尝试看一下控制台中提示的用法说明。</p>
+<blockquote>
+<p>master : 默认分支</p>
+</blockquote>
+<blockquote>
+<p>origin : 默认远程版本库</p>
+</blockquote>
+<blockquote>
+<p>Head : 默认开发分支</p>
+</blockquote>
+<blockquote>
+<p>Head^ : Head的父提交</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">git具体命令</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">git clone {url}</td>
+<td align="center">克隆远程版本仓库</td>
+</tr>
+<tr>
+<td align="center">git init</td>
+<td align="center">初始化本地版本仓库</td>
+</tr>
+<tr>
+<td align="center">git status</td>
+<td align="center">查看状态</td>
+</tr>
+<tr>
+<td align="center">git diff</td>
+<td align="center">查看变更内容</td>
+</tr>
+<tr>
+<td align="center">git add .</td>
+<td align="center">跟踪所有改动文件</td>
+</tr>
+<tr>
+<td align="center">git add {file}</td>
+<td align="center">跟踪指定文件</td>
+</tr>
+<tr>
+<td align="center">git mv {old} {new}</td>
+<td align="center">文件改名</td>
+</tr>
+<tr>
+<td align="center">git rm {file}</td>
+<td align="center">删除文件</td>
+</tr>
+<tr>
+<td align="center">git rm –cached {file}</td>
+<td align="center">停止跟踪文件</td>
+</tr>
+<tr>
+<td align="center">git commit -m “{commit message}”</td>
+<td align="center">提交更新的文件</td>
+</tr>
+<tr>
+<td align="center">git commit –amend</td>
+<td align="center">修改最后一次提交</td>
+</tr>
+<tr>
+<td align="center">git log</td>
+<td align="center">查看提交历史</td>
+</tr>
+<tr>
+<td align="center">git log -p {file}</td>
+<td align="center">查看指定文件的提交历史</td>
+</tr>
+<tr>
+<td align="center">git blame {file}</td>
+<td align="center">以列表的方式查看指定文件的提交历史</td>
+</tr>
+<tr>
+<td align="center">git reset –hard Head</td>
+<td align="center">撤销工作目录中所有未提交文件的修改内容</td>
+</tr>
+<tr>
+<td align="center">git checkout Head {file}</td>
+<td align="center">撤销指定的未提交文件的修改内容</td>
+</tr>
+<tr>
+<td align="center">git revert {commit}</td>
+<td align="center">撤销指定提交</td>
+</tr>
+<tr>
+<td align="center">git branch</td>
+<td align="center">显示所有本地标签</td>
+</tr>
+<tr>
+<td align="center">git checkout {branch}&#x2F;{tag}</td>
+<td align="center">切换指定分支或标签</td>
+</tr>
+<tr>
+<td align="center">git branch {new-branch}</td>
+<td align="center">创建新分支</td>
+</tr>
+<tr>
+<td align="center">git branch -d {branch}</td>
+<td align="center">删除本地指定分支</td>
+</tr>
+<tr>
+<td align="center">git tag</td>
+<td align="center">显示所有本地标签</td>
+</tr>
+<tr>
+<td align="center">git tag {tagname}</td>
+<td align="center">基于最新代码创建标签</td>
+</tr>
+<tr>
+<td align="center">git tag -d {tagname}</td>
+<td align="center">删除标签</td>
+</tr>
+<tr>
+<td align="center">git merge {branch}</td>
+<td align="center">合并指定分支到当前分支</td>
+</tr>
+<tr>
+<td align="center">git rebase {branch}</td>
+<td align="center">衍合指定分支到当前分支</td>
+</tr>
+<tr>
+<td align="center">git remote -v</td>
+<td align="center">查看远程版本库信息</td>
+</tr>
+<tr>
+<td align="center">git remote show {remote}</td>
+<td align="center">查看指定远程版本库信息</td>
+</tr>
+<tr>
+<td align="center">git remote add {remote} {url}</td>
+<td align="center">添加远程版本库</td>
+</tr>
+<tr>
+<td align="center">git fetch {remote}</td>
+<td align="center">从远程库获取代码</td>
+</tr>
+<tr>
+<td align="center">git pull {remote} {branch}</td>
+<td align="center">下载代码及快速合并</td>
+</tr>
+<tr>
+<td align="center">git push {remote} {branch}</td>
+<td align="center">上传代码及快速合并</td>
+</tr>
+<tr>
+<td align="center">git push {remote} :{branch}&#x2F;{tag-name}</td>
+<td align="center">删除远程标签或者分支</td>
+</tr>
+<tr>
+<td align="center">git push –tags</td>
+<td align="center">上传所有标签</td>
+</tr>
+</tbody></table>
+<h3 id="用一个例子说明"><a href="#用一个例子说明" class="headerlink" title="用一个例子说明"></a>用一个例子说明</h3><p>首先新建一个目录存放你的代码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir temp    # 创建仓库文件夹</span><br><span class="line">cd temp</span><br><span class="line">touch readme.md   # 新建readme.md文件</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>提示：在进行任何git操作之前，都需要切换到git仓库对应的文件目录下面</p>
+</blockquote>
+<p>这时候随便输入一个git命令会提示我们不是一个代码仓库。这时需要输入<code>git init</code>来初始化代码仓库。初始化代码仓库之后在输入<code>git status</code>就可以发现在当前分支下「默认为mater分支」存在没有被跟踪的文件<code>readme.md</code>，而且提示你可以使用<code>git add</code>去提交你想要提交的文件。</p>
+<blockquote>
+<p>git init 用来初始化代码仓库<br>git status 用来查看状态</p>
+</blockquote>
+<p>这里通过<code>git add readme.md</code>命令之后即将代码提交到暂存区之中了，这个时候代码等待被提交，同时这里可以使用<code>git rm -cached</code>这个命令去移除这个缓存。接着可以通过输入<code>git commit -m &#39;&#123;提交说明&#125;&#39;</code>来将这个文件提交到代码仓库（其中 -m 表示提交信息）。</p>
+<h2 id="向github提交代码"><a href="#向github提交代码" class="headerlink" title="向github提交代码"></a>向github提交代码</h2><p>通过前面一章，相信已经基本熟悉git的相关操作了。这一章将重点介绍如何向github提交第一行代码。</p>
+<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>当你刚刚注册一个github账号，可以自由的clone其他项目，也可以创建自己的项目，但是无法提交代码，github是基于SSH授权校验来管控提交代码的权限的。所以想向github提交代码第一步是添加ssh key。</p>
+<h3 id="生成ssh-key"><a href="#生成ssh-key" class="headerlink" title="生成ssh key"></a>生成ssh key</h3><p>这里采用的Mac环境，自带ssh，可以通过在命令行中输入ssh验证是否安装。</p>
+<p>接着输入<code>ssh-keygen -t rsa</code>命令，意思是通过指定的rsa算法生成密钥，接着连续输入三个回车键，这时就会生成两个文件<code>id_rsa</code>（密钥）和<code>id_rsa.pub</code>（公钥）。这两个文件在Mac系统的<code>~/.ssh</code>目录下。</p>
+<h3 id="github上面添加ssh-Key"><a href="#github上面添加ssh-Key" class="headerlink" title="github上面添加ssh Key"></a>github上面添加ssh Key</h3><p>进入github设置页面，找到最SSH and GPG keys页签，选择New SSH key，将id_rsa.pub公钥文件中的内容复制到key那一栏中，title，填写一个方便您管理的名字，点击Add SSH Key按钮就OK了。</p>
+<p>添加成功后可以通过输入<code>SSH -T git@github.com</code>来进行测试。</p>
+<h3 id="push-amp-pull"><a href="#push-amp-pull" class="headerlink" title="push &amp; pull"></a>push &amp; pull</h3><p>向远程代码仓库提交代码，需要了解到两个命令：</p>
+<ul>
+<li>push： 当你本地代码更新后，就需要将本地代码推到远程代码仓库，这样本地仓库既可以和本地代码仓库保持同步了。</li>
+</ul>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master #将本地代码推送到远程的master分支上面</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pull： 当别人提交了代码到远程仓库，这个时候你需要使用这个命令将代码拉下来，保证代码的同步。一般在push代码之前都会先pull代码，这样可以避免冲突。</li>
+</ul>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin master #将远程代码更新到本地</span><br></pre></td></tr></table></figure>
+
+<h3 id="提交代码"><a href="#提交代码" class="headerlink" title="提交代码"></a>提交代码</h3><ol>
+<li>首先clone自己的项目，执行命令如下：</li>
+</ol>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:&#123;用户名&#125;/&#123;项目名称&#125;.git</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>通过上面的步骤就可将一个完整的项目复制到本地，这个本地的项目本身已经是一个git仓库，这里只需要在代码仓库的目录下任意修改或添加文件，commit之后既可以push到远程仓库。</li>
+</ol>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+
+
+<p>将设本地已经存在一个git仓库，并且这个仓库已经有了很多次commit记录了，这个时候需要采用另外一种方法来关联github上面的项目。</p>
+<ol>
+<li><p>在github上面新建一个项目。</p>
+</li>
+<li><p>将本地项目与github上面的项目进行关联，切换到项目目录执行如下命令。这里表示添加一个远程仓库，这个远程仓库的地址是<a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#111;&#109;">&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#x74;&#x68;&#x75;&#98;&#46;&#x63;&#111;&#109;</a>:{用户名}&#x2F;{项目名称}.git</p>
+</li>
+</ol>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add &#123;远程仓库名称&#125; git@github.com:&#123;用户名&#125;/&#123;项目名称&#125;.git</span><br></pre></td></tr></table></figure>
+
+<p>  可以通过命令<code>git remote -v</code>查看当项目有那些远程仓库。</p>
+<ol start="3">
+<li>可以通过命令<code>git push &#123;远程仓库名称&#125; &#123;分支名称&#125;</code>向指定远程仓库的指定分支提交代码。</li>
+</ol>
+<blockquote>
+<p>在提交代码前要通过下面命令关联自己的用户名和邮箱：这些信息会出现在你的commit记录里面。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config —global user.name &quot;&#123;用户名&#125;&quot;</span><br><span class="line">git config —global user.email &quot;&#123;邮箱&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2018/04/19/git%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B/" data-id="cl7d3spyl0027acowb55s7kgl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/" rel="tag">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/03/SICP%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-SICP%E7%AE%80%E4%BB%8B%E4%B8%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          SICP学习笔记-SICP简介与环境配置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/07/Markdown%E8%AF%AD%E6%B3%95%E6%95%B4%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Markdown语法整理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CSAPP-存储器的层次结构 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="到目前为止，在我们对系统的研究中，我们都是依赖于一个简单的计算机系统模型，CPU执行指令，而存储系统为CPU存放指令和数据。。在简单模型中，存储器系统是一个线性的字节数组，而CPU能够在一个常数时间内访问每个存储器的位置。这并没有正确反应现代系统实际的工作方式。 在现代的系统结构中，*存储器系统(memory system)是一个具有不同容量、成本和访问时间的存储设备的层次结构。这里CPU寄存器中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-存储器的层次结构">
+<meta property="og:url" content="http://example.com/2022/02/01/CSAPP-%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="到目前为止，在我们对系统的研究中，我们都是依赖于一个简单的计算机系统模型，CPU执行指令，而存储系统为CPU存放指令和数据。。在简单模型中，存储器系统是一个线性的字节数组，而CPU能够在一个常数时间内访问每个存储器的位置。这并没有正确反应现代系统实际的工作方式。 在现代的系统结构中，*存储器系统(memory system)是一个具有不同容量、成本和访问时间的存储设备的层次结构。这里CPU寄存器中">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-02-01T13:54:14.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="CS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CSAPP-存储器的层次结构" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/02/01/CSAPP-%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" class="article-date">
+  <time datetime="2022-02-01T13:54:14.000Z" itemprop="datePublished">2022-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSAPP-存储器的层次结构
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>到目前为止，在我们对系统的研究中，我们都是依赖于一个简单的计算机系统模型，CPU执行指令，而存储系统为CPU存放指令和数据。。在简单模型中，存储器系统是一个线性的字节数组，而CPU能够在一个常数时间内访问每个存储器的位置。这并没有正确反应现代系统实际的工作方式。</p>
+<p>在现代的系统结构中，*存储器系统(memory system)<em>是一个具有不同容量、成本和访问时间的存储设备的层次结构。这里CPU寄存器中保存着最常用的数据。最靠近CPU的小的、快速的</em>高速缓存存储器(cache memory)*最为一部分存储在相对较慢的主存储器(main memory)中的数据和指令的缓冲区域。主存缓存存储在容量较大的、慢速磁盘上的数据，而这些磁盘又常常作为存储在通过网络连接的其他机器上的磁盘或者磁带上的数据缓冲区域。</p>
+<span id="more"></span>
+
+<p>作为程序员，需要理解存储器的层次结构，因为它对应用程序的性能有着巨大的影响。如果你的数据存储在CPU的寄存器中，那么在指令执行的时候，0个周期内就可以访问到它们。如果存储在高速缓存中，需要4～75个周期。如果存储在主存储器中，需要上百个周期。而如果存储在磁盘上，需要大约几千万个周期。</p>
+<p>这里同时还反应了计算机设计的一个基本思想：如果你理解系统是如何将数据在存储器的层次结构中上下移动的，这样对于自己编写的程序，就可以尽量让它的数据存放在存储层次结构中比较高的位置，使得CPU可以更加容易的访问到这些数据。</p>
+<p>这里我们将首先了解一下基本的存储技术：SRAM，DRAM，ROM以及机械硬盘和固态硬盘，并描述它们是如何被组织的。</p>
+<h3 id="1-存储技术"><a href="#1-存储技术" class="headerlink" title="1. 存储技术"></a>1. 存储技术</h3><h4 id="1-1-随机访问存储器"><a href="#1-1-随机访问存储器" class="headerlink" title="1.1 随机访问存储器"></a>1.1 随机访问存储器</h4><p>随机访问存储器可以被分成两类：SRAM和DRAM，其中SRAM的价格要高于DRAM，SRAM主要被用来作为高速缓存存储器。DRAM用来作为主存。</p>
+<h5 id="1-1-1-静态RAM"><a href="#1-1-1-静态RAM" class="headerlink" title="1.1.1 静态RAM"></a>1.1.1 静态RAM</h5><p>对于SRAM只要有电，它就会永远的保持它的值。只有两个稳定的配置或者状态。</p>
+<h5 id="1-1-2-动态RAM"><a href="#1-1-2-动态RAM" class="headerlink" title="1.1.2 动态RAM"></a>1.1.2 动态RAM</h5><p>对于DRAM每一个存储位是一个微小的电容器，所以DRAM存储器对干扰非常敏感。当电容器的电压被扰乱后，他就永远不会恢复。同时还会有许多种原因导致漏电，内存系统会周期性质的通过读出，然后重新来刷新内存中的每一位，来纠错一个字中任何个单位的错误位。</p>
+<h5 id="1-1-3-传统DRAM"><a href="#1-1-3-传统DRAM" class="headerlink" title="1.1.3 传统DRAM"></a>1.1.3 传统DRAM</h5><p>传统的DRAM芯片中的单元(位) 被分成d个*超单元(supercell)<em>，每个超单元都由w个DRAM单元组成。一个d</em>w的DRAM共存储了dw位信息。</p>
+<p>DRAM芯片会被连接到CPU中一个被称为*内存控制器(memory controller)*的电路，这个电路可以一次性传送w位到每个DRAM芯片或者一次从每个DRAM芯片传出w位。</p>
+<p>因为DRAM是通过二维矩阵的方式排列超单元的。对于内存控制器来说为了读取超单元（i，j）中的内容，内存控制器将行地址i和列地址j发送给DRAM。DRAM将超单元（i，j）的内容发送回控制器作为响应。这里行地址i称为RAS(Row Access Strobe，行访问选通脉冲)请求；列地址j称为CAS(Column Access Strobe，列访问选通脉冲)请求。这里一般来说RAS和CAS请求共享DRAM地址引脚。</p>
+<p>例如对于内存控制器的请求读出DRAM中的超单元（2,1），内存控制器会发送地址2。而此时DRAM的响应是将行2的整个内容都复制到一个内部行缓冲区中。接下来内存控制器发送列地址1，DRAM的响应是从缓冲区中复制超单元，并将它们发送到内存控制器。</p>
+<h5 id="1-1-4-内存模块"><a href="#1-1-4-内存模块" class="headerlink" title="1.1.4 内存模块"></a>1.1.4 内存模块</h5><p>DRAM芯片封装在<em>内存模块（memory module）</em>中，同时被插到主板扩展槽上。</p>
+<h5 id="1-1-5-增强的-DRAM"><a href="#1-1-5-增强的-DRAM" class="headerlink" title="1.1.5 增强的 DRAM"></a>1.1.5 增强的 DRAM</h5><p>RAM的生产厂商为了试图跟上迅速增长的处理器速度，出现了下面几种类型的增强型的DRAM：</p>
+<ul>
+<li>*快页模式DRAM（Fast Page Mode DRAM,FPM DRAM）。FPM DRAM允许对同一行连续的访问可以直接从行缓冲区中的到服务。</li>
+<li>*扩展数据输出DRAM（Extended Data Out DRAM, EDO DRAM）。FPDM DRAM的一个增强形式，允许各个CAS信号在时间上靠的更紧密一点。</li>
+<li>*同步DRAM（Synchronous DRAM, SDRAM）。这种方式与内存控制器通信使用一组显式的控制信号，常规来说、FPM和EDO DRAM都是异步信号。同步的方式能够比异步的方式更快的输出它的超单元的内容。</li>
+<li>*双倍数据速率同步DRAM（Double Data-Rate Synchronous DRAM, DDR SDRAM）。DDR SDRAM是对SDRAM的一种增强，它通过使用两个时钟沿作为控制信号，从而使得DRAM的速度翻倍。不同类型的DDR SDRAM是用提高有效带宽的很小的预取缓冲区大小来划分：DDR（2位）；DDR（4位）；DDR（8位）</li>
+<li>视频RAM（Video RAM，VRAM）。主要被用在图形系统的帧缓冲区中。</li>
+</ul>
+<blockquote>
+<p>现在大多数的服务器和桌面的系统都是采用DDR3 SDRAM构造的。</p>
+</blockquote>
+<h5 id="1-1-6-非易失性存储器"><a href="#1-1-6-非易失性存储器" class="headerlink" title="1.1.6 非易失性存储器"></a>1.1.6 非易失性存储器</h5><p>如果断电，DRAM和SRAM都会丢失它们的信息，从这个意义上说，它们都是*易失的(volatile)<em>。另一个方面，</em>非易失存储器(nonvolatile memory)*即使在关电后，仍然保存着它们的信息。</p>
+<blockquote>
+<p>由于历史原因，虽然ROM中有的类型即可以读也可以写，但是它们整体上都被称为只读存储器(Read-only Memory)。ROM是以它们能够被重新编程的次数和对它们进行编程所用的机制来区分的。如PROM（类似芯片中的efuse），EEPROM（清除为0，对其操作是写入1）。</p>
+</blockquote>
+<p>储存在ROM设备中的程序通常被称为固件(firmware)。当一个计算机系统通电以后，他会运行存储在ROM中的固件。如BIOS等</p>
+<h5 id="1-1-7-访问主存"><a href="#1-1-7-访问主存" class="headerlink" title="1.1.7 访问主存"></a>1.1.7 访问主存</h5><p>数据流通过*总线(bus)<em>的共享电子电路在处理器和DRAM主存之间来来回回。每次CPU和主存之间的数据传送都是通过一系列步骤来完成的。这些步骤被称为</em>总线事务(bus transaction)<em>。</em>读事务(read transaction)<em>从主存传送数据到CPU。</em>、写事务(write transaction)*从CPU传送数据到主存。</p>
+<p>简单的理解总线就是一组并行的导线，可以传递数据，地址和控制信号。</p>
+<blockquote>
+<p>不同的厂商提出不同的总线体系结构，作为产品差异化的一种方法。Intel系统使用北桥(northbridge)和南桥(southbridge)的芯片分别将CPU连接到内存和I&#x2F;O设备。现代Intel处理器使用快速通道(QUickPath)互联。</p>
+</blockquote>
+<h4 id="1-2-磁盘存储"><a href="#1-2-磁盘存储" class="headerlink" title="1.2 磁盘存储"></a>1.2 磁盘存储</h4><p><em>磁盘</em>是为了应用和保存大量数据的存储设备，存储数据的数量级可以达到几百到几千兆字节。不过从磁盘上读取信息的时间为毫秒级，比DRAM读慢了10万倍，大约比SRAM慢了100万倍。</p>
+<h5 id="1-2-1-磁盘构造"><a href="#1-2-1-磁盘构造" class="headerlink" title="1.2.1 磁盘构造"></a>1.2.1 磁盘构造</h5><p>磁盘是由*盘片(platter)<em>构成的。每个盘片有两个面或者称为</em>表面(surface)<em>，磁盘表面覆盖着磁性记录材料。盘片的中央有一个可以旋转的</em>主轴(spindle)<em>，它使得盘片以固定的</em>旋转速率(rotational rate)*旋转。磁盘通常包含一个或者多个这样的盘片，并封装在一个密闭的容器中。</p>
+<p>对于一个典型的磁盘表面结构来说，每个磁盘的表面是由一组称为*磁道(track)<em>的同心圆组成。每个磁道被划分成一组扇区(sector)。每个扇区包含相等数量的数据位（通常是512字节），这些数据编码在扇区上的磁性材料中。扇区之间由一些</em>间隙(gap)*分隔开，这些间隙中不存储数据位。间隙存储用来识别扇区格式化位。</p>
+<p>整个磁片加上旋转装置的通常被称为磁盘驱动器(disk drive)。通常简称为磁盘(disk)，或者旋转磁盘(rotating disk)，使其区别于固态硬盘SSD，SSD是没有移动部分的。</p>
+<p>可以通过术语*柱面(sylinder)*来描述多个盘片驱动器的构造，这里，柱面是所有盘片变面上到主轴中心的距离相等的磁道的集合。</p>
+<h5 id="1-2-2-磁盘容量"><a href="#1-2-2-磁盘容量" class="headerlink" title="1.2.2 磁盘容量"></a>1.2.2 磁盘容量</h5><p>一个磁盘上可以记录的最大位数称为它的最大容量，磁盘的容量是由以下技术因素决定。</p>
+<ul>
+<li>记录密度(recording density)(位&#x2F;英寸)：磁道一英寸的段中可以放入的位数。</li>
+<li>磁道密度(track density)(道&#x2F;英寸)：从盘片中心出发半径上一英寸的段内可以有的磁道数。</li>
+<li>面密度(areal density)(位&#x2F;平方英寸)：记录密度与磁道密度的乘积。</li>
+</ul>
+<h5 id="1-2-3-磁盘读写"><a href="#1-2-3-磁盘读写" class="headerlink" title="1.2.3 磁盘读写"></a>1.2.3 磁盘读写</h5><p>磁盘用*读&#x2F;写头(read&#x2F;write head)<em>来读写存储在磁性表面的位，而读写头连接到一个传动臂的一端。驱动器移动读&#x2F;写头的机械运动称为</em>寻道(seek)*。读&#x2F;写头一般一致行动，在任意时刻，所有读&#x2F;写头都位于同一个柱面上。</p>
+<p>磁盘以扇区大小的块来读写数据。对扇区的访问时间又三个主要的部分：寻道时间(seek time)， 旋转时间(rotational latency)和传送时间(transfer time)。</p>
+<h5 id="1-2-4-逻辑磁盘块"><a href="#1-2-4-逻辑磁盘块" class="headerlink" title="1.2.4 逻辑磁盘块"></a>1.2.4 逻辑磁盘块</h5><p>为了对操作系统隐藏磁盘系统的复杂性，通常会在磁盘中封装一个小的硬盘控制器，维护着逻辑号块和实际物理扇区之间的映射关系。当读取一个磁盘扇区的数据到主存，操作系统发送一个命令到磁盘控制器，让他读取某个逻辑块号。控制器上的固件通过查找，将一个逻辑块号转化成为一个(盘面，磁道，扇区)的三维数组。</p>
+<blockquote>
+<p>磁盘控制器必须对磁盘进行格式化，然后才能在该磁盘上存储数据。格式化包括用标识扇区的信息填写扇区之间的间隙，标识出表面有故障的柱面并且不使用它们，以及在每个区中预留出一组柱面作为备用，如果区中一个或多个柱面在磁盘使用过程中坏掉了，就可以使用这些备用的柱面。因为存在着这些备用的柱面，所以磁盘制造商所说的格式化容量比最大容量要小。</p>
+</blockquote>
+<h5 id="1-2-5-连接I-x2F-O设备"><a href="#1-2-5-连接I-x2F-O设备" class="headerlink" title="1.2.5 连接I&#x2F;O设备"></a>1.2.5 连接I&#x2F;O设备</h5><p>如图形卡，鼠标，键盘和磁盘这些设备都是通过I&#x2F;O总线连接到CPU的。一般来说I&#x2F;O总线比系统总线和内存总线慢，但是它可以连接种类繁多的I&#x2F;O设备。</p>
+<h5 id="1-2-6-访问磁盘"><a href="#1-2-6-访问磁盘" class="headerlink" title="1.2.6 访问磁盘"></a>1.2.6 访问磁盘</h5><p>CPU使用一种称为*内存映射I&#x2F;O（memory-mapped I&#x2F;O）的技术来向I&#x2F;O设备发射命令。对于CPU访问磁盘大致过程如下：</p>
+<ol>
+<li>CPU通过将命令，逻辑块号和目的内存地址写到与磁盘相关联的内存映射地址，发起一个磁盘读请求。</li>
+<li>磁盘控制器读扇区，并执行道主存的DMA传送。</li>
+<li>当DMA传送完成时，磁盘控制器通过中断的方式通知CPU</li>
+</ol>
+<h4 id="1-3-固态硬盘"><a href="#1-3-固态硬盘" class="headerlink" title="1.3 固态硬盘"></a>1.3 固态硬盘</h4><p>固态硬盘(Solid State Disk, SSD)是一种基于闪存的存储技术。一个SSD封装由一个或多个闪存芯片和闪存翻译层(flash translation layer)组成。</p>
+<blockquote>
+<p>对于SSD来说，读要比写要快。随机读和写的性能差别是由底层闪存基本属性决定。</p>
+</blockquote>
+<p>SSD的随机写很慢，因为写入需要在一页的整个被擦除之后才能写这一页，擦除需要相对较长的时间。当写操作试图写入一个存在有用数据的块时，那么这个块中所带有用数据的页都必须被复制到一个新的块中，然后才能进行对页P的写。</p>
+<h5 id="1-4-存储技术的趋势"><a href="#1-4-存储技术的趋势" class="headerlink" title="1.4 存储技术的趋势"></a>1.4 存储技术的趋势</h5><p>对于存储器技术的讨论，可以总价下面几个思想：</p>
+<ul>
+<li>不同的存储技术有着不同的价格和性能折中。</li>
+<li>不同存储技术的价格和性能有着截然不同的速率变化。</li>
+</ul>
+<h3 id="2-局部性"><a href="#2-局部性" class="headerlink" title="2. 局部性"></a>2. 局部性</h3><p>一个编写良好的额计算机程序常常具有良好的*局部性(locality)<em>。也就是，它们倾向于引用邻近于其他最近引用过的数据项，或者最近引用过的数据项本身。这种倾向性被称为</em>局部性原理(principle of locality)*，是一个持久的概念，对硬件和软件系统的设计和性能都有着极大的影响。</p>
+<p>局部性通常包含有两种不同的形式：*时间局部性(temporal locality)<em>（被引用过一次的内存位置可能在不远的将来再次被引用）和</em>空间局部性(spatial locality)*（如果一个内存位置被引用了一次，那么程序很可能在不远的将来引用到附近的一个内存位置）。</p>
+<blockquote>
+<p>一般来说，有良好局部性的程序比局部性差的程序运行得更快。</p>
+</blockquote>
+<h4 id="2-1-对程序数据引用的局部性"><a href="#2-1-对程序数据引用的局部性" class="headerlink" title="2.1 对程序数据引用的局部性"></a>2.1 对程序数据引用的局部性</h4><p>例如下面的一段代码，可以看出，对于变量v，函数有很好的空间局部性，但是时间局部性很差，因为每个向量元素只被访问一次。对于循环结构代码来说，这个函数要么具有很好的空间局部性，要么有好的时间局部性。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sumvec</span><span class="params">(<span class="type">int</span> v[N])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i, sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">        sum += v[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于上面的C代码，按顺序访问每个元素的函数，具有步长为1的引用模式。一般将这种引用模式称为*顺序引用模式(sequential reference pattern)*。一个连续向量中，每隔K个元素进行访问，就称为步长为k的引用模式。一般来说，随着步长的增加，空间局部性下降。</p>
+<h4 id="2-2-取指令的局部性"><a href="#2-2-取指令的局部性" class="headerlink" title="2.2 取指令的局部性"></a>2.2 取指令的局部性</h4><p>因为程序指令是存放在内存中的，CPU必须取出这些指令，所以我们也能够评价一个程序关于取指令的局部性能。对于for循环来说，循环体里面的指令是按照连续的内存顺序执行的，因此循环有良好的空间局部性。因为循环体会被执行多次，所以它也有很好的时间局部性。</p>
+<p>区别于程序数据的一个重要的属性是在运行的时候它是不能被修改的。当程序正在执行的时候，CPU只从内存中读出给它的指令。CPU很少会重写或者去修改这些指令。</p>
+<h4 id="2-3-局部性小结"><a href="#2-3-局部性小结" class="headerlink" title="2.3 局部性小结"></a>2.3 局部性小结</h4><p>对于量化评价程序中局部性的一些简单原则：</p>
+<ul>
+<li>对于重复引用相同变量的程序有良好的时间局部性。</li>
+<li>对于具有步长为k的引用模式的程序，步长越小，空间局部性越好。</li>
+<li>对于取指令来说，循环有好的时间和空间局部性。循环体越小，循环迭代次数越多，局部性越好。</li>
+</ul>
+<h3 id="3-存储器层次结构"><a href="#3-存储器层次结构" class="headerlink" title="3. 存储器层次结构"></a>3. 存储器层次结构</h3><ul>
+<li>存储技术：不同存储技术的访问时间差异很大。速度较快的技术每字节的成本要比速度较慢的技术高，而且容量较小。CPU和主存之间的速度差异在增大。</li>
+<li>计算机软件：一个编写良好的程序倾向于展示出良好的局部性。</li>
+</ul>
+<p>计算机通过一种称为*存储器层次结构(memory hierarchy)*的组织方法使得硬件和软件的这些基本属性互相补充的十分完美。存储器的层次结构由块到慢如下形式: <code>寄存器 --&gt; L1高速缓存(SRAM) --&gt; L2高速缓存(SRAM) --&gt; L3高速缓存(SRAM) --&gt; 主存(DRAM) --&gt; 本地二级缓存(本地磁盘) --&gt; 远程二级存储(分布式文件系统，web服务器) </code></p>
+<h4 id="3-1-存储层次结构中的缓存"><a href="#3-1-存储层次结构中的缓存" class="headerlink" title="3.1 存储层次结构中的缓存"></a>3.1 存储层次结构中的缓存</h4><p>一般来说，*高速缓存(cache)*是一个小而且快速的存储设备，它作为存储在更大，也更慢的设备中的数据对象的缓冲区。</p>
+<p>存储器层次结构的中心思想是，对于每个位于k层的更快的存储设备作为位于k+1层的更大更慢的存储设备的缓存。换句话说，层次结构中的每一层都缓存来自较低一层的数据对象。例如，主存作为本地磁盘的缓存。</p>
+<p>一般来说第k层更小，更快，更昂贵的设备缓存着第k+1层块的一个子集，数据以块为大小传输在层与层之间复制。</p>
+<p>数据总是以块大小为*传送单元(transfer unit)*在第k层和第k+1层之间来回复制的。虽然在层次结构中任何一对相邻的层次之间块大小是固定的，但是其他层次对之间可以有不同的块大小。一般来说，层次结构中较低层(离CPU较远)的设备的访问时间较长，因此为了补偿这些较长的访问时间，倾向于使用较大的块。</p>
+<h5 id="3-1-1-缓存命中"><a href="#3-1-1-缓存命中" class="headerlink" title="3.1.1 缓存命中"></a>3.1.1 缓存命中</h5><p>当程序需要第k+1层的某个数据对象d的时候，它首先在当前存储在第k层的一个块中查找d。如果d刚好缓存在第k层中，那么就是我们所说的*缓存命中(cache hit)*。这时程序直接从第k层中读取d。</p>
+<h5 id="3-1-2-缓存步命中"><a href="#3-1-2-缓存步命中" class="headerlink" title="3.1.2 缓存步命中"></a>3.1.2 缓存步命中</h5><p>当第k层中没有缓存数据对象d的时候，那么就是我们所说的*缓存不命中(cache miss)*。当发生缓存不命中的时候，第k层的缓存从第k+1层缓存中取出包含d的那个块，如果第k层的缓存已经满了，可能就会覆盖现存的一个块。</p>
+<p>这里覆盖一个现存的块的过程称为*替换(replacing)<em>或者</em>驱逐(evicting)<em>这个块。被驱逐的这个块有时被称为</em>牺牲块(victim block)<em>。决定应该替换那个块是由缓存的</em>替换策略(replacement policy)*来控制的。可以随机替换或者选择最后被访问的时间距离现在最远的块。</p>
+<h5 id="3-1-3-缓存不命中的种类"><a href="#3-1-3-缓存不命中的种类" class="headerlink" title="3.1.3 缓存不命中的种类"></a>3.1.3 缓存不命中的种类</h5><p>当第k层的缓存是空的，那么对任何数据对象的访问都不会命中。一个空的缓存被称为*冷缓存(cold cache)<em>，此类不命中称为</em>强制不命中(compulsory miss)<em>或者</em>冷不命中(cold miss)*。这种缓存不命中的形式通常是短暂的时间，不会在稳定状态下出现。</p>
+<p>当缓存按照某种规则替换k+1层的块，就有可能出现*冲突不命中(conflict miss)*的情况。例如制定某种规则，缓存K层分为4个块，每个块只会替换K+1层中编号对4取余相等的块，例如，当需要k+1层中7号内存块中的数据会将其复制到编号为3的k层数据块中。但是这种情况如果程序只需要编号为3和7的k+1层中的数据块就需要反复的复制3和7到k层缓存中，即使k层缓存总共可以容纳4个块。</p>
+<p>当程序需要反复访问一个数组中的元素。同时这数组的大小超过缓存的大小的时候，缓存就会出现*容量不命中(capacity miss)*。简单的说就是缓存太小，不能处理这个数组。</p>
+<h5 id="3-1-4-缓存管理"><a href="#3-1-4-缓存管理" class="headerlink" title="3.1.4 缓存管理"></a>3.1.4 缓存管理</h5><p>存储器层次结构的本质是，每一层存储设备都是较低一层的缓存。在每一层上，存在某种形式的逻辑管理缓存。例如将缓存划分成块，在不同的层之间传送块，判定是命中还是不命中并处理它们。管理缓存的逻辑可以是硬件、软件，或是两者的结合。</p>
+<h4 id="3-2-存储层次结构概念小结"><a href="#3-2-存储层次结构概念小结" class="headerlink" title="3.2 存储层次结构概念小结"></a>3.2 存储层次结构概念小结</h4><p>基于缓存的存储器层次结构行之有效，是因为较慢的存储设备比较快的存储设备更便宜，同时程序倾向于展示局部性。</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">缓存什么</th>
+<th align="left">被缓存在何处</th>
+<th align="left">延迟（周期数）</th>
+<th align="left">由谁管理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CPU寄存器</td>
+<td align="left">4字节或者8字节字</td>
+<td align="left">芯片上的CPU寄存器</td>
+<td align="left">0</td>
+<td align="left">编译器</td>
+</tr>
+<tr>
+<td align="left">TLB</td>
+<td align="left">地址翻译</td>
+<td align="left">芯片上的TLB</td>
+<td align="left">0</td>
+<td align="left">硬件MMU</td>
+</tr>
+<tr>
+<td align="left">L1高速缓存</td>
+<td align="left">64字节块</td>
+<td align="left">芯片上的L1高速缓存</td>
+<td align="left">4</td>
+<td align="left">硬件</td>
+</tr>
+<tr>
+<td align="left">L2高速缓存</td>
+<td align="left">64字节块</td>
+<td align="left">芯片上的L2高速缓存</td>
+<td align="left">10</td>
+<td align="left">硬件</td>
+</tr>
+<tr>
+<td align="left">L3高速缓存</td>
+<td align="left">64字节块</td>
+<td align="left">芯片上的L3高速缓存</td>
+<td align="left">50</td>
+<td align="left">硬件</td>
+</tr>
+<tr>
+<td align="left">虚拟内存</td>
+<td align="left">4KB页</td>
+<td align="left">主存</td>
+<td align="left">200</td>
+<td align="left">硬件+OS</td>
+</tr>
+<tr>
+<td align="left">缓冲区缓存</td>
+<td align="left">部分文件</td>
+<td align="left">主存</td>
+<td align="left">200</td>
+<td align="left">OS</td>
+</tr>
+<tr>
+<td align="left">磁盘缓存</td>
+<td align="left">磁盘扇区</td>
+<td align="left">磁盘控制器</td>
+<td align="left">100 000</td>
+<td align="left">控制器固件</td>
+</tr>
+<tr>
+<td align="left">网络缓存</td>
+<td align="left">部分文件</td>
+<td align="left">本地磁盘</td>
+<td align="left">10 000 000</td>
+<td align="left">NFS客户端</td>
+</tr>
+<tr>
+<td align="left">浏览器缓存</td>
+<td align="left">web页</td>
+<td align="left">本地磁盘</td>
+<td align="left">10 000 000</td>
+<td align="left">Web浏览器</td>
+</tr>
+<tr>
+<td align="left">web缓存</td>
+<td align="left">web页</td>
+<td align="left">远程服务器磁盘</td>
+<td align="left">1 000 000 000</td>
+<td align="left">Web代理服务器</td>
+</tr>
+</tbody></table>
+<h3 id="4-高速缓存存储器"><a href="#4-高速缓存存储器" class="headerlink" title="4. 高速缓存存储器"></a>4. 高速缓存存储器</h3><p>在这一节的讨论中，我们会假设一个简单的存储器层次结构，CPU和主存储器之间只有一个L1高速缓存。</p>
+<h4 id="4-1-通用高速缓存存储器组织结构"><a href="#4-1-通用高速缓存存储器组织结构" class="headerlink" title="4.1 通用高速缓存存储器组织结构"></a>4.1 通用高速缓存存储器组织结构</h4><p>假设一个计算机系统，其存储器控制器地址有m位，形成M&#x3D;2^m个不同的地址。同时这样的一个机器的高速缓存被组织成一个有S&#x3D;2^s个高速缓存组(cache set)的数组。每个组包含E个高速缓存行(cache line)。每个行是由一个B&#x3D;2^b字节的数据块(block)组成，其中数据块中有一个有效位指明这行数据是否包含有意义的信息。还存在t&#x3D;m-(b+s)个标记位，它们唯一地标识出存储在这个高速缓存行中的块。</p>
+<p>一般来说，高速缓存的结构可以通过元组<code>(S,E,B,m)</code>来描述。高速缓存的大小C通常是指所有块的大小的和。标记位和有效位不包含在里面。因此，<code>C=S*E*B</code>。</p>
+<h4 id="4-2-直接映射高速缓存"><a href="#4-2-直接映射高速缓存" class="headerlink" title="4.2 直接映射高速缓存"></a>4.2 直接映射高速缓存</h4><p>根据每个组的高速缓存行数E，高速缓存被分成不同的类别。对于每个组只有一行的高速缓存被称为直接映射高速缓存。</p>
+<p>对于一个直接映射高速缓存的系统，我们假设它有一个CPU、一个L1高速缓存和一个主存。当CPU执行一条读内存字的w指令的时候，它向L1高速缓存请求这个字。如果L1高速缓存中有w的一个缓存副本，那么就得到L1高速缓存命中，高速缓存就会很快的抽取这个w，并将它返回给CPU。否则就会发生缓存不命中，当L1高速缓存向主存储请求包含w的块的一个副本时，CPU必须等待。当被请求的块最终从内存到达时，L1高速缓存将这个块存放在它的一个高速缓存行里，从被存储的块中抽取字w，然后将它返回给CPU。高速缓存确定一个请求是否命中，然后抽取被请求的字的过程分为三步：1）组选择，2）行匹配，3）字抽取。</p>
+<h5 id="4-2-1-直接映射高速缓存系统的组选择"><a href="#4-2-1-直接映射高速缓存系统的组选择" class="headerlink" title="4.2.1 直接映射高速缓存系统的组选择"></a>4.2.1 直接映射高速缓存系统的组选择</h5><p>高速缓存从w地址抽取出s个组的索引位。这些位被解释成一个对应于一个组的无符号数，或者简单的解释，当我们把高速缓存看成一个关于组的一维数组，那么这些组索引位就是一个到这个数组的索引。</p>
+<h5 id="4-2-2-直接映射高速缓存系统的行匹配"><a href="#4-2-2-直接映射高速缓存系统的行匹配" class="headerlink" title="4.2.2 直接映射高速缓存系统的行匹配"></a>4.2.2 直接映射高速缓存系统的行匹配</h5><p>4.2.1 中通过地址位获得了组索引，这里将确定是否有字w的一个副本存储在组i包含的一个高速缓存行中。这里因为每个组只有一行，当且仅当设置了有效位，而且高速缓存行中的标记与w的地址中的标记匹配时，这一行中包含w的一个副本。</p>
+<blockquote>
+<p>只有当高速缓存行中的标记位与地址中的标记位相匹配，才能说缓存命中，同时如果有效位没有设置，或者标记不相匹配，那么我们就得到了一个缓存不命中。</p>
+</blockquote>
+<h5 id="4-2-3-直接映射高速缓存系统的字抽取"><a href="#4-2-3-直接映射高速缓存系统的字抽取" class="headerlink" title="4.2.3 直接映射高速缓存系统的字抽取"></a>4.2.3 直接映射高速缓存系统的字抽取</h5><p>一旦缓存命中，我们知道w就在这个块中的某个地方。最后一步确定所需要的字在块中是从哪里开始的。可以将块偏移理解为数组索引。</p>
+<h5 id="4-2-4-直接映射高速缓存系统不命中时的行替换"><a href="#4-2-4-直接映射高速缓存系统不命中时的行替换" class="headerlink" title="4.2.4 直接映射高速缓存系统不命中时的行替换"></a>4.2.4 直接映射高速缓存系统不命中时的行替换</h5><p>如果缓存不命中，那么它需要从存储器层次结构的下一层取出被请求的块，然后将新的块存储在组索引位指示的组中的一个高速缓存中。一般而言，如果组中都是有效的高速缓存行，那么必须要驱逐一个现存的行。对于直接映射高速缓存来说，每个组只包含有一行，替换策略为：用新取出的行替换当前的行。</p>
+<h4 id="4-3-组相联高速缓存"><a href="#4-3-组相联高速缓存" class="headerlink" title="4.3 组相联高速缓存"></a>4.3 组相联高速缓存</h4><p>组相联高速缓存允许每个组保存有多于一个的高速缓存行。</p>
+<h4 id="4-4-全相连高速缓存"><a href="#4-4-全相连高速缓存" class="headerlink" title="4.4 全相连高速缓存"></a>4.4 全相连高速缓存</h4><p>全相连高速缓存是由一个包含所有高速缓存行的组(即 E&#x3D;C&#x2F;B) 组成。简单的理解只有一个组。</p>
+<p>因为高速缓存电路必须并行的搜索许多相匹配的标记，构造一个又大又块的相关联高速缓存十分困难，而且昂贵。因此，全相联高速缓存只适合做小的高速缓存，例如虚拟内存系统中的翻译备用缓冲器。</p>
+<h4 id="4-5-有关写的问题"><a href="#4-5-有关写的问题" class="headerlink" title="4.5 有关写的问题"></a>4.5 有关写的问题</h4><p>前面描写的高速缓存关于读的操作可以概括为：首先，在高速缓存中查找所需要的字w的副本。如果命中，立即将w返回给CPU。如果不命中，从存储器的层次结构中较低的层中取出包含w的块，将这个块存储到某个高速缓存中(可能会驱逐一个有效的行)，然后返回字w。</p>
+<p>对于写的情况则比较复杂。假设我们要写一个已经缓存了的字w(写命中，write hit) 方法如下：</p>
+<ol>
+<li>直写(write-through)，就是立即将w的高速缓存块写回到紧接着的低一层中。这种方法会导致每次写回都要引起总线流量。</li>
+<li>写回(write-back)，尽可能的推迟更新，只有当替换算法要驱逐这个更新过的块的时候，才把它写到紧接着的低一层中。可以显著的减少总线流量。</li>
+</ol>
+<p>当我们要写回的数据不在缓存中的时候，称为写不命中，具体方法有：</p>
+<ol>
+<li>写分配(write-allocate)，加载相应的低一层的块到高速缓存中，然后更新这个高速缓存。</li>
+<li>非写分配(not-write-allocate)，避开高速缓存，直接把这个字写到底一层中。</li>
+</ol>
+<h4 id="4-6-实际高速缓存层次结构分析"><a href="#4-6-实际高速缓存层次结构分析" class="headerlink" title="4.6 实际高速缓存层次结构分析"></a>4.6 实际高速缓存层次结构分析</h4><p>对于高速缓存，只保存指令的高速缓存称为<code>i-cache</code>，只保存程序数据的高速缓存称为<code>d-cache</code>。既保存指令又保存数据的高速缓存称为统一的高速缓存。通常会针对不同的访问模式来优化这两个高速缓存，它们可以有不同的块大小，相联度和容量。</p>
+<h4 id="4-7-高速缓存参数的性能影响"><a href="#4-7-高速缓存参数的性能影响" class="headerlink" title="4.7 高速缓存参数的性能影响"></a>4.7 高速缓存参数的性能影响</h4><p>有许多指标来衡量高速缓存的性能。</p>
+<ul>
+<li>不命中率（miss rate）。在一个程序执行或程序的一部分执行期间，内存引用不命中的比率。</li>
+<li>命中率（hit rate）。命中内存的比率。</li>
+<li>命中时间（hit time）。从高速缓存传送一个字到CPU所需要的时间。包括组选择、行确认和字选择时间。</li>
+<li>不命中处罚（miss penalty）。由于不命中所需要的额外时间。</li>
+</ul>
+<h3 id="5-编写高速缓存友好的代码"><a href="#5-编写高速缓存友好的代码" class="headerlink" title="5. 编写高速缓存友好的代码"></a>5. 编写高速缓存友好的代码</h3><p>编写高速缓存友好的代码的基本方法如下：</p>
+<ol>
+<li>让最常见的情况运行的快，程序通常把大部分时间都花在少量的核心函数上面，而这些函数通常把大部分时间都花在少量的循环上面。所以要把注意力集中在核心函数里的循环上，而忽略其他部分。</li>
+<li>尽量减小每个循环内部的缓存不命中数量。总的说来就是1）对局部变量的反复引用是好的，因为编译器能够将它们缓存在寄存器文件中；2）步长为1的引用模式是好的，因为存储器的层次结构中所有层次上的缓存都是将数据存储为连续的块。</li>
+</ol>
+<blockquote>
+<p>较高的不命中率会对运行时间有显著的影响。</p>
+</blockquote>
+<h3 id="6-高速缓存对程序性能的影响"><a href="#6-高速缓存对程序性能的影响" class="headerlink" title="6. 高速缓存对程序性能的影响"></a>6. 高速缓存对程序性能的影响</h3><p>这里将通过研究高速缓存对运行在实际机器上的程序性能的影响，综合我们对存储层次结构的讨论。</p>
+<h4 id="6-1-存储器山"><a href="#6-1-存储器山" class="headerlink" title="6.1 存储器山"></a>6.1 存储器山</h4><p>一个程序从存储系统中读取数据的速率称为*读吞吐量(read throughput)<em>，或者称为</em>读带宽(read bandwidth)*。如果一个程序在s秒的时间段内读n个字节，那么这段时间内的读吞吐就等于n&#x2F;s。</p>
+<p>总的来说，存储器系统的性能不是一个数字就能描述的。相反，他是一座时间和空间局部性的山，这里我们称之为存储山。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/02/01/CSAPP-%E5%AD%98%E5%82%A8%E5%99%A8%E7%9A%84%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" data-id="cl7d3spxg0005acowetjc8zxp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/03/05/CSAPP-%E9%93%BE%E6%8E%A5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CSAPP-链接
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/12/25/CSAPP-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CSAPP-优化程序性能</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

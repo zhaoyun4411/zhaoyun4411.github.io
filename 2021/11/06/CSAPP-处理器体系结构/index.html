@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CSAPP-处理器体系结构 | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="到目前为止，我们学习的计算机系统仅仅只限于机器语言的程序级别。我们知道处理器必须执行一系列的指令，每条指令执行某个简单的操作，例如两个数相加。指令被编码为一个或多个字节组成的二进制格式。一个处理器支持的指令和指令的字节被称为它的指令集体系结构（ISA）。 这一节将简要介绍处理器的硬件设计。这里将研究一个硬件系统执行某种ISA指令的方式，这会使你能够更加好的理解计算机系统是如何工作的，以及计算机制造">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-处理器体系结构">
+<meta property="og:url" content="http://example.com/2021/11/06/CSAPP-%E5%A4%84%E7%90%86%E5%99%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="到目前为止，我们学习的计算机系统仅仅只限于机器语言的程序级别。我们知道处理器必须执行一系列的指令，每条指令执行某个简单的操作，例如两个数相加。指令被编码为一个或多个字节组成的二进制格式。一个处理器支持的指令和指令的字节被称为它的指令集体系结构（ISA）。 这一节将简要介绍处理器的硬件设计。这里将研究一个硬件系统执行某种ISA指令的方式，这会使你能够更加好的理解计算机系统是如何工作的，以及计算机制造">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-11-06T02:03:25.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="CS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CSAPP-处理器体系结构" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/11/06/CSAPP-%E5%A4%84%E7%90%86%E5%99%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" class="article-date">
+  <time datetime="2021-11-06T02:03:25.000Z" itemprop="datePublished">2021-11-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSAPP-处理器体系结构
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>到目前为止，我们学习的计算机系统仅仅只限于机器语言的程序级别。我们知道处理器必须执行一系列的指令，每条指令执行某个简单的操作，例如两个数相加。指令被编码为一个或多个字节组成的二进制格式。一个处理器支持的指令和指令的字节被称为它的<em>指令集体系结构</em>（ISA）。</p>
+<p>这一节将简要介绍处理器的硬件设计。这里将研究一个硬件系统执行某种ISA指令的方式，这会使你能够更加好的理解计算机系统是如何工作的，以及计算机制造商的技术挑战。</p>
+<span id="more"></span>
+
+
+<blockquote>
+<p>ISA 模型下计算机指令应该是顺序执行，也就是说先取出一条指令，等到它执行完毕，再开始执行下一条指令。通过同时处理多条指令的不同部分处理器可以获得更高的性能。</p>
+</blockquote>
+<p>定义简单指令集（Y86） —-&gt; 介绍数字硬件设计的背景 —-&gt; 第一步基于顺序执行的处理器模型 —-&gt; 流水化处理器</p>
+<h3 id="1-Y86-64-指令集体系结构"><a href="#1-Y86-64-指令集体系结构" class="headerlink" title="1. Y86-64 指令集体系结构"></a>1. Y86-64 指令集体系结构</h3><p>指令集中每条指令都会读取或修改处理器状态的某些部分，这些部分被称为程序员（编写程序的人或产生机器代码的编译器）可见状态。在处理器的实现中，只要我们能够保证机器级别的程序能够访问程序员可见状态，就不需要完全按照ISA暗示的方式来表示和组织这个处理器的状态。</p>
+<p>这里Y86-64 主要包括：</p>
+<ul>
+<li>15个程序寄存器 <code>%rax</code> <code>%rcx</code> <code>%rdx</code> <code>%rbx</code> <code>%rsp</code> <code>%rbp</code> <code>%rsi</code> <code>%rdi</code> <code>%r8 ~ %r14</code> (每个寄存器存储一个64位的字， 寄存器 <code>%rsp</code> 被入栈、出栈、调用和返回指令作为栈指针)。</li>
+<li>3个一位条件码：<code>ZF</code> <code>SF</code> <code>OF</code>(保存最近的算数逻辑指令造成影响的有关信息)。</li>
+<li>程序计数器PC存放当前正在执行指令的地址。</li>
+<li>内存</li>
+<li>stat状态码，表明程序执行的总体状态。指明程序是正常运行，还是出现某种异常。</li>
+</ul>
+<h4 id="1-1-Y86-64-指令"><a href="#1-1-Y86-64-指令" class="headerlink" title="1.1 Y86-64 指令"></a>1.1 Y86-64 指令</h4><p>Y86-64 指令的细节主要包括：</p>
+<ul>
+<li>mov指令被分成4个不同的形式: <code>irmovq</code>(源是立即数) <code>rrmovq</code>(源是寄存器) <code>mrmovq</code>(内存到寄存器) <code>rmmovq</code>(寄存器到内存) 。 这些内存传送指令中内存的引用方式是简单的基地址和偏移量的形式。</li>
+<li>四个整数操作指令：<code>addq</code> <code>subq</code> <code>andq</code> <code>xorq</code>。 这些指令只对寄存器数据进行操作，同时还会设置3个条件码。</li>
+<li>七个跳转指令：<code>jmp</code> <code>jle</code> <code>jl</code> <code>je</code> <code>jne</code> <code>jge</code> <code>jg</code></li>
+<li>六个条件传送指令：<code>cmovle</code> <code>cmovl</code> <code>cmove</code> <code>cmovne</code> <code>cmovge</code> <code>cmovg</code>。当条件代码满足所需要的约束条件的时候，才会更新目的寄存器的值。</li>
+<li>call指令，将返回值入栈，然后跳转到目的地址。 </li>
+<li>pushq和popq指令，实现入栈和出栈。</li>
+<li>halt指令，停止指令的执行。这条指令会导致整个系统暂停运行。</li>
+</ul>
+<h4 id="1-2-指令编码"><a href="#1-2-指令编码" class="headerlink" title="1.2 指令编码"></a>1.2 指令编码</h4><p>对于Y86-64来说，每条指令需要 1～10个字节不等，这取决于需要那些字段。每条指令的第一个字节表明指令类型，这个字节分成两个部分，每个部分4位：其中高4位是代码部分，低4位是功能部分。</p>
+<p>其中代码值0～B分别是 ： </p>
+<ul>
+<li><code>halt</code> &lt;—&gt; 0 </li>
+<li><code>nop</code> &lt;—&gt; 1</li>
+<li><code>rrmovq</code> &lt;—&gt; 2</li>
+<li><code>irmovq</code> &lt;—&gt; 3</li>
+<li><code>rmmovq</code> &lt;—&gt; 4</li>
+<li><code>mrmovq</code> &lt;—&gt; 5</li>
+<li><code>OPq</code> &lt;—&gt; 6 (整数操作指令)</li>
+<li><code>jXX</code> &lt;—&gt; 7</li>
+<li><code>cmovXX</code> &lt;—&gt; 2</li>
+<li><code>call</code> &lt;—&gt; 8</li>
+<li><code>ret</code> &lt;—&gt; 9</li>
+<li><code>pushq</code> &lt;—&gt; a</li>
+<li><code>popq</code> &lt;—&gt; b</li>
+</ul>
+<p>对于功能值来说只有一组相关代码才会被用到，例如整数操作指令</p>
+<ul>
+<li><code>addq</code> &lt;—&gt; 0x60</li>
+<li><code>subq</code> &lt;—&gt; 0x61</li>
+<li><code>andq</code> &lt;—&gt; 0x62</li>
+<li><code>xorq</code> &lt;—&gt; 0x63</li>
+</ul>
+<p>对于Y86-64来说，程序寄存器存在CPU中的一个寄存器文件中，这个寄存器文件就是一个小的，以寄存器ID作为地址的随机访问存储器。其中对应的ID有：<br><code>%rax</code>(0) <code>%rcx</code>(1) <code>%rdx</code>(2) <code>%rbx</code>(3) <code>%rsp</code>(4) <code>%rbp</code>(5) <code>%rsi</code>(6) <code>%rdi</code>(7) <code>r8</code>(8) <code>%r9</code>(9) <code>%r10</code>(A) <code>%r11</code>(B) <code>%r12</code>(C) <code>%r13</code>(D) <code>%r14</code>(E) <code>无寄存器</code>(F)</p>
+<blockquote>
+<p>当需要指明不应该访问任何寄存器的时候就用ID值0xF来表示</p>
+</blockquote>
+<p>有些指令需要一个附加的4字节常数（constant word）。这个字能作为<code>irmovq</code> 的立即数， <code>rmmovq</code>&amp;<code>mrmovq</code>的地址指示符的偏移量，以及分支指令和调用指令的目的地址。</p>
+<p>指令集存在的一个重要性质就是保证字节编码必须有唯一的解释。任意一个字节序列要么是一个唯一的指令序列编码，要么就不是一个合法的字节序列。</p>
+<h4 id="1-3-Y86-64-异常"><a href="#1-3-Y86-64-异常" class="headerlink" title="1.3 Y86-64 异常"></a>1.3 Y86-64 异常</h4><p>对于Y86-64来说，程序员可见的状态包括状态码<code>State</code>，它描述程序执行的总体状态。它的值包括：<code>AOK</code> &lt;—&gt; 1 (正常操作) , <code>HLT</code> &lt;—&gt; 2 (遇到执行halt指令) , <code>ADR</code> &lt;—&gt; 3 (遇到非法地址) , <code>INS</code> &lt;—&gt; 4 (遇到非法指令)</p>
+<p>这里对于我们设计的Y86-64指令集来说，当遇到这些异常的时候，我们就简单的让处理器停止执行指令。而在更加完整的设计中，处理器通常会调用一个异常处理的程序，这个过程被用来处理遇到的某种类型的异常。</p>
+<h4 id="1-4-Y86-64-程序"><a href="#1-4-Y86-64-程序" class="headerlink" title="1.4 Y86-64 程序"></a>1.4 Y86-64 程序</h4><p>Y86-64代码与我们常使用的X86代码类似，但有以下几个不同点：</p>
+<ul>
+<li>Y86-64需要将常数加载到寄存器，因为它在算数指令中不能使用立即数；</li>
+<li>要实现从内存读取一个数值并将其与一个寄存器相加，Y86-64代码需要两条指令，X86-64代码只需要一条addq指令；</li>
+<li>Y86-64代码必须使用<code>andq</code>等指令在进入循环💰设置条件码。</li>
+</ul>
+<blockquote>
+<p>对于汇编指令来说，以<code>.</code>开头的词是汇编器伪指令，它们告诉汇编器调整地址，以便在那产生代码或者插入一些数据。</p>
+</blockquote>
+<h4 id="1-5-其他"><a href="#1-5-其他" class="headerlink" title="1.5 其他"></a>1.5 其他</h4><p>大多数的Y86-64指令是以一种简单明了的方式修改程序状态。但是下面两个特别的指令组合需要特别注意：</p>
+<ul>
+<li><code>pushq</code>指令会把栈指针减去8，并且将一个寄存器的值写入内存中。因此当执行<code>pushq %rsp</code>指令的时候，处理器的行为是不确定的，应为要入栈的寄存器值会被同一条指令修改。</li>
+<li><code>popq</code>指令同样会有类似的歧义。</li>
+</ul>
+<h3 id="2-逻辑设计和硬件控制语言HCL"><a href="#2-逻辑设计和硬件控制语言HCL" class="headerlink" title="2. 逻辑设计和硬件控制语言HCL"></a>2. 逻辑设计和硬件控制语言HCL</h3><p>在硬件设计中，用电子电路来计算对位进行运算的函数，以及在各种存储单元中存储位。大多数现代电路技术都是使用信号线上的高电压或低电压表示不同的位值。在当前的技术中，逻辑1是用1.0v左右的高电压表示，而逻辑0是用0.0v左右的低电压表示。要实现一个数字系统需要三个主要的组成部分：计算对位进行操作的函数的组合逻辑、存储位的存储器单元，以及控制存储器单元更新的时钟信号。</p>
+<blockquote>
+<p>现在大多数硬件都是使用硬件描述语言(Hardware Description Language, HDL)来表达。最常用的的语言有Verilog，它的语法类似于C； 另外一种是VHDL，它的语法类似于编程语言Ada。</p>
+</blockquote>
+<blockquote>
+<p>20世纪80年代中期，研究者开发出了逻辑合成(logic synthesis)程序，它可以根据HDL的描述生成有效的电路设计。</p>
+</blockquote>
+<h4 id="2-1-逻辑门"><a href="#2-1-逻辑门" class="headerlink" title="2.1 逻辑门"></a>2.1 逻辑门</h4><p>逻辑门是数字电路的基本计算单元，它们参与运算产生输出。逻辑门主要包括 AND(&amp;&amp;) ，OR(||) 和 NOT (!)。</p>
+<blockquote>
+<p>应为逻辑门是针对单个位的数进行操作的，而不是整个字。 所以使用<code>&amp;&amp;</code> &#x2F; <code>||</code> &#x2F; <code>~</code> 而不是 <code>&amp;</code> \ <code>|</code> \ <code>~</code> 。 这样的位操作符进行描述。</p>
+</blockquote>
+<h4 id="2-2-组合电路和HCL布尔表达式"><a href="#2-2-组合电路和HCL布尔表达式" class="headerlink" title="2.2 组合电路和HCL布尔表达式"></a>2.2 组合电路和HCL布尔表达式</h4><p>将很多的逻辑门组合成一个网，就能构建计算块，称为组合电路。如何构建这个网络有如下的几条限制：</p>
+<ul>
+<li>每个逻辑门的输入必须连接到下述选项之一：1）一个系统输入（称为主输入），2）某个存储器单元的输出，3）某个逻辑门的输出。</li>
+<li>两个或者多个逻辑门的输出不能连接在一起。否则它们可能会使线上的电压矛盾，可能会导致一个不合法的电压或者电路故障。</li>
+<li>这个网络必须是无环的。也就是网络中不能有路径经过一系列的门而形成一个回路，这样的回路会导致网络计算的函数有歧义。</li>
+</ul>
+<p>HCL表达式很清楚的表明了组合逻辑电路和C语言中逻辑表达式的对应之处。它们都是使用布尔操作来对输入进行计算的函数。值得注意的是这两种表达计算的方法之间存在如下区别。</p>
+<ul>
+<li>组合电路是由一系列逻辑门组成，它的属性是输出会持续的响应输入的变化。如果电路的输入变化，在一定的延迟之后，它的输出也会相应的变化。</li>
+<li>C逻辑表达式允许参数是任意整数，而逻辑门只对0和1进行操作。</li>
+<li>C的逻辑表达式有一个属性就是它们可能只被部分求值。如果一个AND或OR操作只用对第一个参数求职就能确定，那么就不会对第二个参数求值了。逻辑门没有这种特性，它只是简单的响应输入的变化。</li>
+</ul>
+<h4 id="2-3-字级的组合电路和HCL整数表达式"><a href="#2-3-字级的组合电路和HCL整数表达式" class="headerlink" title="2.3 字级的组合电路和HCL整数表达式"></a>2.3 字级的组合电路和HCL整数表达式</h4><p>通过将逻辑门组合成大的网，我们可以构造出能够计算更加复杂函数的组合电路。通常，我们设计能对数据字进行操作的电路。执行字级计算的组合电路根据输入字的各个位，用逻辑门来计算输出字的各个位。</p>
+<p>这里处理器通常会使用多种多路复用器，使得我们能够根据某些控制条件，从许多源中选出想要的字。表达式通常的格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    select_1 : expr_1 ;</span><br><span class="line">    select_2 : expr_2 ;</span><br><span class="line">    ...</span><br><span class="line">    select_k : expr_k ;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>表达式包含了一系列的情况，每种情况的i都有一个布尔表达式<code>select_i</code>和一个整数表达式<code>expr_i</code>。前者表明什么时候选择这种情况，后者指明得到的值。</p>
+<blockquote>
+<p>这里与C语言中的switch语句不同的地方是，并不要求不同的选择表达式之间互斥。因为从逻辑上来讲，这些选择表达式是顺序求值的，并且第一个求值为1的情况会被选中。</p>
+</blockquote>
+<h4 id="2-4-集合关系"><a href="#2-4-集合关系" class="headerlink" title="2.4 集合关系"></a>2.4 集合关系</h4><p>在处理器设计中，需要确定检测正在处理的某个指令是否属于某一类指令代码，这种处理就是属于一种集合关系。可以类比为硬件中的过滤器的概念。判断集合关系的通用格式是： <code>iexpr in &#123;iexpr_1, iexpr_2, ... , iexpr_k&#125;</code>。</p>
+<h4 id="2-5-存储器和时钟"><a href="#2-5-存储器和时钟" class="headerlink" title="2.5 存储器和时钟"></a>2.5 存储器和时钟</h4><p>组合电路从本质上讲，不存储任何有用的信息。相反的，它们只是简单的响应输入信号，产生等于输入的某个函数的输出。为了能够产生时序电路（sequential circuit），也就是有状态并且在这个状态上进行计算的系统，这里必须要引入按位存储信息的设备。存储设备都是由同一个时钟控制的，时钟是一个周期信号，决定什么时候将新的值加载到设备中。主要包含两类存储器：</p>
+<ul>
+<li>时钟寄存器 （寄存器），存储单个位或者字。时钟信号控制寄存器加载输入值。</li>
+<li>随机访问寄存器 （内存），存储多个字。使用地址来选择应该读或者写那个字。</li>
+</ul>
+<blockquote>
+<p>在硬件中，寄存器直接将它的输入和输出线连接到电路的其他部分。在机器级编程中，寄存器代表的是CPU的可寻址的字，这里的地址是寄存器ID。</p>
+</blockquote>
+<blockquote>
+<p>硬件寄存器可以简单的理解成我们说的RAM，需要写入地址，表明应该选择哪个程序寄存器，同属数据输出对应该寄存器的输入值。</p>
+</blockquote>
+<h3 id="3-Y86-64的顺序实现"><a href="#3-Y86-64的顺序实现" class="headerlink" title="3. Y86-64的顺序实现"></a>3. Y86-64的顺序实现</h3><p>这里先假设一个可以运行Y86-64 指令集的处理器，他在每一个时钟周期上，只能执行处理一条完整的指令所需要的所有步骤。</p>
+<h4 id="3-1-将处理组织成阶段"><a href="#3-1-将处理组织成阶段" class="headerlink" title="3.1 将处理组织成阶段"></a>3.1 将处理组织成阶段</h4><p>通常来说处理一条指令包含很多操作。将它们组织成某个特殊的阶段顺序，即使指令的动作差异很大，但是所有的指令都遵循统一的顺序。每一步具体处理取决于正在执行的指令。创建这样的一个框架。我们就能够设计一个充分利用硬件的处理器。下面是关于各个阶段以及各阶段执行操作的简单描述：</p>
+<ul>
+<li>取指（fetch）：取指阶段从内存中读取指令字节，地址为程序计数器（PC）的值。从指令中抽取指令指示符字节的两个四位部分，称之为icode（指令代码） 和 ifun（指令功能）。它可能取出一个寄存器指示符字节，指明一个或者两个寄存器操作数指示符rA和rB。它还有可能取出一个四字节常数valC。它按顺序方式计算当前指令的下一条指令的地址valP。也就是说，valP等于PC的值加上已取指令的长度。</li>
+<li>译码（decode）：译码阶段从寄存器文件读入最多两个操作数，得到值valA和&#x2F;或valB。通常读入指令中rA和rB字段中指明的寄存器，不过有的指令是读取<code>%rsp</code>寄存器。</li>
+<li>执行（execute）：在执行阶段，算数&#x2F;逻辑单元（ALU）要么执行指令指明的操作（根据ifun的值）。计算内存引用的有效地址，要么增加或者减少栈指针。得到的值我们称为valE，也有可能设置条件码，如果条件成立，则更新目标寄存器。同样对于一条条转指令来说，这个阶段会决定是不是选择分支。</li>
+<li>访存（memory）：访存阶段可以讲数据写入内存，或者从内存中读取数据。读出的数据值为valM</li>
+<li>写回（write back）：写回阶段最多可以将两个结果写到寄存器文件。</li>
+<li>更新PC（PC update）：将PC设置成下一条指令的地址。</li>
+</ul>
+<p>这里处理器无限循环执行这些阶段，当发生异常时，处理器的一种简化处理是<code>halt</code>指令或者非法指令停止运行。在更加完整的设计中处理器会进入异常模式，开始执行由异常类型决定的特殊代码。</p>
+<blockquote>
+<p>这里面临的一个挑战是将每条不同的指令需要的计算放入上述的那个通用框架中。</p>
+</blockquote>
+<p>这里列出了我们常用的指令根据上面的阶段描述所需要的处理：</p>
+<table>
+<thead>
+<tr>
+<th align="left">阶段</th>
+<th align="left"><code>Opq rA, rB</code></th>
+<th align="left"><code>rrmovq rA, rB</code></th>
+<th align="left"><code>irmovq V, rB</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">取指</td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"><code>valC &lt;-- M_8[PC+2]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code> valP &lt;-- PC+2</code></td>
+<td align="left"><code>valP &lt;-- PC+2</code></td>
+<td align="left"><code>valP &lt;-- PC+10</code></td>
+</tr>
+<tr>
+<td align="left">译码</td>
+<td align="left"><code>valA &lt;-- R[rA]</code></td>
+<td align="left"><code>valA &lt;-- R[rA]</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valB &lt;-- R[rB]</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">执行</td>
+<td align="left"><code>valE &lt;-- valB OP valA</code></td>
+<td align="left"><code>valE &lt;-- 0+valA</code></td>
+<td align="left"><code>valE &lt;-- 0+valC</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>Set CC</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">访存</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">写回</td>
+<td align="left"><code>R[rB] &lt;-- valE</code></td>
+<td align="left"><code>R[rB] &lt;-- valE</code></td>
+<td align="left"><code>R[rB] &lt;-- valE</code></td>
+</tr>
+<tr>
+<td align="left">更新PC</td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">阶段</th>
+<th align="left"><code>rmmovq rA, D(rB)</code></th>
+<th align="left"><code>mrmovq D(rB), rA</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">取指</td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valC &lt;-- M_8[PC+2]</code></td>
+<td align="left"><code>valC &lt;-- M_8[PC+2]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code> valP &lt;-- PC+10</code></td>
+<td align="left"><code>valP &lt;-- PC+10</code></td>
+</tr>
+<tr>
+<td align="left">译码</td>
+<td align="left"><code>valA &lt;-- R[rA]</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valB &lt;-- R[rB]</code></td>
+<td align="left"><code>valB &lt;-- R[rB]</code></td>
+</tr>
+<tr>
+<td align="left">执行</td>
+<td align="left"><code>valE &lt;-- valB +valC</code></td>
+<td align="left"><code>valE &lt;-- valB +valC</code></td>
+</tr>
+<tr>
+<td align="left">访存</td>
+<td align="left"><code>M_8[valE] &lt;-- valA</code></td>
+<td align="left"><code>valE &lt;-- M_8[valE]</code></td>
+</tr>
+<tr>
+<td align="left">写回</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">更新PC</td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">阶段</th>
+<th align="left"><code>pushq rA</code></th>
+<th align="left"><code>popq rA</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">取指</td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+<td align="left"><code>rA:rB &lt;-- M_1[PC+1]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valP &lt;-- PC+2</code></td>
+<td align="left"><code>valP &lt;-- PC+2</code></td>
+</tr>
+<tr>
+<td align="left">译码</td>
+<td align="left"><code>valA &lt;-- R[rA]</code></td>
+<td align="left"><code>valA &lt;-- R[%rsp]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valB &lt;-- R[%rsp]</code></td>
+<td align="left"><code>valB &lt;-- R[%rsp]</code></td>
+</tr>
+<tr>
+<td align="left">执行</td>
+<td align="left"><code>valE &lt;-- valB + (-8)</code></td>
+<td align="left"><code>valE &lt;-- valB + 8</code></td>
+</tr>
+<tr>
+<td align="left">访存</td>
+<td align="left"><code>M_8[valE] &lt;-- valA</code></td>
+<td align="left"><code>valE &lt;-- M_8[valA]</code></td>
+</tr>
+<tr>
+<td align="left">写回</td>
+<td align="left"><code>R[%rsp] &lt;-- valE</code></td>
+<td align="left"><code>R[%rsp] &lt;-- valE</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"><code>R[rA] &lt;-- valM</code></td>
+</tr>
+<tr>
+<td align="left">更新PC</td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+<td align="left"><code>PC &lt;-- valP</code></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">阶段</th>
+<th align="left"><code>jXX Dest</code></th>
+<th align="left"><code>call Dest</code></th>
+<th align="left"><code>ret</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">取指</td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+<td align="left"><code>icode: ifun &lt;-- M_1[PC]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>valC &lt;-- M_8[PC+1]</code></td>
+<td align="left"><code>valC &lt;-- M_8[PC+1]</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code> valP &lt;-- PC+9</code></td>
+<td align="left"><code>valP &lt;-- PC+9</code></td>
+<td align="left"><code>valP &lt;-- PC+1</code></td>
+</tr>
+<tr>
+<td align="left">译码</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"><code>valA &lt;-- R[%rsp]</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"><code>valB &lt;-- R[%rsp]</code></td>
+<td align="left"><code>valB &lt;-- R[%rsp]</code></td>
+</tr>
+<tr>
+<td align="left">执行</td>
+<td align="left"><code>Cnd &lt;-- Cond(CC, ifun)</code></td>
+<td align="left"><code>valE &lt;-- valB + (-8)</code></td>
+<td align="left"><code>valE &lt;-- valB+8</code></td>
+</tr>
+<tr>
+<td align="left">访存</td>
+<td align="left"></td>
+<td align="left"><code>M_8[valE] &lt;-- valP</code></td>
+<td align="left"><code>valM &lt;-- M_8[valA]</code></td>
+</tr>
+<tr>
+<td align="left">写回</td>
+<td align="left"></td>
+<td align="left"><code>R[%rsp] &lt;-- valE</code></td>
+<td align="left"><code>R[%rsp] &lt;-- valE</code></td>
+</tr>
+<tr>
+<td align="left">更新PC</td>
+<td align="left"><code>PC &lt;-- Cnd?valC:valP</code></td>
+<td align="left"><code>PC &lt;-- valC</code></td>
+<td align="left"><code>PC &lt;-- valM</code></td>
+</tr>
+</tbody></table>
+<h4 id="3-2-SEQ的硬件结构"><a href="#3-2-SEQ的硬件结构" class="headerlink" title="3.2 SEQ的硬件结构"></a>3.2 SEQ的硬件结构</h4><p>实现所有的Y86-64指令需要的计算根据前面一节我们将其组织成6个基本阶段：取指、译码、执行、访存、写回和更新PC指针。在这里硬件单元与各个处理阶段之间的关联如下：</p>
+<ul>
+<li>取指：将程序计数器寄存器作为地址，指令内存读取指令字节。PC增加器计算valP，即增加了的程序计数器。</li>
+<li>译码：寄存器文件有两个读端口A和B，从这两个端口同时读寄存器valA和valB。</li>
+<li>执行：执行阶段会根据指令的类型，将算数&#x2F;逻辑单元（ALU）用于不同的目的。对整数操作，它要执行指令所指定的运算。对于其他指令，它会作为一个加法器来计算增加或者减少栈指针，或者计算有效地址，或者只是简单地加0，将一个输入传递到输出。或者更新条件码的新值。</li>
+<li>访存：在执行访存时，数据内存读出或者写入一个内存字。指令和数据内存访问的是相同的内存位置，但是用于不同的目的。</li>
+<li>写回：寄存器文件有两个写端口。端口E用来写入ALU计算出来的值，而端口M用来写从数据内存中读出来的值。</li>
+<li>PC更新：程序计数器的新值选择来自于valP（下一条指令的地址）；valC（调用指令或跳转指令指定的目标地址）；valM（从内存读取的返回地址）。</li>
+</ul>
+<h4 id="3-3-SEQ的时序"><a href="#3-3-SEQ的时序" class="headerlink" title="3.3 SEQ的时序"></a>3.3 SEQ的时序</h4><p>SEQ的实现包括组合逻辑和两种存储设备：时钟寄存器（程序计数器和条件码寄存器）和随机访问存储器（寄存器文件、指令内存和数据内存）。对于组合逻辑来说并不需要任何时许或者时钟控制（当输入变化，值就会通过逻辑门的网络传播）。</p>
+<p>所以还有程序计数器，条件码寄存器，数据内存和寄存器文件需要对他们的时序进行明确控制。这些单元通过一个时钟信号控制，它将触发新值装载到寄存器以及将值写入到随机访问存储器。每一个时钟周期，程序计数器都会装载新的指令地址。只有在执行整数指令运算的时候，才会装载条件码寄存器。只有在执行<code>rmmovq</code> <code>pushq</code> 或者<code>call</code>指令的时候，才会写数据内存。寄存器文件的两个写端口允许每个时钟周期跟新两个程序寄存器（这里可以使用特殊的寄存器端口ID 0xF作为端口地址，来表明这个端口不应该执行任何写操作）。</p>
+<p>要控制处理器中活动的时序，只要寄存器和内存的时钟控制。所有的状态更新实际上是同时发生，并且在时钟上升开始的下一个周期。</p>
+<blockquote>
+<p>这里所有的计算会遵循下面的组织原则：从不读回。处理器从来不需要为了完成一条指令的执行而去读取该指令的更新状态。</p>
+</blockquote>
+<h4 id="3-4-SEQ阶段的实现"><a href="#3-4-SEQ阶段的实现" class="headerlink" title="3.4 SEQ阶段的实现"></a>3.4 SEQ阶段的实现</h4><p>HCL描述中使用的常数值包括指令、功能码、寄存器ID、ALU操作和状态码的编码。</p>
+<ol>
+<li><strong>取指阶段</strong> 取指阶段包括指令内存硬件单元。以PC作为第一个字节的地址，这个单元一次从内存中读取出10个字节。其中第一个字节被解释成为指令字节，分为两个4位的数。然后标号为<code>icode</code>和<code>ifun</code>的逻辑控制块计算指令和功能码。同时从指令内存中读取的剩余9个字节是寄存器指示符字节和常数字的组合码。标号<code>Align</code>的硬件单元会处理这些字节，将它们放入寄存器字段和常数字中。</li>
+<li><strong>译码和写回阶段</strong> 对于译码和写回阶段都需要访问寄存器文件。这里寄存器文件有4个端口。它支持同时进行两个读（在端口A和端口B上）和两个写（在端口E和端口M上）。每个端口都有一个地址连接和一个数据连接，地址连接是一个寄存器ID，而数据连接是一个64位的数据总线。</li>
+<li><strong>执行阶段</strong> 执行阶段包括算数&#x2F;逻辑单元（ALU）。这个单元根据<code>alufun</code>信号设置，对输入<code>aluA</code>和<code>aluB</code>执行 ADD、SUBTRACT、AND或者EXCLUSIVEOR运算。ALU的输出就是valE信号。</li>
+<li><strong>访存阶段</strong> 访存阶段的任务就是读或者写程序数据。</li>
+<li><strong>更新PC阶段</strong> SEQ中的最后一个阶段会产生程序计数器的新值。</li>
+</ol>
+<p>这里我们已经完整的描述了一个Y86-64处理器的设计。可以看到，通过将执行每条不同的指令所需要的步骤组织成一个统一的流程，就可以用很少量的各种硬件单元以及一个时钟来控制计算的顺序，从而实现整个处理器。不过这样一来，控制逻辑就必须要在这些单元之间路由信号，并根据指令类型和分支条件产生适当的控制信号。</p>
+<h3 id="4-流水线的通用原理"><a href="#4-流水线的通用原理" class="headerlink" title="4. 流水线的通用原理"></a>4. 流水线的通用原理</h3><p>流水线的一个重要特性就是提高系统的整体<em>吞吐量</em> （throuhput），也就是单位时间内服务的顾客总数，不会流水线会轻微的增加系统的<em>延迟</em>（latency），也就是服务一个用户所需要的时间。</p>
+<h4 id="4-1-计算流水线"><a href="#4-1-计算流水线" class="headerlink" title="4.1 计算流水线"></a>4.1 计算流水线</h4><p>对于我们这里描述的计算流水线来说，这里的“顾客”就是我们的程序指令，流水线的每个阶段去完成指令执行的一部分。</p>
+<blockquote>
+<p>在现代逻辑设计中，电路延迟以微微秒或者皮秒来统计，简写成ps（10^-12秒）</p>
+</blockquote>
+<blockquote>
+<p>对于流水线图来说，时间从左往右流动。</p>
+</blockquote>
+<p>对于流水线系统来说，在稳定的状态下，三个阶段都应该是活动的，每个时钟周期，一条指令离开系统，一条新的进入。</p>
+<h4 id="4-2-流水线操作的详细说明"><a href="#4-2-流水线操作的详细说明" class="headerlink" title="4.2 流水线操作的详细说明"></a>4.2 流水线操作的详细说明</h4><p>减缓时钟周期并不会影响流水线的行为。信号传播到流水线寄存器的输入，但是直到时钟上升才会去改变寄存器的状态。从另外一个方面来讲，如果时钟运行的太快，就会有灾难性的后果。值可能会来不及通过组合逻辑，因此当时钟周期上升的时候，寄存器的输入还是不合法的值。</p>
+<h4 id="4-3-流水线的局限性"><a href="#4-3-流水线的局限性" class="headerlink" title="4.3 流水线的局限性"></a>4.3 流水线的局限性</h4><p>对于流水线系统会有如下两个因素降低流水线系统的效率：</p>
+<ol>
+<li>不一致的划分。这里运行时钟的频率是由最慢的的延迟阶段限制。</li>
+<li>流水线过深会导致收益下降。流水线加深会使用更多的硬件，但是提升的比率不高。</li>
+</ol>
+<h3 id="5-Y86-64的流水线实现"><a href="#5-Y86-64的流水线实现" class="headerlink" title="5. Y86-64的流水线实现"></a>5. Y86-64的流水线实现</h3><h4 id="5-1-SEQ-重新安排计算阶段"><a href="#5-1-SEQ-重新安排计算阶段" class="headerlink" title="5.1 SEQ+: 重新安排计算阶段"></a>5.1 SEQ+: 重新安排计算阶段</h4><p>对于SEQ流水线化的设计其中一个重要的设计就是，调整PC的值是在一个时钟周期开始的时候更新，而不是时钟周期结束的时候更新。</p>
+<p>在SEQ+中，我们创建状态寄存器来保存在一条指令执行过程中计算出来的信号。然而，当一个新的时钟周期开始时，这些信号值通过同样的逻辑来计算当前指令的PC。这里将这些寄存器标号为<code>pIcode</code> <code>pCnd</code>等等，来指明在任意给定的周期，它们保存的是前一个周期中产生的控制信号。</p>
+<h4 id="5-2-插入流水线寄存器"><a href="#5-2-插入流水线寄存器" class="headerlink" title="5.2 插入流水线寄存器"></a>5.2 插入流水线寄存器</h4><p>对于流水线寄存器来说，可以按下面方法标号：</p>
+<ul>
+<li>F 保存程序计数器的预测值</li>
+<li>D 位于取指和译码之间。它保存关于最新取出的指令的信息，即将由译码阶段进行处理。</li>
+<li>E 位于译码和执行之间。它保存了关于最新译码指令从寄存器文件中读出的值的信息，即将由执行阶段进行处理。</li>
+<li>M 位于执行和访存阶段之间。它保存最新执行的指令的结果，即将由访存阶段进行处理，它还保存关于用于处理条件转移的分支条件和分支目标的信息。</li>
+<li>W 位于访存阶段和反馈路径之间，反馈路径将计算出来的值提供给寄存器文件写，而当完成ret指令时，它还要向PC选择逻辑提供返回值。</li>
+</ul>
+<h4 id="5-3-对信号进行重新排列和标号"><a href="#5-3-对信号进行重新排列和标号" class="headerlink" title="5.3 对信号进行重新排列和标号"></a>5.3 对信号进行重新排列和标号</h4><p>顺序实现的SEQ和SEQ+在一个时刻只处理一条指令，因此如<code>valC</code> <code>srcA</code>这样的信号都有唯一的值。在流水线化的设计中，需要采用命名机制，通过在信号名前面加上大写的流水线寄存器名字作为前缀，存储在流水线寄存器中的信号可以唯一的被标识。例如<code>D_stat</code> <code>E_stat</code>。</p>
+<blockquote>
+<p>这里在系统命名中。大写前缀 D E M W 是指流水线寄存器，所以M_stat是指流水线寄存器M的状态码字段。小写的前缀 f d e m w 是指流水线阶段，所以m_stat 指的是在访存阶段中由控制逻辑块产生出的状态信号。</p>
+</blockquote>
+<h4 id="5-4-预测下一个PC"><a href="#5-4-预测下一个PC" class="headerlink" title="5.4 预测下一个PC"></a>5.4 预测下一个PC</h4><p>流水线化设计的目的就是每一个时钟周期都发射一条新的指令，也就是说每个时钟周期都有一条新的指令进入到执行阶段并最终完成。这要求我们在取出当前指令后，马上可以确定下一条指令的位置。</p>
+<p>但是对于条件指令&#x2F;ret指令&#x2F;call指令来说，需要等到几个周期之后，也就是指令通过执行阶段后，我们才能知道是否要选择分支。</p>
+<p>在大多数情况下，我们能达到每个时钟周期发射一条新的指令的目的。但是对于大多数指令类型来说。我们的预测是完全可靠的。猜测分支方向并根据猜测开始取指的技术被称为分支预测，实际上所有的处理器都采用了某种形式的此类技术。</p>
+<p>对于ret指令，在设计中我们不会试图对返回的地址做出任何的预测。只是简单的暂停处理新指令，直到ret指令通过写回阶段。</p>
+<h4 id="5-5-流水线冒险"><a href="#5-5-流水线冒险" class="headerlink" title="5.5 流水线冒险"></a>5.5 流水线冒险</h4><p>当相邻指令之间存在相关的时候会导致出现问题，在完成我们的设计之前，必须解决下面两个问题。这些相关有两种形式：</p>
+<ol>
+<li>数据相关。下一条指令会用到这一条指令的计算结果。</li>
+<li>控制相关。一条指令需要确定下一条指令的位置。</li>
+</ol>
+<p>例如在执行跳转，调用或者返回指令的时候。这些相关的指令操作可能会导致流水线产生计算错误，称之为流水线冒险（hazard）。这里根据上面的相关形式，冒险也可以被分成两类：数据冒险和控制冒险。</p>
+<blockquote>
+<p>之所以会出现数据冒险，是因为流水线化的处理器是在译码阶段从寄存器文件中读取指令的操作数，而要等到三个周期后的指令写回阶段，才会将指令的结果写到寄存器中。</p>
+</blockquote>
+<p>当一条指令更新后面指令会用到的那些程序状态的时候，就有可能会出现数据冒险。这里主要有下面几类：</p>
+<ul>
+<li>程序寄存器：出现这种冒险的原因是因为寄存器文件的读写是在不同的阶段进行的，导致不同的指令之间出现不希望的相互作用。</li>
+<li>程序计数器：更新和读取程序计数器之间的冲突导致了控制冒险。当我们的取指阶段逻辑在取下一条指令之前，正确预测了程序计数器的新值的时候，就不会产生冒险。</li>
+<li>内存：对数据的内存的读和写都发生在访存阶段。在一条读内存的指令到达这个阶段之前，前面所有要写内存的指令都已经完成了这个阶段。另外，在访存阶段中写数据的指令和在取指阶段中读数据指令之间也会有冲突，因为指令和数据内存访问的是同一个地址空间。</li>
+<li>条件码寄存器：条件传送指令会在执行阶段以及条件转移会在访存阶段读这些寄存器。在条件传送或者转移到达执行阶段之前，前面所有的操作都已经完成了这个阶段，所以不会产生冒险。</li>
+<li>状态寄存器：指令流过流水线时，会影响程序状态。我们采用流水线中的每条指令都与一个状态码相关联的机制，当异常发生的时候，处理器能够有条件的停止。</li>
+</ul>
+<blockquote>
+<p>我们只需要处理寄存器数据冒险，控制冒险，以及确保能够正确处理异常。当设计一个复杂系统的时候，这样的分类分析十分重要。</p>
+</blockquote>
+<p>对于流水线冒险，我们可以通过下面几种方式来避免：</p>
+<ol>
+<li>用暂停来避免数据冒险：暂停是避免冒险的一种常用的技术，在暂停时，处理器会停止流水线中的一条或多条指令，直到冒险条件不再满足。（类比用了几条nop指令）</li>
+<li>用转发来避免数据冒险：因为流水线的设计是在译码阶段从寄存器文件中读入源操作数，但是对于这些源寄存器的写一直需要到写回阶段才会发生。这里数据转发的策略是将要写的值直接转发到流水线寄存器的E作为源操作数。</li>
+<li>加载&#x2F;使用数据冒险：因为读内存的发生在流水线中处于较晚的阶段，所以当度取内存到寄存器的指令紧接着使用该寄存器的情况就会出现这样的数据冒险。这里一般通过暂停来处理这种加载&#x2F;使用冒险，这种方法被称为加载互锁（load interlock）。加载互锁这种处理方式会降低流水线的吞吐量。</li>
+<li>避免控制冒险：当处理器无法根据处于取指阶段的当前指令来确定下一条指令的地址的时候，就会出现控制冒险。控制冒险只会出现在ret指令，跳转指令的时候。</li>
+</ol>
+<h4 id="5-6-异常处理"><a href="#5-6-异常处理" class="headerlink" title="5.6 异常处理"></a>5.6 异常处理</h4><p>处理器中的很多事情都会导致异常控制流，此时，程序执行的正常流程被破坏。异常可以由程序执行从内部产生（halt； 非法指令；非法地址），也可以是某个外部信号从外部产生（外部中断）。</p>
+<blockquote>
+<p>这里吧导致异常的指令称之为<em>异常指令(excepting instruction)</em> 。在使用非法指令地址的情况中，没有实际的异常指令，但是可以想象非法地址处有一种虚拟指令可以帮助理解。</p>
+</blockquote>
+<p>在一个流水线系统中，异常处理包括一些细节问题。</p>
+<ul>
+<li>可能同时有多条指令会引起异常。如，在流水线系统中取址阶段发现halt指令，同时访存阶段出现地址越界。这里根据异常处理原则 <strong>由流水线中最深的指令引起的异常，优先级最高</strong> ，流水线线系统会访存阶段中地址越界的异常。</li>
+<li>当取出一条指令，开始执行的时候发现了异常，而后来由于分支预测的错误，取消了该指令。流水线逻辑会取消这条指令，同时避免出现的异常。</li>
+<li>流水线化的处理器会在不同的阶段更新系统的状态的不同部分。有可能出现下面大的情况，一条指令导致了一个一个异常，但是它后面的指令在异常指令完成前改变了部分状态。</li>
+</ul>
+<blockquote>
+<p>对于后面两种情况，我们一般通过在流水线结构中加入异常处理逻辑，让我们能够从各个异常中做出正确的选择，也能够避免由于分支预测错误取出的指令造成的异常。</p>
+</blockquote>
+<p>对于流水线系统来说。当流水线中 有一个或者多个阶段出现异常的时候，信息只是简单的存放在流水线寄存器的状态字中。异常事件不会对流水线中的指令流有任何影响，除了会禁止流水线后面的指令更新程序员可见状态（条件码和内存），直到异常指令达到最后的流水线阶段。这里指令到达写回阶段的顺序与它们在非流水线中的执行顺序相同，所以我们可以保证第一条遇到异常的指令会第一个到达写回阶段，此时程序停止，流水线中的寄存器W的状态码记录程序状态。如果指令被取消，那么关于这条指令的异常状态信息也都会被取消。所有导致异常的指令后面的指令都不能改变程序员可见的状态。</p>
+<h4 id="5-7-PIPE各个阶段的实现"><a href="#5-7-PIPE各个阶段的实现" class="headerlink" title="5.7 PIPE各个阶段的实现"></a>5.7 PIPE各个阶段的实现</h4><p>根据前面的描述这里将描述PIPE各个逻辑块的设计，许多逻辑块与SEQ和SEQ+中相应的部件完全相同，除了我们必须从来自不同的流水线寄存器（用大写的流水线寄存器名字作为前缀）或来自各个阶段计算（用小写的阶段名字的第一个字母作为前缀）的信号中选择适当的值。</p>
+<h4 id="5-8-流水线控制逻辑"><a href="#5-8-流水线控制逻辑" class="headerlink" title="5.8 流水线控制逻辑"></a>5.8 流水线控制逻辑</h4><p>对于流水线处理器来说，控制逻辑必须处理下面4种控制情况，这些情况是其他机制（例如数据转发和分支预测）不能处理的：</p>
+<ul>
+<li><strong>加载&#x2F;使用冒险</strong> ： 在一条从内存中读出一个值的指令和一条使用该值的指令之间，流水线必须暂停一个周期；</li>
+<li><strong>处理ret</strong> ：流水线必须暂停直到ret指令到达写回阶段；</li>
+<li><strong>预测错误的分支</strong> ：在分支逻辑发现不应该选择该分支之前，分支目标处的几条指令已经进入流水线了。必须取消这些指令，并从跳转指令后的那条指令开始取值；</li>
+<li><strong>异常</strong> ：当一条指令导致异常，我们想要禁止后面的指令更新程序员可见的状态，并且在异常指令到达写回阶段的时候，停止执行。</li>
+</ul>
+<blockquote>
+<p>对于每种异常情况的处理，都是对流水线正常、暂停、和气泡操作的某个组合。在时序方面，流水线寄存器的暂停和气泡控制信号是由组合逻辑产生的。当时钟上升时，这些值必须是合法的，使得当下一个时钟周期开始的时候，每个流水线寄存器，要么暂停，要么产生气泡，要么加载。</p>
+</blockquote>
+<h4 id="5-9-流水线性能分析"><a href="#5-9-流水线性能分析" class="headerlink" title="5.9 流水线性能分析"></a>5.9 流水线性能分析</h4><p>从上面我们可以看到，所有流水线控制逻辑进行特殊处理的条件，都会导致流水线不能够实现一个时钟周期发射一条的目标。这里通过确定流水线中插入气泡的频率，来衡量这种损失。</p>
+<p>插入气泡会导致未使用的流水线周期。一条返回指令会产生三个气泡，一个加载&#x2F;使用冒险会产生一个气泡，而一个分支预测错误会产生两个。</p>
+<p>这里通过计算PIPE执行一条指令所需要的平均时钟周期估计值，来量化这些处罚对整体性能的影响，这种衡量方法称为CPI（Cycles Per Instruction，每指令周期数）。这种衡量值是流水线平均吞吐量的倒数，不过时间单位是时钟周期，而不是微微秒。具体计算式为<code>CPI = 1.0 + lp（加载处罚） + mp（错误预测分支处罚） + rp（返回处罚）</code></p>
+<h4 id="5-10-未完成的工作"><a href="#5-10-未完成的工作" class="headerlink" title="5.10 未完成的工作"></a>5.10 未完成的工作</h4><p>这里已经创建了一个完整的PIPE流水线化的微处理器结构，设计了控制逻辑块，并且实现了处理器普通流水线无法处理的特殊情况的流水线控制逻辑。不过PIPE还是缺乏一些实际微处理器设计中所需要的关键特性：</p>
+<ol>
+<li>多周期指令：大多数处理器系统中，乘法和除法指令这样的复杂指令并非能够一个周期完成。大多数处理方式是使用独立的逻辑单元处理如硬件乘法器。</li>
+<li>与存储系统的借口：处理器的存储系统是由多种硬件存储器和管理虚拟内存的操作系统软件共同组成，并非直接访问各种存储器，如磁盘。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/11/06/CSAPP-%E5%A4%84%E7%90%86%E5%99%A8%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" data-id="cl7d3spxf0004acow3nhv19qx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/12/25/CSAPP-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CSAPP-优化程序性能
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/08/15/CSAPP-%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%BA%E5%99%A8%E7%BA%A7%E8%A1%A8%E7%A4%BA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CSAPP-程序的机器级表示</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

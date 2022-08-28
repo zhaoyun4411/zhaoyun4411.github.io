@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>CSAPP-系统级IO | 咸鱼站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备（如磁盘驱动器，终端和网络）之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAPP-系统级IO">
+<meta property="og:url" content="http://example.com/2022/06/18/CSAPP-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/index.html">
+<meta property="og:site_name" content="咸鱼站">
+<meta property="og:description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备（如磁盘驱动器，终端和网络）之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-06-18T12:48:14.000Z">
+<meta property="article:modified_time" content="2022-08-28T09:02:32.676Z">
+<meta property="article:author" content="Yun Zhao">
+<meta property="article:tag" content="CSAPP">
+<meta property="article:tag" content="读书笔记">
+<meta property="article:tag" content="CS">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="咸鱼站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">咸鱼站</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CSAPP-系统级IO" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/06/18/CSAPP-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/" class="article-date">
+  <time datetime="2022-06-18T12:48:14.000Z" itemprop="datePublished">2022-06-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSAPP-系统级IO
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>输入&#x2F;输出（I&#x2F;O）是在主存和外部设备（如磁盘驱动器，终端和网络）之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。</p>
+<span id="more"></span>
+
+<p>了解Unix I&#x2F;O将帮助你理解其他的系统概念。 I&#x2F;O是操作系统不可或缺的一部分，因此，我们经常遇到I&#x2F;O和其他系统概念之间的循环依赖。</p>
+<p>有时候除了使用Unix I&#x2F;O以外别无选择。</p>
+<h3 id="1-Unix-I-x2F-O"><a href="#1-Unix-I-x2F-O" class="headerlink" title="1. Unix I&#x2F;O"></a>1. Unix I&#x2F;O</h3><p>一个Linux文件就是一个m个字节的序列，所有的I&#x2F;O设备（例如网络，磁盘和终端）都被模型化为文件，而所有的输入和输出都被当成对应文件的读和写来执行。这种将设备映射为文件的方式，允许Linux内核引出一个简单、低级的应用接口，称为Unix I&#x2F;O，这使得所有的输入和输出都能以一种统一而且一致的方式来执行。步骤如下</p>
+<ul>
+<li><em>打开文件</em>。应用程序要求内核打开相应的文件，宣告他要访问一个IO设备。内核会返回一个非负整数，叫做<em>描述符</em>，它在后续对此文件的所有操作中标识这个文件。内核记录有关打开的文件的所有信息。应用程序只需要记住这个描述符。</li>
+<li>Linux Shell创建每个进程开始时都有三个打开的文件：<em>标准输入（描述符为0）</em>，<em>标准输出（描述符为1）</em>，<em>标准错误（描述符为2）</em>。头文件<code>&lt;unistd.h&gt;</code>定义了常量STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO, 可以用来代替显式的描述符值。</li>
+<li><em>改变当前文的文件位置</em>。 对于打开的文件，内核保持着文件位置k，初始为0，这个文件位置就是从文件头开始的字节偏移量。</li>
+<li><em>读写文件</em>。读操作就是从文件中复制字节到内存；类似的写操作就是从内存复制字节到文件。</li>
+<li><em>关闭文件</em>。当应用程序结束对文件的访问，就应该通知内核关闭这个文件。内核这时释放文件打开时创建的数据结构，并将描述符恢复到可用描述符池中。进程终止，内核会关闭所有打开的文件。</li>
+</ul>
+<h3 id="2-文件"><a href="#2-文件" class="headerlink" title="2. 文件"></a>2. 文件</h3><p>每个Linux文件都有一个类型（type）来表明它在系统中的角色：</p>
+<ul>
+<li><em>普通文件 （regular file）</em>，可以包含任意数据，如文本文件（text file）和二进制文件（binary file）；</li>
+<li><em>目录 （directory）</em>是包含一组<em>链接（link）</em> 的文件，其中每个链接都将一个文件名映射到一个文件，这个文件可以是另一个目录。</li>
+<li><em>套接字（socket）</em>是用来与另一个进程进行跨网络通信的文件。</li>
+</ul>
+<p>每个进程都有一个<em>当前工作目录（current working directory）</em>来确定其在目录层次结构中的位置。</p>
+<p>目录层次结构中的位置用<em>路径名（pathname）</em>来指定。路径名有两种形式：1. 绝对路径名；2. 相对路径名；</p>
+<h3 id="3-打开和关闭文件"><a href="#3-打开和关闭文件" class="headerlink" title="3. 打开和关闭文件"></a>3. 打开和关闭文件</h3><p>进程通过<code>open</code>函数来打开一个已存在的文件或者创建一个新文件。</p>
+<h3 id="4-读和写文件"><a href="#4-读和写文件" class="headerlink" title="4. 读和写文件"></a>4. 读和写文件</h3><p>应用程序通过分别调用<code>read</code>和<code>write</code>函数来执行输入和输出操作.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ssize_t</span> <span class="title function_">read</span><span class="params">(<span class="type">int</span> fd, <span class="type">void</span> *buf, <span class="type">size_t</span> n)</span>;</span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">write</span><span class="params">(<span class="type">int</span> fd, <span class="type">const</span> <span class="type">void</span> *buf,<span class="type">size_t</span> n)</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>ssize_t</code>在x86-64系统中被定义为<code>long</code>； 而<code>size_t</code>被定义为<code>unsigned long</code>。因为<code>ssize_t</code>作为read函数返回值的类型，出错的时候需要能返回-1.</p>
+</blockquote>
+<p>在某些情况下，read和write传送的字节会出现比应用程序要求的要少的情况。这些<em>不足值（short count）</em>不表示有错误。出现这样的情况有：</p>
+<ol>
+<li><em>读时遇到EOF</em>。如读一个文件只有20个字节，但是应用程序通过read函数读取50个字节。这样一来，read将通过返回不足值0来发出EOF信号。</li>
+<li><em>从终端读取文本行</em>。这种情况下read函数将一次传送一个文本行。</li>
+<li><em>读和写网络套接字（socket）</em>。内部缓冲约束会引起read和write返回不足值。</li>
+</ol>
+<h3 id="5-使用RIO包健壮地读写"><a href="#5-使用RIO包健壮地读写" class="headerlink" title="5. 使用RIO包健壮地读写"></a>5. 使用RIO包健壮地读写</h3><p>这里将会讲述一个I&#x2F;O包，称为RIO（Robust I&#x2F;O，健壮的I&#x2F;O）包。它会自动帮助处理上一节讲到的不足值。RIO包提供了方便，健壮和高效的I&#x2F;O。RIO还提供了两类不同的函数：</p>
+<ul>
+<li>无缓冲的输入输出函数。这些函数直接在内存和文件之间传送数据，没有应用级缓冲。</li>
+<li>带缓冲的输入函数。类似于<code>printf</code>这样的标准I&#x2F;O函数提供的缓冲区。带缓冲的RIO输入函数是线程安全的，它在同一个描述符号上可以被交错地调用。</li>
+</ul>
+<h4 id="5-1-RIO的无缓冲的输入输出函数"><a href="#5-1-RIO的无缓冲的输入输出函数" class="headerlink" title="5.1 RIO的无缓冲的输入输出函数"></a>5.1 RIO的无缓冲的输入输出函数</h4><p>通过调用<code>rio_readn</code>和<code>rio_writen</code>函数，应用程序可以在内存和文件之间直接传送数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ssize_t</span> <span class="title function_">rio_readn</span><span class="params">(<span class="type">int</span> fd, <span class="type">void</span> *usrbuf, <span class="type">size_t</span> n)</span>;</span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">rio_writen</span><span class="params">(<span class="type">int</span> fd, <span class="type">void</span> *usrbuf, <span class="type">size_t</span> n)</span>;</span><br><span class="line"><span class="comment">//成功的话返回传送的字节数，若EOF则返回0，若出错则返回-1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-2-RIO的带缓冲的输入函数"><a href="#5-2-RIO的带缓冲的输入函数" class="headerlink" title="5.2 RIO的带缓冲的输入函数"></a>5.2 RIO的带缓冲的输入函数</h4><p>RIO提供一种包装函数(<code>rio_readlineb</code>)，它从一个内部读缓冲区复制一个文本行，当缓冲区变空的时候，会自动的调用read重新填满缓冲区。对于既包含文本行也包含二进制数据的文件，也有<code>rio_readn</code>带缓冲区的版本叫做<code>rio_readnb</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">rio_readinitb</span><span class="params">(<span class="type">rio_t</span> *rp, <span class="type">int</span> fd)</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">rio_readlineb</span><span class="params">(<span class="type">rio_t</span> *rp, <span class="type">void</span> *userbuf, <span class="type">size_t</span> maxlen)</span>;</span><br><span class="line"><span class="type">ssize_t</span> <span class="title function_">rio_readnb</span><span class="params">(<span class="type">rio_t</span> *rp, <span class="type">void</span> *userbuf, <span class="type">size_t</span> n)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-读取文件元数据"><a href="#6-读取文件元数据" class="headerlink" title="6. 读取文件元数据"></a>6. 读取文件元数据</h3><p>应用程序通过调用<code>stat</code>和<code>fstat</code>函数，检索关于文件的信息或称为文件的<em>元数据（metadata）</em>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">stat</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *filename, <span class="keyword">struct</span> stat *buf)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">fstat</span><span class="params">(<span class="type">int</span> fd, <span class="keyword">struct</span> stat *buf)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-读取目录和内存"><a href="#7-读取目录和内存" class="headerlink" title="7. 读取目录和内存"></a>7. 读取目录和内存</h3><p>应用程序可以采用<code>readdir</code>系列函数来读取目录的内容。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DIR *<span class="title function_">opendir</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *name)</span>;</span><br><span class="line"><span class="keyword">struct</span> dirent *<span class="title function_">readdir</span><span class="params">(DIR *dirp)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-共享文件"><a href="#8-共享文件" class="headerlink" title="8. 共享文件"></a>8. 共享文件</h3><p>可以使用许多不同的方式来共享Linux文件。内核使用三个相关的数据结构来表示打开的文件：</p>
+<ul>
+<li><em>描述符表（descriptor table）</em>。每个进程都有它独立的描述符号表，它的表项是由进程打开的文件描述符来索引的。每个打开的描述符表项指向<em>文件表</em>中的一个表项。</li>
+<li><em>文件表（file table）</em>。打开文件的集合是由一张文件表来表示的，所有的进程共享这张表。包含当前文件的位置，引用计数（reference count）（即当前指向该表项的描述符表项数），以及一个指向v-node表的指针。进程关闭描述符只会减少相应的文件表表项中的引用计数。内核并不会删除这个文件表表项，直到引用计数为零。</li>
+<li><em>v-node表（v-node table）</em>。同文件表一样，所有的进程共享这张 v-node 表。保存文件访问，文件大小，文件类型等信息。</li>
+</ul>
+<blockquote>
+<p>父子进程共享相同的打开文件表集合，因此共享相同的文件位置。</p>
+</blockquote>
+<h3 id="9-I-x2F-O重定向"><a href="#9-I-x2F-O重定向" class="headerlink" title="9. I&#x2F;O重定向"></a>9. I&#x2F;O重定向</h3><p>Linux shell提供了I&#x2F;O重定向操作符，允许用户将磁盘文件和标准输入输出联系起来。例如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">linux&gt; </span><span class="language-bash"><span class="built_in">ls</span> &gt; foo.txt</span></span><br></pre></td></tr></table></figure>
+
+<p>同时Linux提供函数<code>dup2</code>来实现I&#x2F;O重定向</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">dup2</span><span class="params">(<span class="type">int</span> oldfd, <span class="type">int</span> newfd)</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-标准I-x2F-O"><a href="#10-标准I-x2F-O" class="headerlink" title="10. 标准I&#x2F;O"></a>10. 标准I&#x2F;O</h3><p>C语言定义了一组高级输入输出函数，称为标准I&#x2F;O库，为程序员提供Unix I&#x2F;O的较高级别的替代。</p>
+<p>标准I&#x2F;O库将一个打开的文件模型转化为一个流。对于程序员来说，一个流就是一个指向FILE类型结构的指针。类型FILE的流是对文件描述符和流缓冲区的抽象。流缓冲区的目的和RIO读缓冲区的一样：就是使开销较高的Linux I&#x2F;O系统调用的数量尽可能的小。如getc函数第一次被调用时，系统会调用read函数来填充缓冲区，接下来getc直接从缓冲区得到服务。</p>
+<h3 id="11-综合"><a href="#11-综合" class="headerlink" title="11. 综合"></a>11. 综合</h3><p>Unix I&#x2F;O模型是在操作系统内核中实现的。应用程序可以通过<code>open</code>,<code>close</code>,<code>lseek</code>等函数来访问Unix I&#x2F;O。标准I&#x2F;O函数提供了 Unix I&#x2F;O函数的一个更完整的带缓冲的替代品，包括格式化的I&#x2F;O例程，如printf和scanf。下面是一些基本指导：</p>
+<ol>
+<li>只要有可能就使用标准I&#x2F;O。</li>
+<li>不要使用<code>scanf</code>或<code>rio_readline</code>来读二进制文件，因为它设计是用来处理文本文件的。</li>
+<li>注意网络套接字。</li>
+</ol>
+<p>标准I&#x2F;O流，从某种意义上而言是全双工的，因为程序能够在同一个流上面执行输入和输出。然而，对流的限制和对套接字的限制，有时候会互相冲突。</p>
+<ol>
+<li>跟在输出函数之后的输入函数。需要在中间插入对 <code>fflush</code>、<code>fseek</code>、<code>fsetpos</code>或者<code>rewind</code>的调用。 一个输入函数不能跟随在一个输出函数之后。<code>fflush</code>函数清空与流相关的缓冲区。后三个函数使用 Unix I&#x2F;O <code>lseek</code> 函数来重置当前的文件位置。</li>
+<li>跟在输入函数之后的输出函数。需要在中间插入对<code>fseek</code>、<code>fsetpos</code>或者<code>rewind</code>的调用，一个输出函数不能跟随在一个输入函数之后，除非该输入函数遇到了一个文件结束。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2022/06/18/CSAPP-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/" data-id="cl7d3spxk000bacow33o5023m" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CSAPP-网络编程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/06/05/CSAPP-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CSAPP-虚拟内存</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boot-process/" rel="tag">Boot process</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAN/" rel="tag">CAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CS/" rel="tag">CS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSAPP/" rel="tag">CSAPP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Devops/" rel="tag">Devops</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Embedded-System/" rel="tag">Embedded System</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IIS/" rel="tag">IIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intel/" rel="tag">Intel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lisp/" rel="tag">Lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mac-OS/" rel="tag">Mac OS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Makefile/" rel="tag">Makefile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modbus/" rel="tag">Modbus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Modern-Robotics/" rel="tag">Modern Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Robotics/" rel="tag">Robotics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SICP/" rel="tag">SICP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Stm32/" rel="tag">Stm32</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/freertos/" rel="tag">freertos</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leetcode/" rel="tag">leetcode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/" rel="tag">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/timing/" rel="tag">timing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" rel="tag">互联网</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" rel="tag">读书笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Boot-process/" style="font-size: 10px;">Boot process</a> <a href="/tags/C/" style="font-size: 12.31px;">C</a> <a href="/tags/C/" style="font-size: 17.69px;">C++</a> <a href="/tags/CAN/" style="font-size: 10.77px;">CAN</a> <a href="/tags/CS/" style="font-size: 19.23px;">CS</a> <a href="/tags/CSAPP/" style="font-size: 17.69px;">CSAPP</a> <a href="/tags/Devops/" style="font-size: 10px;">Devops</a> <a href="/tags/Embedded-System/" style="font-size: 16.15px;">Embedded System</a> <a href="/tags/HTTP/" style="font-size: 16.92px;">HTTP</a> <a href="/tags/Hexo/" style="font-size: 10.77px;">Hexo</a> <a href="/tags/IIS/" style="font-size: 13.08px;">IIS</a> <a href="/tags/Intel/" style="font-size: 10px;">Intel</a> <a href="/tags/Linux/" style="font-size: 13.85px;">Linux</a> <a href="/tags/Lisp/" style="font-size: 14.62px;">Lisp</a> <a href="/tags/Mac-OS/" style="font-size: 10px;">Mac OS</a> <a href="/tags/Makefile/" style="font-size: 10px;">Makefile</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Modbus/" style="font-size: 10.77px;">Modbus</a> <a href="/tags/Modern-Robotics/" style="font-size: 10px;">Modern Robotics</a> <a href="/tags/Robotics/" style="font-size: 10px;">Robotics</a> <a href="/tags/SICP/" style="font-size: 14.62px;">SICP</a> <a href="/tags/Stm32/" style="font-size: 12.31px;">Stm32</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/freertos/" style="font-size: 10px;">freertos</a> <a href="/tags/git/" style="font-size: 12.31px;">git</a> <a href="/tags/leetcode/" style="font-size: 18.46px;">leetcode</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/timing/" style="font-size: 10px;">timing</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/%E4%BA%92%E8%81%94%E7%BD%91/" style="font-size: 13.08px;">互联网</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 11.54px;">博客</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 15.38px;">网络</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">读书笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">August 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">June 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">April 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/03/">March 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">February 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/12/">December 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/11/">November 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">August 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/28/Intel-efi-%E7%9B%B8%E5%85%B3%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/">Intel-efi-相关启动流程解析</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/30/Modern-Robotics-%E4%BD%8D%E5%BD%A2%E7%A9%BA%E9%97%B4/">Modern-Robotics-位形空间</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/09/%E9%80%9A%E8%BF%87github-action%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/">通过github-action搭建博客自动部署</a>
+          </li>
+        
+          <li>
+            <a href="/2022/07/02/CSAPP-%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">CSAPP-并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/2022/06/24/CSAPP-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">CSAPP-网络编程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 Yun Zhao<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
